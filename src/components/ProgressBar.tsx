@@ -1,6 +1,4 @@
-
 import React from 'react';
-import { View, Text } from 'react-native';
 
 interface ProgressBarProps {
   current: number;
@@ -11,8 +9,7 @@ interface ProgressBarProps {
   intense?: boolean;
   progress?: number;
   height?: number;
-  backgroundColor?: string;
-  progressColor?: string;
+  className?: string;
 }
 
 const ProgressBar = ({ 
@@ -23,9 +20,8 @@ const ProgressBar = ({
   size = 'md',
   intense = false,
   progress,
-  height = 12,
-  backgroundColor = 'rgba(255, 255, 255, 0.2)',
-  progressColor = 'rgba(255, 255, 255, 0.8)'
+  height,
+  className = ''
 }: ProgressBarProps) => {
   const percentage = progress !== undefined ? progress : Math.min((current / max) * 100, 100);
   
@@ -42,68 +38,43 @@ const ProgressBar = ({
   const barHeight = getHeight();
 
   return (
-    <View style={{ width: '100%' }}>
+    <div className={`w-full ${className}`}>
       {(label || showNumbers) && (
-        <View style={{ 
-          flexDirection: 'row', 
-          justifyContent: 'space-between', 
-          alignItems: 'center', 
-          marginBottom: 8 
-        }}>
+        <div className="flex justify-between items-center mb-2">
           {label && (
-            <Text style={{ 
-              fontSize: 14, 
-              fontWeight: '500', 
-              color: '#FFFFFF' 
-            }}>
+            <span className="text-sm font-medium text-white">
               {label}
-            </Text>
+            </span>
           )}
           {showNumbers && (
-            <Text style={{ 
-              fontSize: 12, 
-              color: 'rgba(255, 255, 255, 0.7)' 
-            }}>
+            <span className="text-xs text-white/70">
               {current}/{max}
-            </Text>
+            </span>
           )}
-        </View>
+        </div>
       )}
       
-      <View style={{
-        height: barHeight,
-        backgroundColor: backgroundColor,
-        borderRadius: barHeight / 2,
-        overflow: 'hidden'
-      }}>
-        <View 
-          style={{
-            height: '100%',
-            width: `${percentage}%`,
-            backgroundColor: intense ? '#10B981' : progressColor,
-            borderRadius: barHeight / 2
-          }}
+      <div 
+        className="bg-white/20 rounded-full overflow-hidden"
+        style={{ height: barHeight }}
+      >
+        <div 
+          className={`h-full rounded-full transition-all duration-300 ${
+            intense ? 'bg-emerald-500' : 'bg-white/80'
+          }`}
+          style={{ width: `${percentage}%` }}
         />
-      </View>
+      </div>
       
       {percentage >= 100 && (
-        <View style={{ 
-          marginTop: 4, 
-          flexDirection: 'row', 
-          alignItems: 'center', 
-          gap: 4 
-        }}>
-          <Text style={{ fontSize: 12 }}>🎉</Text>
-          <Text style={{ 
-            fontSize: 12, 
-            color: '#10B981', 
-            fontWeight: '500' 
-          }}>
+        <div className="flex items-center gap-1 mt-1">
+          <span className="text-xs">🎉</span>
+          <span className="text-xs text-emerald-500 font-medium">
             Complete!
-          </Text>
-        </View>
+          </span>
+        </div>
       )}
-    </View>
+    </div>
   );
 };
 

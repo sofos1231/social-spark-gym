@@ -186,13 +186,10 @@ const PracticeRoad = () => {
           {config.steps.map((step, index) => (
             <PracticeStepCard
               key={step.id}
-              id={step.id}
-              title={step.title}
-              icon={step.icon}
-              status={step.status}
+              step={step}
               theme={config.theme}
               order={index + 1}
-              onClick={() => {
+              onPress={() => {
                 if (step.status !== 'locked') {
                   // Navigate to specific drill/training
                   navigate('/quick-drill', { 
