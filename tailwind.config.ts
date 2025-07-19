@@ -65,6 +65,26 @@ export default {
 					silver: 'hsl(var(--xp-silver))',
 					gold: 'hsl(var(--xp-gold))',
 					diamond: 'hsl(var(--xp-diamond))'
+				},
+				dating: {
+					primary: 'hsl(var(--dating-primary))',
+					secondary: 'hsl(var(--dating-secondary))',
+					bg: 'hsl(var(--dating-bg))'
+				},
+				interview: {
+					primary: 'hsl(var(--interview-primary))',
+					secondary: 'hsl(var(--interview-secondary))',
+					bg: 'hsl(var(--interview-bg))'
+				},
+				charisma: {
+					primary: 'hsl(var(--charisma-primary))',
+					secondary: 'hsl(var(--charisma-secondary))',
+					bg: 'hsl(var(--charisma-bg))'
+				},
+				speaking: {
+					primary: 'hsl(var(--speaking-primary))',
+					secondary: 'hsl(var(--speaking-secondary))',
+					bg: 'hsl(var(--speaking-bg))'
 				}
 			},
 			fontFamily: {
@@ -76,6 +96,10 @@ export default {
 				'gradient-warning': 'var(--gradient-warning)',
 				'gradient-accent': 'var(--gradient-accent)',
 				'gradient-xp': 'var(--gradient-xp)',
+				'gradient-dating': 'var(--gradient-dating)',
+				'gradient-interview': 'var(--gradient-interview)',
+				'gradient-charisma': 'var(--gradient-charisma)',
+				'gradient-speaking': 'var(--gradient-speaking)',
 			},
 			boxShadow: {
 				'card': 'var(--shadow-card)',

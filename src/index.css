@@ -51,6 +51,23 @@
     --xp-gold: 45 93% 58%;
     --xp-diamond: 200 100% 70%;
 
+    /* Category themes - distinct color palettes */
+    --dating-primary: 300 76% 62%;
+    --dating-secondary: 320 85% 75%;
+    --dating-bg: 310 100% 98%;
+    
+    --interview-primary: 215 84% 55%;
+    --interview-secondary: 210 100% 85%;
+    --interview-bg: 215 100% 98%;
+    
+    --charisma-primary: 150 75% 45%;
+    --charisma-secondary: 45 100% 60%;
+    --charisma-bg: 150 100% 98%;
+    
+    --speaking-primary: 25 95% 53%;
+    --speaking-secondary: 0 0% 10%;
+    --speaking-bg: 25 100% 98%;
+
     /* Gradients - intense and motivational */
     --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
     --gradient-success: linear-gradient(135deg, hsl(var(--success)), hsl(var(--success-glow)));
@@ -59,6 +76,12 @@
     --gradient-xp: linear-gradient(90deg, hsl(var(--warning)), hsl(var(--success)));
     --gradient-background: linear-gradient(135deg, hsl(var(--background-warm)), hsl(var(--card-warm)));
     --gradient-intense: linear-gradient(135deg, hsl(var(--accent)), hsl(var(--primary)));
+    
+    /* Category gradients */
+    --gradient-dating: linear-gradient(135deg, hsl(var(--dating-primary)), hsl(var(--dating-secondary)));
+    --gradient-interview: linear-gradient(135deg, hsl(var(--interview-primary)), hsl(var(--interview-secondary)));
+    --gradient-charisma: linear-gradient(135deg, hsl(var(--charisma-primary)), hsl(var(--charisma-secondary)));
+    --gradient-speaking: linear-gradient(135deg, hsl(var(--speaking-primary)), hsl(var(--speaking-secondary)));
 
     /* Interactive states */
     --destructive: 0 84% 60%;
@@ -324,6 +347,75 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+  }
+
+  .text-gradient-intense {
+    background: var(--gradient-intense);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Category card styles */
+  .category-card {
+    @apply relative rounded-xl border-0 overflow-hidden cursor-pointer transition-all duration-300;
+    backdrop-filter: blur(10px);
+    box-shadow: var(--shadow-elevation);
+  }
+
+  .category-card:active {
+    transform: scale(0.98);
+  }
+
+  .category-dating {
+    background: var(--gradient-dating);
+    color: white;
+  }
+
+  .category-interview {
+    background: var(--gradient-interview);
+    color: white;
+  }
+
+  .category-charisma {
+    background: var(--gradient-charisma);
+    color: white;
+  }
+
+  .category-speaking {
+    background: var(--gradient-speaking);
+    color: white;
+  }
+
+  .shimmer-effect {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .shimmer-effect::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.6),
+      transparent
+    );
+    transition: left 0.8s ease-out;
+    z-index: 1;
+  }
+
+  .shimmer-effect.shimmer-active::before {
+    left: 100%;
+  }
+
+  .info-card {
+    @apply bg-card/90 backdrop-blur-lg rounded-lg border border-border/50 p-3 min-w-[140px] h-[100px] flex flex-col justify-between;
+    box-shadow: var(--shadow-card);
   }
 }
 
