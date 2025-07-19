@@ -1,11 +1,11 @@
 import { useNavigate } from 'react-router-dom';
-import { Heart, Users, Briefcase, Mic, LucideIcon } from 'lucide-react';
+import { Heart, Users, Briefcase, Mic } from 'lucide-react';
 import PracticeCard from '@/components/PracticeCard';
 
 interface CategoryData {
   id: string;
   title: string;
-  icon: LucideIcon;
+  icon: React.ElementType;
   theme: 'dating' | 'interview' | 'charisma' | 'speaking';
   xp: number;
   streak: number;
