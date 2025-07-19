@@ -1,172 +1,281 @@
-import { useState, useEffect } from 'react';
-import { Lock, CheckCircle2 } from 'lucide-react';
 
-interface PracticeStepCardProps {
+import React, { useState, useEffect } from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withDelay,
+} from 'react-native-reanimated';
+import { CheckCircle2, Lock } from 'lucide-react-native';
+
+interface StepData {
   id: string;
   title: string;
   icon: string;
   status: 'locked' | 'unlocked' | 'completed';
-  theme: 'dating' | 'interview' | 'charisma' | 'speaking';
-  order: number;
-  onClick?: () => void;
 }
 
-const PracticeStepCard = ({
-  id,
-  title,
-  icon,
-  status,
+interface PracticeStepCardProps {
+  step: StepData;
+  theme: 'dating' | 'interview' | 'charisma' | 'speaking';
+  order: number;
+  onPress?: () => void;
+  animationDelay?: number;
+}
+
+const PracticeStepCard: React.FC<PracticeStepCardProps> = ({
+  step,
   theme,
   order,
-  onClick
-}: PracticeStepCardProps) => {
-  const [isVisible, setIsVisible] = useState(false);
+  onPress,
+  animationDelay = 0
+}) => {
+  const opacity = useSharedValue(0);
+  const translateY = useSharedValue(20);
 
   useEffect(() => {
-    // Staggered entrance animation
-    const timer = setTimeout(() => {
-      setIsVisible(true);
-    }, order * 100);
+    opacity.value = withDelay(animationDelay, withTiming(1, { duration: 500 }));
+    translateY.value = withDelay(animationDelay, withTiming(0, { duration: 500 }));
+  }, [animationDelay]);
 
-    return () => clearTimeout(timer);
-  }, [order]);
-
-  const getThemeClasses = () => {
+  const getThemeColors = () => {
     switch (theme) {
       case 'dating':
         return {
-          card: 'bg-gradient-to-r from-dating-primary/90 to-dating-secondary/90',
-          glow: 'shadow-[0_0_20px_hsl(var(--dating-primary)/0.4)]',
-          border: 'border-dating-primary/30'
+          gradient: ['#6b2154', '#b83280'],
+          borderColor: '#e91e63',
+          shadowColor: '#e91e63',
         };
       case 'interview':
         return {
-          card: 'bg-gradient-to-r from-interview-primary/90 to-interview-secondary/90',
-          glow: 'shadow-[0_0_20px_hsl(var(--interview-primary)/0.4)]',
-          border: 'border-interview-primary/30'
+          gradient: ['#1e3a5f', '#1e88e5'],
+          borderColor: '#42a5f5',
+          shadowColor: '#42a5f5',
         };
       case 'charisma':
         return {
-          card: 'bg-gradient-to-r from-charisma-primary/90 to-charisma-secondary/90',
-          glow: 'shadow-[0_0_20px_hsl(var(--charisma-primary)/0.4)]',
-          border: 'border-charisma-primary/30'
+          gradient: ['#1a4d3a', '#00c896'],
+          borderColor: '#4dd0e1',
+          shadowColor: '#4dd0e1',
         };
       case 'speaking':
         return {
-          card: 'bg-gradient-to-r from-speaking-primary/90 to-speaking-secondary/90',
-          glow: 'shadow-[0_0_20px_hsl(var(--speaking-primary)/0.4)]',
-          border: 'border-speaking-primary/30'
+          gradient: ['#5d3317', '#ff8f00'],
+          borderColor: '#ffb74d',
+          shadowColor: '#ffb74d',
         };
       default:
         return {
-          card: 'bg-muted',
-          glow: '',
-          border: 'border-border'
+          gradient: ['#1a1a2e', '#16213e'],
+          borderColor: '#94A3B8',
+          shadowColor: '#94A3B8',
         };
     }
   };
 
-  const themeClasses = getThemeClasses();
+  const themeColors = getThemeColors();
 
   const getStatusStyles = () => {
-    switch (status) {
+    switch (step.status) {
       case 'completed':
         return {
-          wrapper: `${themeClasses.card} ${themeClasses.glow} border ${themeClasses.border}`,
-          content: 'text-white',
-          interactive: true
+          backgroundColor: themeColors.gradient[0],
+          borderColor: themeColors.borderColor,
+          textColor: '#FFFFFF',
+          interactive: true,
+          shadow: true
         };
       case 'unlocked':
         return {
-          wrapper: `${themeClasses.card} border ${themeClasses.border} shadow-elevation`,
-          content: 'text-white',
-          interactive: true
+          backgroundColor: themeColors.gradient[1],
+          borderColor: themeColors.borderColor,
+          textColor: '#FFFFFF',
+          interactive: true,
+          shadow: true
         };
       case 'locked':
         return {
-          wrapper: 'bg-muted/50 border border-border/30',
-          content: 'text-muted-foreground',
-          interactive: false
+          backgroundColor: 'rgba(100, 100, 100, 0.3)',
+          borderColor: 'rgba(148, 163, 184, 0.3)',
+          textColor: '#94A3B8',
+          interactive: false,
+          shadow: false
         };
       default:
         return {
-          wrapper: 'bg-card border',
-          content: 'text-foreground',
-          interactive: false
+          backgroundColor: '#1a1a2e',
+          borderColor: '#94A3B8',
+          textColor: '#FFFFFF',
+          interactive: false,
+          shadow: false
         };
     }
   };
 
   const statusStyles = getStatusStyles();
 
+  const animatedStyle = useAnimatedStyle(() => ({
+    opacity: opacity.value,
+    transform: [{ translateY: translateY.value }],
+  }));
+
   return (
-    <div
-      className={`transform transition-all duration-500 ${
-        isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
-      }`}
-      style={{ transitionDelay: `${order * 50}ms` }}
-    >
-      <div
-        className={`relative p-4 rounded-xl backdrop-blur-sm transition-all duration-200 ${
-          statusStyles.wrapper
-        } ${
-          statusStyles.interactive 
-            ? 'cursor-pointer hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98]' 
-            : 'cursor-not-allowed'
-        }`}
-        onClick={statusStyles.interactive ? onClick : undefined}
+    <Animated.View style={[styles.container, animatedStyle]}>
+      <TouchableOpacity
+        activeOpacity={statusStyles.interactive ? 0.7 : 1}
+        onPress={statusStyles.interactive ? onPress : undefined}
+        disabled={!statusStyles.interactive}
+        style={[
+          styles.card,
+          {
+            backgroundColor: statusStyles.backgroundColor,
+            borderColor: statusStyles.borderColor,
+            shadowColor: statusStyles.shadow ? statusStyles.borderColor : 'transparent',
+          }
+        ]}
       >
         {/* Step number indicator */}
-        <div className="absolute -left-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-background border-2 border-current flex items-center justify-center text-xs font-bold">
-          {order}
-        </div>
+        <View style={[styles.stepNumber, { borderColor: statusStyles.textColor }]}>
+          <Text style={[styles.stepNumberText, { color: statusStyles.textColor }]}>
+            {order}
+          </Text>
+        </View>
 
-        <div className="flex items-center gap-3 ml-4">
+        <View style={styles.content}>
           {/* Icon area */}
-          <div className={`text-2xl ${statusStyles.content}`}>
-            {status === 'completed' ? (
-              <CheckCircle2 size={24} className="text-green-300" />
-            ) : status === 'locked' ? (
-              <Lock size={20} className="text-muted-foreground" />
+          <View style={styles.iconArea}>
+            {step.status === 'completed' ? (
+              <CheckCircle2 size={24} color="#10B981" />
+            ) : step.status === 'locked' ? (
+              <Lock size={20} color="#94A3B8" />
             ) : (
-              <span>{icon}</span>
+              <Text style={[styles.iconEmoji, { color: statusStyles.textColor }]}>
+                {step.icon}
+              </Text>
             )}
-          </div>
+          </View>
 
           {/* Content */}
-          <div className="flex-1">
-            <h3 className={`font-display font-semibold text-base ${statusStyles.content}`}>
-              {title}
-            </h3>
-            <div className="flex items-center gap-2 mt-1">
-              <span className={`text-xs px-2 py-1 rounded-full font-medium ${
-                status === 'completed' 
-                  ? 'bg-green-500/20 text-green-300' 
-                  : status === 'unlocked'
-                  ? 'bg-yellow-500/20 text-yellow-300'
-                  : 'bg-muted/20 text-muted-foreground'
-              }`}>
-                {status === 'completed' ? 'Mastered' : status === 'unlocked' ? 'Ready' : 'Locked'}
-              </span>
-            </div>
-          </div>
+          <View style={styles.textContent}>
+            <Text style={[styles.title, { color: statusStyles.textColor }]}>
+              {step.title}
+            </Text>
+            <View style={styles.statusBadge}>
+              <Text style={[
+                styles.statusText,
+                {
+                  backgroundColor: step.status === 'completed' 
+                    ? 'rgba(16, 185, 129, 0.2)' 
+                    : step.status === 'unlocked'
+                    ? 'rgba(245, 158, 11, 0.2)'
+                    : 'rgba(100, 100, 100, 0.2)',
+                  color: step.status === 'completed' 
+                    ? '#10B981' 
+                    : step.status === 'unlocked'
+                    ? '#F59E0B'
+                    : '#94A3B8'
+                }
+              ]}>
+                {step.status === 'completed' ? 'Mastered' : step.status === 'unlocked' ? 'Ready' : 'Locked'}
+              </Text>
+            </View>
+          </View>
 
           {/* Status indicator */}
-          {status === 'completed' && (
-            <div className="w-3 h-3 rounded-full bg-green-400 animate-pulse-glow" />
+          {step.status === 'completed' && (
+            <View style={[styles.statusDot, { backgroundColor: '#10B981' }]} />
           )}
-          {status === 'unlocked' && (
-            <div className="w-3 h-3 rounded-full bg-yellow-400 animate-pulse" />
+          {step.status === 'unlocked' && (
+            <View style={[styles.statusDot, { backgroundColor: '#F59E0B' }]} />
           )}
-        </div>
-
-        {/* Glow effect for completed items */}
-        {status === 'completed' && (
-          <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-transparent via-white/5 to-transparent animate-pulse-glow" />
-        )}
-      </div>
-    </div>
+        </View>
+      </TouchableOpacity>
+    </Animated.View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    marginBottom: 12,
+  },
+  card: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
+    borderRadius: 16,
+    borderWidth: 2,
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 8,
+    marginLeft: 12,
+  },
+  stepNumber: {
+    position: 'absolute',
+    left: -12,
+    top: '50%',
+    marginTop: -12,
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: '#0f1323',
+    borderWidth: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  stepNumberText: {
+    fontSize: 12,
+    fontWeight: '700',
+  },
+  content: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: 16,
+    gap: 12,
+  },
+  iconArea: {
+    width: 32,
+    height: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  iconEmoji: {
+    fontSize: 24,
+  },
+  textContent: {
+    flex: 1,
+  },
+  title: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 4,
+  },
+  statusBadge: {
+    alignSelf: 'flex-start',
+  },
+  statusText: {
+    fontSize: 12,
+    fontWeight: '500',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+    overflow: 'hidden',
+  },
+  statusDot: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+  },
+});
 
 export default PracticeStepCard;

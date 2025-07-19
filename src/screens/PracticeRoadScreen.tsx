@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -11,13 +12,11 @@ import {
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { ArrowLeft, Crown, Zap } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useFonts, Poppins_400Regular, Poppins_600SemiBold, Poppins_700Bold } from '@expo-google-fonts/poppins';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
   withDelay,
-  withSpring,
 } from 'react-native-reanimated';
 import PracticeStepCard from '../components/PracticeStepCard';
 import ProgressBar from '../components/ProgressBar';
@@ -47,12 +46,6 @@ const PracticeRoadScreen = () => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   const opacity = useSharedValue(0);
-
-  const [fontsLoaded] = useFonts({
-    Poppins_400Regular,
-    Poppins_600SemiBold,
-    Poppins_700Bold,
-  });
 
   useEffect(() => {
     setIsLoaded(true);
@@ -124,150 +117,135 @@ const PracticeRoadScreen = () => {
     }
   };
 
-  const config = categoryConfigs[categoryId];
+  const config = categoryConfigs[categoryId || ''];
 
-  const getThemeColors = () => {
-    switch (config?.theme) {
+  if (!config) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorTitle}>Category not found</Text>
+        <TouchableOpacity 
+          onPress={() => navigation.goBack()}
+          style={styles.errorButton}
+        >
+          <Text style={styles.errorButtonText}>Return to Practice Hub</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
+  const getThemeGradient = () => {
+    switch (config.theme) {
       case 'dating':
-        return ['#6b2154', '#b83280', '#e91e63'];
+        return ['#3d1a3d', '#6b2154', '#b83280', '#e91e63'];
       case 'interview':
-        return ['#1e3a5f', '#1e88e5', '#42a5f5'];
+        return ['#0d1421', '#1e3a5f', '#1e88e5', '#42a5f5'];
       case 'charisma':
-        return ['#1a4d3a', '#00c896', '#4dd0e1'];
+        return ['#0d2818', '#1a4d3a', '#00c896', '#4dd0e1'];
       case 'speaking':
-        return ['#5d3317', '#ff8f00', '#ffb74d'];
+        return ['#2d1810', '#5d3317', '#ff8f00', '#ffb74d'];
       default:
-        return ['#0f1323', '#1a1a2e', '#16213e'];
+        return ['#0f1323', '#1a1a2e'];
     }
   };
 
-  const getMotivationalMessage = () => {
-    switch (config?.theme) {
-      case 'dating':
-        return "💕 Love is a skill that can be learned";
-      case 'interview':
-        return "🎯 Your next opportunity awaits";
-      case 'charisma':
-        return "✨ Charisma is your superpower";
-      case 'speaking':
-        return "🎤 Your voice deserves to be heard";
-      default:
-        return "🌟 Keep practicing, keep growing";
-    }
-  };
+  const completedSteps = config.steps.filter(step => step.status === 'completed').length;
+  const progressPercentage = Math.round((completedSteps / config.steps.length) * 100);
 
   const animatedStyle = useAnimatedStyle(() => ({
     opacity: opacity.value,
   }));
 
-  if (!config || !fontsLoaded) {
-    return (
-      <View style={styles.loadingContainer}>
-        <Text style={styles.loadingText}>Loading...</Text>
-      </View>
-    );
-  }
-
-  const completedSteps = config.steps.filter(step => step.status === 'completed').length;
-  const progressPercentage = Math.round((completedSteps / config.steps.length) * 100);
-  const themeColors = getThemeColors();
-
-  const handleStepPress = (step: StepData) => {
-    if (step.status !== 'locked') {
-      navigation.navigate('QuickDrill' as never, {
-        category: config.theme,
-        skill: step.id,
-        title: step.title
-      } as never);
-    }
-  };
-
   return (
     <Animated.View style={[styles.container, animatedStyle]}>
       <StatusBar barStyle="light-content" />
-      
       <LinearGradient
-        colors={themeColors}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
+        colors={getThemeGradient()}
+        locations={[0, 0.3, 0.7, 1]}
         style={styles.gradient}
       >
+        {/* Header */}
+        <View style={styles.header}>
+          {/* Back button */}
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            style={styles.backButton}
+          >
+            <ArrowLeft size={20} color="#FFFFFF" />
+          </TouchableOpacity>
+
+          {/* Header content */}
+          <View style={styles.headerContent}>
+            <View style={styles.levelContainer}>
+              <Crown size={20} color="#FDE047" />
+              <Text style={styles.levelText}>Level {config.level}</Text>
+            </View>
+            <Text style={styles.headerTitle}>{config.title}</Text>
+            <Text style={styles.headerSubtitle}>{config.subtitle}</Text>
+            
+            {/* Progress overview */}
+            <View style={styles.progressOverview}>
+              <View style={styles.progressHeader}>
+                <View style={styles.xpContainer}>
+                  <Zap size={16} color="#FDE047" />
+                  <Text style={styles.xpText}>{config.totalXP.toLocaleString()} XP</Text>
+                </View>
+                <Text style={styles.progressText}>{progressPercentage}% complete</Text>
+              </View>
+              <ProgressBar
+                current={completedSteps}
+                max={config.steps.length}
+                showNumbers={false}
+                backgroundColor="rgba(255, 255, 255, 0.2)"
+                progressColor="rgba(255, 255, 255, 0.8)"
+                height={8}
+              />
+              <Text style={styles.progressSubtext}>
+                {completedSteps} of {config.steps.length} skills mastered
+              </Text>
+            </View>
+          </View>
+        </View>
+
+        {/* Steps Road */}
         <ScrollView 
           style={styles.scrollView}
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
         >
-          {/* Header */}
-          <View style={styles.header}>
-            {/* Back Button */}
-            <TouchableOpacity
-              style={styles.backButton}
-              onPress={() => navigation.goBack()}
-            >
-              <ArrowLeft size={20} color="#FFFFFF" />
-            </TouchableOpacity>
-
-            {/* Header Content */}
-            <View style={styles.headerContent}>
-              <View style={styles.levelContainer}>
-                <Crown size={20} color="#FEF3C7" />
-                <Text style={styles.levelText}>Level {config.level}</Text>
-              </View>
-              
-              <Text style={styles.categoryTitle}>{config.title}</Text>
-              <Text style={styles.categorySubtitle}>{config.subtitle}</Text>
-              
-              {/* Progress Overview */}
-              <View style={styles.progressOverview}>
-                <View style={styles.progressHeader}>
-                  <View style={styles.xpContainer}>
-                    <Zap size={16} color="#FEF3C7" />
-                    <Text style={styles.xpText}>
-                      {config.totalXP.toLocaleString()} XP
-                    </Text>
-                  </View>
-                  <Text style={styles.completionText}>
-                    {progressPercentage}% complete
-                  </Text>
-                </View>
-                
-                <ProgressBar 
-                  progress={progressPercentage} 
-                  height={8}
-                  backgroundColor="rgba(255, 255, 255, 0.2)"
-                  progressColor="rgba(255, 255, 255, 0.8)"
-                />
-                
-                <Text style={styles.progressFooter}>
-                  {completedSteps} of {config.steps.length} skills mastered
-                </Text>
-              </View>
-            </View>
-          </View>
-
-          {/* Steps Road */}
           <View style={styles.stepsContainer}>
-            {/* Connector Line */}
+            {/* Vertical connector line */}
             <View style={styles.connectorLine} />
             
-            <View style={styles.stepsContent}>
+            <View style={styles.stepsList}>
               {config.steps.map((step, index) => (
                 <PracticeStepCard
                   key={step.id}
                   step={step}
                   theme={config.theme}
                   order={index + 1}
-                  onPress={() => handleStepPress(step)}
+                  onPress={() => {
+                    if (step.status !== 'locked') {
+                      // Navigate to specific drill/training
+                      navigation.navigate('QuickDrill' as never, { 
+                        category: config.theme, 
+                        skill: step.id,
+                        title: step.title 
+                      } as never);
+                    }
+                  }}
                   animationDelay={index * 100}
                 />
               ))}
             </View>
           </View>
 
-          {/* Motivational Footer */}
-          <View style={styles.motivationalFooter}>
+          {/* Bottom motivational section */}
+          <View style={styles.motivationalSection}>
             <Text style={styles.motivationalText}>
-              {getMotivationalMessage()}
+              {config.theme === 'dating' && "💕 Love is a skill that can be learned"}
+              {config.theme === 'interview' && "🎯 Your next opportunity awaits"}
+              {config.theme === 'charisma' && "✨ Charisma is your superpower"}
+              {config.theme === 'speaking' && "🎤 Your voice deserves to be heard"}
             </Text>
           </View>
         </ScrollView>
@@ -280,34 +258,42 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  loadingContainer: {
+  gradient: {
+    flex: 1,
+  },
+  errorContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#0f1323',
+    padding: 20,
   },
-  loadingText: {
+  errorTitle: {
+    fontSize: 24,
+    fontWeight: '700',
     color: '#FFFFFF',
+    marginBottom: 16,
+    textAlign: 'center',
+  },
+  errorButton: {
+    backgroundColor: '#3B82F6',
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 12,
+  },
+  errorButtonText: {
+    color: '#FFFFFF',
+    fontWeight: '600',
     fontSize: 16,
-    fontFamily: 'Poppins_400Regular',
-  },
-  gradient: {
-    flex: 1,
-  },
-  scrollView: {
-    flex: 1,
-  },
-  scrollContent: {
-    paddingBottom: 80,
   },
   header: {
-    paddingTop: 50,
+    paddingTop: 60,
     paddingBottom: 32,
-    position: 'relative',
+    paddingHorizontal: 16,
   },
   backButton: {
     position: 'absolute',
-    top: 50,
+    top: 60,
     left: 16,
     zIndex: 10,
     padding: 8,
@@ -315,9 +301,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.2)',
   },
   headerContent: {
-    paddingHorizontal: 16,
-    paddingTop: 48,
     alignItems: 'center',
+    paddingTop: 48,
   },
   levelContainer: {
     flexDirection: 'row',
@@ -327,22 +312,22 @@ const styles = StyleSheet.create({
   },
   levelText: {
     fontSize: 14,
-    fontFamily: 'Poppins_700Bold',
+    fontWeight: '700',
     color: '#FEF3C7',
   },
-  categoryTitle: {
+  headerTitle: {
     fontSize: 28,
-    fontFamily: 'Poppins_700Bold',
+    fontWeight: '700',
     color: '#FFFFFF',
-    textAlign: 'center',
     marginBottom: 8,
-  },
-  categorySubtitle: {
-    fontSize: 18,
-    fontFamily: 'Poppins_600SemiBold',
-    color: 'rgba(255, 255, 255, 0.9)',
     textAlign: 'center',
+  },
+  headerSubtitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: 'rgba(255, 255, 255, 0.9)',
     marginBottom: 24,
+    textAlign: 'center',
   },
   progressOverview: {
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
@@ -350,8 +335,6 @@ const styles = StyleSheet.create({
     padding: 16,
     width: '100%',
     maxWidth: 320,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
   },
   progressHeader: {
     flexDirection: 'row',
@@ -362,24 +345,29 @@ const styles = StyleSheet.create({
   xpContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: 4,
   },
   xpText: {
     fontSize: 14,
-    fontFamily: 'Poppins_700Bold',
+    fontWeight: '700',
     color: '#FFFFFF',
   },
-  completionText: {
+  progressText: {
     fontSize: 14,
-    fontFamily: 'Poppins_700Bold',
+    fontWeight: '700',
     color: '#86EFAC',
   },
-  progressFooter: {
+  progressSubtext: {
     fontSize: 12,
-    fontFamily: 'Poppins_400Regular',
     color: 'rgba(255, 255, 255, 0.75)',
     textAlign: 'center',
     marginTop: 4,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    paddingBottom: 100,
   },
   stepsContainer: {
     paddingHorizontal: 24,
@@ -393,21 +381,19 @@ const styles = StyleSheet.create({
     width: 2,
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
   },
-  stepsContent: {
+  stepsList: {
     gap: 16,
   },
-  motivationalFooter: {
+  motivationalSection: {
     marginTop: 48,
     marginHorizontal: 16,
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
     borderRadius: 16,
     padding: 16,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
   },
   motivationalText: {
     fontSize: 14,
-    fontFamily: 'Poppins_600SemiBold',
+    fontWeight: '500',
     color: 'rgba(255, 255, 255, 0.9)',
     textAlign: 'center',
   },

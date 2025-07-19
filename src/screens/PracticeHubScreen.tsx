@@ -1,3 +1,4 @@
+
 import React from 'react';
 import {
   View,
@@ -9,8 +10,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Heart, Users, Briefcase, Mic } from 'lucide-react-native';
-import { useFonts, Poppins_400Regular, Poppins_600SemiBold, Poppins_700Bold } from '@expo-google-fonts/poppins';
-import CategoryCard from '../components/CategoryCard';
+import PracticeCard from '../components/PracticeCard';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -35,12 +35,6 @@ interface InfoCardData {
 
 const PracticeHubScreen = () => {
   const navigation = useNavigation();
-
-  const [fontsLoaded] = useFonts({
-    Poppins_400Regular,
-    Poppins_600SemiBold,
-    Poppins_700Bold,
-  });
 
   const categories: CategoryData[] = [
     {
@@ -120,14 +114,6 @@ const PracticeHubScreen = () => {
     navigation.navigate(category.route as never, { categoryId: category.id } as never);
   };
 
-  if (!fontsLoaded) {
-    return (
-      <View style={styles.loadingContainer}>
-        <Text>Loading...</Text>
-      </View>
-    );
-  }
-
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#0f1323" />
@@ -146,10 +132,17 @@ const PracticeHubScreen = () => {
         {/* Category Cards */}
         <View style={styles.categoriesContainer}>
           {categories.map((category, index) => (
-            <CategoryCard
+            <PracticeCard
               key={category.id}
-              category={category}
-              onPress={() => handleCategoryPress(category)}
+              id={category.id}
+              title={category.title}
+              icon={category.icon}
+              theme={category.theme}
+              xp={category.xp}
+              streak={category.streak}
+              completedMissions={category.completedMissions}
+              totalMissions={category.totalMissions}
+              onClick={() => handleCategoryPress(category)}
               animationDelay={index * 100}
             />
           ))}
@@ -191,12 +184,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#0f1323',
   },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#0f1323',
-  },
   scrollView: {
     flex: 1,
   },
@@ -211,14 +198,14 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 32,
-    fontFamily: 'Poppins_700Bold',
+    fontWeight: '700',
     color: '#FFFFFF',
     marginBottom: 8,
     textAlign: 'center',
   },
   subtitle: {
     fontSize: 18,
-    fontFamily: 'Poppins_600SemiBold',
+    fontWeight: '600',
     color: '#94A3B8',
     textAlign: 'center',
   },
@@ -232,7 +219,7 @@ const styles = StyleSheet.create({
   },
   statsTitle: {
     fontSize: 20,
-    fontFamily: 'Poppins_700Bold',
+    fontWeight: '700',
     color: '#FFFFFF',
     marginBottom: 16,
   },
@@ -259,12 +246,12 @@ const styles = StyleSheet.create({
   },
   infoCardTitle: {
     fontSize: 14,
-    fontFamily: 'Poppins_700Bold',
+    fontWeight: '700',
     color: '#FFFFFF',
   },
   infoCardSubtitle: {
     fontSize: 12,
-    fontFamily: 'Poppins_400Regular',
+    fontWeight: '400',
     color: '#94A3B8',
   },
   motivationalFooter: {
@@ -278,7 +265,7 @@ const styles = StyleSheet.create({
   },
   motivationalText: {
     fontSize: 14,
-    fontFamily: 'Poppins_600SemiBold',
+    fontWeight: '600',
     color: '#FBB936',
     textAlign: 'center',
   },
