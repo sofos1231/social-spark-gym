@@ -3,7 +3,8 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Practice from "./pages/Practice";
+import PracticeHub from "./pages/PracticeHub";
+import PracticeRoad from "./pages/PracticeRoad";
 import QuickDrill from "./pages/QuickDrill";
 import ShadowPractice from "./pages/ShadowPractice";
 import Stats from "./pages/Stats";
@@ -23,7 +24,8 @@ const App = () => (
       <BrowserRouter>
         <div className="relative">
           <Routes>
-            <Route path="/" element={<Practice />} />
+            <Route path="/" element={<PracticeHub />} />
+            <Route path="/practice-road/:categoryId" element={<PracticeRoad />} />
             <Route path="/quick-drill" element={<QuickDrill />} />
             <Route path="/shadow-practice" element={<ShadowPractice />} />
             <Route path="/stats" element={<Stats />} />
