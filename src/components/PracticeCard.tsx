@@ -1,39 +1,21 @@
-
-import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  Dimensions,
-} from 'react-native';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-  withSpring,
-  withSequence,
-  withDelay,
-} from 'react-native-reanimated';
-import { LinearGradient } from 'expo-linear-gradient';
-
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
+import React from 'react';
+import { LucideIcon } from 'lucide-react';
+import ProgressBar from './ProgressBar';
 
 interface PracticeCardProps {
   id: string;
   title: string;
-  icon: React.ComponentType<any>;
+  icon: LucideIcon;
   theme: 'dating' | 'interview' | 'charisma' | 'speaking';
   xp: number;
   streak: number;
   completedMissions: number;
   totalMissions: number;
-  onClick: () => void;
+  onClick?: () => void;
   animationDelay?: number;
 }
 
-const PracticeCard: React.FC<PracticeCardProps> = ({ 
-  id,
+const PracticeCard: React.FC<PracticeCardProps> = ({
   title,
   icon: Icon,
   theme,
@@ -42,308 +24,100 @@ const PracticeCard: React.FC<PracticeCardProps> = ({
   completedMissions,
   totalMissions,
   onClick,
-  animationDelay = 0 
+  animationDelay = 0
 }) => {
-  const scale = useSharedValue(0.95);
-  const opacity = useSharedValue(0);
-  const shimmerX = useSharedValue(-200);
-  const pressScale = useSharedValue(1);
-
-  const progressPercentage = Math.round((completedMissions / totalMissions) * 100);
-  const level = Math.floor(xp / 500) + 1;
-
-  useEffect(() => {
-    opacity.value = withDelay(animationDelay, withTiming(1, { duration: 500 }));
-    scale.value = withDelay(animationDelay, withSpring(1, { damping: 15, stiffness: 150 }));
-  }, [animationDelay]);
-
-  const getThemeColors = () => {
+  const getThemeClasses = () => {
     switch (theme) {
       case 'dating':
         return {
-          colors: ['#6b2154', '#b83280', '#e91e63'],
-          borderColor: '#e91e63',
-          shadowColor: '#e91e63',
+          gradient: 'from-pink-900/80 to-pink-600/80',
+          border: 'border-pink-500/50',
+          glow: 'shadow-pink-500/20',
         };
       case 'interview':
         return {
-          colors: ['#1e3a5f', '#1e88e5', '#42a5f5'],
-          borderColor: '#42a5f5',
-          shadowColor: '#42a5f5',
+          gradient: 'from-blue-900/80 to-blue-600/80',
+          border: 'border-blue-500/50',
+          glow: 'shadow-blue-500/20',
         };
       case 'charisma':
         return {
-          colors: ['#1a4d3a', '#00c896', '#4dd0e1'],
-          borderColor: '#4dd0e1',
-          shadowColor: '#4dd0e1',
+          gradient: 'from-emerald-900/80 to-emerald-600/80',
+          border: 'border-emerald-500/50',
+          glow: 'shadow-emerald-500/20',
         };
       case 'speaking':
         return {
-          colors: ['#5d3317', '#ff8f00', '#ffb74d'],
-          borderColor: '#ffb74d',
-          shadowColor: '#ffb74d',
+          gradient: 'from-orange-900/80 to-orange-600/80',
+          border: 'border-orange-500/50',
+          glow: 'shadow-orange-500/20',
         };
       default:
         return {
-          colors: ['#1a1a2e', '#16213e', '#0f1323'],
-          borderColor: '#94A3B8',
-          shadowColor: '#94A3B8',
+          gradient: 'from-slate-800/80 to-slate-600/80',
+          border: 'border-slate-500/50',
+          glow: 'shadow-slate-500/20',
         };
     }
   };
 
-  const themeColors = getThemeColors();
-
-  const animatedContainerStyle = useAnimatedStyle(() => ({
-    opacity: opacity.value,
-    transform: [
-      { scale: scale.value * pressScale.value }
-    ],
-  }));
-
-  const shimmerStyle = useAnimatedStyle(() => ({
-    transform: [{ translateX: shimmerX.value }],
-  }));
-
-  const handlePressIn = () => {
-    pressScale.value = withSpring(0.98, { damping: 15, stiffness: 300 });
-    shimmerX.value = withTiming(SCREEN_WIDTH + 100, { duration: 800 });
-  };
-
-  const handlePressOut = () => {
-    pressScale.value = withSpring(1, { damping: 15, stiffness: 300 });
-  };
-
-  const handlePress = () => {
-    pressScale.value = withSequence(
-      withTiming(0.95, { duration: 100 }),
-      withTiming(1, { duration: 200 })
-    );
-    
-    setTimeout(() => {
-      onClick();
-    }, 150);
-  };
+  const themeClasses = getThemeClasses();
 
   return (
-    <Animated.View style={[styles.container, animatedContainerStyle]}>
-      <TouchableOpacity
-        activeOpacity={0.9}
-        onPressIn={handlePressIn}
-        onPressOut={handlePressOut}
-        onPress={handlePress}
-        style={styles.touchable}
-      >
-        <LinearGradient
-          colors={themeColors.colors}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={[
-            styles.card,
-            {
-              borderColor: themeColors.borderColor,
-              shadowColor: themeColors.shadowColor,
-            }
-          ]}
-        >
-          {/* Shimmer Effect */}
-          <Animated.View style={[styles.shimmer, shimmerStyle]} />
-          
-          {/* Card Content */}
-          <View style={styles.content}>
-            {/* Header Row */}
-            <View style={styles.headerRow}>
-              {/* Left Side - Icon and Title */}
-              <View style={styles.leftSection}>
-                <View style={styles.iconContainer}>
-                  <Icon size={24} color="#FFFFFF" />
-                </View>
-                <View style={styles.titleSection}>
-                  <Text style={styles.title}>{title}</Text>
-                  <Text style={styles.xpText}>
-                    {xp.toLocaleString()} XP
-                  </Text>
-                </View>
-              </View>
+    <div 
+      className={`
+        relative p-6 rounded-2xl border-2 backdrop-blur-sm cursor-pointer
+        transition-all duration-300 hover:scale-105 hover:shadow-2xl
+        bg-gradient-to-br ${themeClasses.gradient} ${themeClasses.border} ${themeClasses.glow}
+        animate-fade-in
+      `}
+      style={{ 
+        animationDelay: `${animationDelay}ms`,
+      }}
+      onClick={onClick}
+    >
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-3">
+          <div className="p-3 rounded-xl bg-white/10 backdrop-blur-sm">
+            <Icon size={24} className="text-white" />
+          </div>
+          <h3 className="text-lg font-bold text-white">{title}</h3>
+        </div>
+        
+        {/* Streak indicator */}
+        <div className="flex items-center gap-1 px-3 py-1 rounded-full bg-orange-500/20 border border-orange-500/30">
+          <span className="text-sm">🔥</span>
+          <span className="text-sm font-semibold text-orange-300">{streak}</span>
+        </div>
+      </div>
 
-              {/* Right Side - Streak and Missions */}
-              <View style={styles.rightSection}>
-                <View style={styles.streakContainer}>
-                  <Text style={styles.fireIcon}>🔥</Text>
-                  <Text style={styles.streakNumber}>{streak}</Text>
-                </View>
-                <View style={styles.missionsContainer}>
-                  <Text style={styles.missionsText}>
-                    <Text style={styles.completedMissions}>{completedMissions}</Text>
-                    <Text style={styles.totalMissions}>/{totalMissions}</Text>
-                  </Text>
-                  <Text style={styles.missionsLabel}>missions</Text>
-                </View>
-              </View>
-            </View>
+      {/* Stats */}
+      <div className="grid grid-cols-2 gap-4 mb-6">
+        <div className="text-center">
+          <div className="text-2xl font-bold text-white">{xp.toLocaleString()}</div>
+          <div className="text-xs text-white/70">XP Earned</div>
+        </div>
+        <div className="text-center">
+          <div className="text-2xl font-bold text-white">{completedMissions}/{totalMissions}</div>
+          <div className="text-xs text-white/70">Missions</div>
+        </div>
+      </div>
 
-            {/* Progress Section */}
-            <View style={styles.progressSection}>
-              <View style={styles.progressBarContainer}>
-                <View 
-                  style={[
-                    styles.progressBar, 
-                    { width: `${progressPercentage}%` }
-                  ]} 
-                />
-              </View>
-              <View style={styles.progressInfo}>
-                <Text style={styles.progressText}>
-                  {progressPercentage}% complete
-                </Text>
-                <Text style={styles.levelText}>
-                  Level {level}
-                </Text>
-              </View>
-            </View>
-          </View>
-        </LinearGradient>
-      </TouchableOpacity>
-    </Animated.View>
+      {/* Progress */}
+      <ProgressBar
+        current={completedMissions}
+        max={totalMissions}
+        showNumbers={false}
+        height={8}
+        intense
+      />
+
+      {/* Decorative elements */}
+      <div className="absolute top-4 right-4 w-2 h-2 bg-white/30 rounded-full animate-pulse" />
+      <div className="absolute bottom-4 left-4 w-1 h-1 bg-white/40 rounded-full" />
+    </div>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    marginBottom: 4,
-  },
-  touchable: {
-    borderRadius: 20,
-  },
-  card: {
-    height: 144,
-    borderRadius: 20,
-    padding: 24,
-    position: 'relative',
-    overflow: 'hidden',
-    borderWidth: 2,
-    shadowOffset: {
-      width: 0,
-      height: 8,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 16,
-    elevation: 12,
-  },
-  shimmer: {
-    position: 'absolute',
-    top: 0,
-    left: -200,
-    bottom: 0,
-    width: 200,
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
-    opacity: 0.6,
-  },
-  content: {
-    flex: 1,
-    justifyContent: 'space-between',
-    zIndex: 10,
-  },
-  headerRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-  },
-  leftSection: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-    gap: 12,
-  },
-  iconContainer: {
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    padding: 10,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.3)',
-  },
-  titleSection: {
-    flex: 1,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: '#FFFFFF',
-    lineHeight: 22,
-    marginBottom: 4,
-  },
-  xpText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: 'rgba(255, 255, 255, 0.9)',
-  },
-  rightSection: {
-    alignItems: 'flex-end',
-    marginLeft: 12,
-  },
-  streakContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    marginBottom: 4,
-  },
-  fireIcon: {
-    fontSize: 14,
-  },
-  streakNumber: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#FEF3C7',
-  },
-  missionsContainer: {
-    alignItems: 'flex-end',
-  },
-  missionsText: {
-    fontSize: 14,
-    fontWeight: '700',
-  },
-  completedMissions: {
-    color: 'rgba(255, 255, 255, 0.9)',
-  },
-  totalMissions: {
-    color: 'rgba(255, 255, 255, 0.6)',
-  },
-  missionsLabel: {
-    fontSize: 12,
-    fontWeight: '400',
-    color: 'rgba(255, 255, 255, 0.75)',
-  },
-  progressSection: {
-    gap: 8,
-  },
-  progressBarContainer: {
-    height: 10,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    borderRadius: 5,
-    overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.3)',
-  },
-  progressBar: {
-    height: '100%',
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
-    borderRadius: 5,
-  },
-  progressInfo: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  progressText: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#86EFAC',
-  },
-  levelText: {
-    fontSize: 12,
-    fontWeight: '400',
-    color: 'rgba(255, 255, 255, 0.75)',
-  },
-});
 
 export default PracticeCard;
