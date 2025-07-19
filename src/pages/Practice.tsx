@@ -18,28 +18,42 @@ const Practice = () => {
     { title: 'Advanced Charm', status: 'locked' as const, icon: '✨' },
   ];
 
+  const isCloseToLevelUp = (xpToNextLevel - userXP) <= 30;
+
   return (
-    <div className="min-h-screen bg-background pb-20">
+    <div className="min-h-screen pb-20" style={{ background: 'var(--gradient-background)' }}>
       {/* Header */}
       <div className="section-mobile">
         <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold mb-2">Today's Mission</h1>
-          <p className="text-lg text-primary font-semibold">
-            Flirting with Confidence 💫
+          <h1 className="text-3xl font-bold mb-2 text-gradient-primary">Today's Mission</h1>
+          <p className="text-xl font-semibold flex items-center justify-center gap-2">
+            <span className="text-2xl">❤️‍🔥</span>
+            Flirting with Confidence
+            <span className="text-2xl">😎</span>
           </p>
         </div>
 
         {/* Level Progress */}
-        <div className="card-elevated p-4 mb-6">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-sm font-medium">Level {userLevel}</span>
-            <span className="xp-badge">🔥 {userXP} XP</span>
+        <div className={`card-warm p-5 mb-6 ${isCloseToLevelUp ? 'level-up-glow' : ''}`}>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <span className="text-lg font-bold">Level {userLevel}</span>
+              <span className="text-2xl animate-pulse">🔥</span>
+            </div>
+            <span className="xp-badge text-base font-bold">{userXP} XP</span>
           </div>
           <ProgressBar 
             current={userXP} 
             max={xpToNextLevel} 
-            label={`${xpToNextLevel - userXP} XP to Level ${userLevel + 1}`}
+            label={`Only ${xpToNextLevel - userXP} XP to Level ${userLevel + 1}! 🚀`}
+            intense={true}
+            size="lg"
           />
+          <div className="mt-3 text-center">
+            <p className="text-sm font-medium text-gradient-xp">
+              {isCloseToLevelUp ? "🎉 You're so close to leveling up!" : `${xpToNextLevel - userXP} XP to Level ${userLevel + 1}! 🚀`}
+            </p>
+          </div>
         </div>
 
         {/* Action Buttons */}
@@ -76,9 +90,9 @@ const Practice = () => {
 
       {/* Skill Tree */}
       <div className="px-4">
-        <h2 className="text-lg font-semibold mb-4 text-center">Your Progress Path</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center text-gradient-intense">Your Progress Path</h2>
         
-        <div className="flex flex-col items-center space-y-2">
+        <div className="flex flex-col items-center space-y-3">
           {skills.map((skill, index) => (
             <SkillNode
               key={skill.title}
@@ -96,10 +110,15 @@ const Practice = () => {
         </div>
 
         {/* Motivational Text */}
-        <div className="mt-6 text-center">
-          <p className="text-sm text-muted-foreground">
-            You're 20 XP away from Level 3! 🚀
-          </p>
+        <div className="mt-8 text-center">
+          <div className="card-warm p-4 inline-block">
+            <p className="text-base font-semibold text-gradient-xp">
+              You're {xpToNextLevel - userXP} XP away from Level {userLevel + 1}! 🚀
+            </p>
+            <p className="text-sm text-accent mt-1">
+              Keep pushing forward, legend! 💪
+            </p>
+          </div>
         </div>
       </div>
     </div>

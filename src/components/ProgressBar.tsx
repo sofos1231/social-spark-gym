@@ -4,6 +4,7 @@ interface ProgressBarProps {
   label?: string;
   showNumbers?: boolean;
   size?: 'sm' | 'md' | 'lg';
+  intense?: boolean;
 }
 
 const ProgressBar = ({ 
@@ -11,7 +12,8 @@ const ProgressBar = ({
   max, 
   label, 
   showNumbers = true, 
-  size = 'md' 
+  size = 'md',
+  intense = false
 }: ProgressBarProps) => {
   const percentage = Math.min((current / max) * 100, 100);
   
@@ -38,7 +40,7 @@ const ProgressBar = ({
       
       <div className={`progress-bar ${sizeClasses[size]}`}>
         <div 
-          className="progress-fill"
+          className={intense ? "progress-fill-intense" : "progress-fill"}
           style={{ width: `${percentage}%` }}
         />
       </div>
