@@ -114,62 +114,62 @@ const PracticeHub = () => {
   return (
     <div 
       className="min-h-screen pb-20"
-      style={{ 
-        background: 'linear-gradient(135deg, #0f1323 0%, #1a1a2e 50%, #16213e 100%)' 
-      }}
+      style={{ background: 'var(--gradient-background)' }}
     >
       {/* Header */}
-      <div className="section-mobile">
+      <div className="section-container">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-display font-bold mb-3 text-gradient-intense">
+          <h1 className="heading-hero mb-3">
             Practice Hub
           </h1>
-          <p className="text-lg text-muted-foreground font-display font-medium">
+          <p className="text-lg text-muted-foreground font-medium">
             Choose your training world
           </p>
         </div>
       </div>
 
       {/* Category Cards */}
-      <div className="px-4 space-y-5 mb-8">
-        {categories.map((category, index) => (
-          <div
-            key={category.id}
-            className="animate-slide-up"
-            style={{ animationDelay: `${index * 100}ms` }}
-          >
-            <PracticeCard
-              id={category.id}
-              title={category.title}
-              icon={category.icon}
-              theme={category.theme}
-              xp={category.xp}
-              streak={category.streak}
-              completedMissions={category.completedMissions}
-              totalMissions={category.totalMissions}
-              onClick={() => handleCategoryClick(category)}
-            />
-          </div>
-        ))}
+      <div className="section-container-sm">
+        <div className="space-y-6">
+          {categories.map((category, index) => (
+            <div
+              key={category.id}
+              className="animate-scale-in"
+              style={{ animationDelay: `${index * 120}ms` }}
+            >
+              <PracticeCard
+                id={category.id}
+                title={category.title}
+                icon={category.icon}
+                theme={category.theme}
+                xp={category.xp}
+                streak={category.streak}
+                completedMissions={category.completedMissions}
+                totalMissions={category.totalMissions}
+                onClick={() => handleCategoryClick(category)}
+              />
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Stats Section */}
-      <div className="px-4">
-        <h2 className="text-xl font-display font-bold mb-4 text-foreground">Your Journey</h2>
-        <div className="grid grid-cols-4 gap-3">{/* Changed from flex to grid for equal sizing */}
+      <div className="section-container-sm">
+        <h2 className="heading-section">Your Journey</h2>
+        <div className="grid grid-cols-4 gap-4">
           {infoCards.map((card, index) => {
             const getCardStyle = (cardId: string) => {
               switch (cardId) {
                 case 'level':
-                  return 'bg-gradient-to-br from-yellow-400 to-orange-500 text-white shadow-xl shadow-orange-500/25';
+                  return 'bg-gradient-primary text-primary-foreground shadow-glow-primary/50';
                 case 'badges':
-                  return 'bg-gradient-to-br from-purple-500 to-pink-600 text-white shadow-xl shadow-purple-500/25';
+                  return 'bg-gradient-secondary text-secondary-foreground shadow-glow-secondary/50';
                 case 'progress':
-                  return 'bg-gradient-to-br from-emerald-400 to-teal-600 text-white shadow-xl shadow-emerald-500/25';
+                  return 'bg-gradient-success text-success-foreground shadow-glow-success/50';
                 case 'insight':
-                  return 'bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-xl shadow-blue-500/25';
+                  return 'bg-card text-card-foreground shadow-elevation border border-border';
                 default:
-                  return 'bg-white/10 text-white';
+                  return 'bg-card text-card-foreground shadow-card';
               }
             };
 
@@ -190,16 +190,16 @@ const PracticeHub = () => {
               <div 
                 key={card.id} 
                 className={`
-                  animate-scale-in p-4 rounded-xl backdrop-blur-sm border border-white/20 transition-all duration-300 h-20 w-full
+                  animate-scale-in p-4 rounded-xl transition-all duration-200 h-20 w-full
                   ${getCardStyle(card.id)}
-                  ${(card.id === 'badges' || card.id === 'level') ? 'cursor-pointer hover:scale-105 hover:shadow-2xl' : 'hover:scale-102'}
+                  ${(card.id === 'badges' || card.id === 'level') ? 'cursor-pointer hover:scale-105 hover:shadow-elevation' : 'hover:scale-102'}
                 `}
-                style={{ animationDelay: `${(index + 4) * 100}ms` }}
+                style={{ animationDelay: `${(index + 4) * 120}ms` }}
                 onClick={() => handleInfoCardClick(card.id)}
               >
                 <div className="flex flex-col items-center justify-center h-full text-center">
-                  <span className="text-lg filter drop-shadow-sm mb-1">{card.icon}</span>
-                  <span className="text-sm font-bold drop-shadow-sm">{card.title}</span>
+                  <span className="text-lg mb-1">{card.icon}</span>
+                  <span className="text-sm font-semibold">{card.title}</span>
                 </div>
               </div>
             );
@@ -208,10 +208,10 @@ const PracticeHub = () => {
       </div>
 
       {/* Motivational Footer */}
-      <div className="mt-8 px-4">
-        <div className="card-warm p-4 text-center animate-scale-in" style={{ animationDelay: '800ms' }}>
-          <p className="text-sm font-display font-bold text-gradient-xp">
-            "Every conversation is a chance to level up!" 💪
+      <div className="section-container-sm">
+        <div className="card-secondary text-center animate-scale-in" style={{ animationDelay: '800ms' }}>
+          <p className="text-sm font-semibold">
+            <span className="text-gradient-xp">"Every conversation is a chance to level up!"</span> 💪
           </p>
         </div>
       </div>

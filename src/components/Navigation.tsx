@@ -14,11 +14,12 @@ const Navigation = () => {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 backdrop-blur-xl border-t border-white/10">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 backdrop-blur-xl">
       <div 
-        className="h-20"
+        className="h-20 border-t"
         style={{ 
-          background: 'linear-gradient(135deg, rgba(15,19,35,0.95) 0%, rgba(26,26,46,0.95) 50%, rgba(22,33,62,0.95) 100%)' 
+          background: 'var(--gradient-background)',
+          borderColor: 'hsl(var(--border) / 0.3)'
         }}
       >
         <div className="flex items-center justify-around h-full px-4">
@@ -31,46 +32,44 @@ const Navigation = () => {
                 key={item.path}
                 to={item.path}
                 className={`
-                  flex flex-col items-center gap-1 py-2 px-4 rounded-xl transition-all duration-300 relative
+                  flex flex-col items-center gap-1 py-2 px-3 rounded-xl transition-all duration-200 relative min-w-[60px]
                   ${isActive 
-                    ? 'text-white scale-110' 
-                    : 'text-white/60 hover:text-white/80 hover:scale-105'
+                    ? 'nav-tab-active scale-105' 
+                    : 'nav-tab-inactive hover:scale-102'
                   }
                 `}
               >
                 {/* Active glow effect */}
                 {isActive && (
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20 rounded-xl blur-sm" />
+                  <div 
+                    className="absolute inset-0 rounded-xl blur-sm opacity-40" 
+                    style={{ background: 'var(--gradient-primary)' }}
+                  />
                 )}
                 
                 <div className="relative z-10 flex flex-col items-center gap-1">
                   <div className={`
-                    w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300
+                    w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200 relative
                     ${isActive 
-                      ? 'bg-gradient-primary shadow-lg shadow-primary/30' 
-                      : 'bg-white/10 hover:bg-white/20'
+                      ? 'bg-primary text-primary-foreground shadow-glow-primary' 
+                      : 'bg-card/60 text-muted-foreground hover:bg-card hover:text-foreground'
                     }
                   `}>
-                    <Icon size={20} />
+                    <Icon size={18} className="relative z-10" />
                     {isActive && (
-                      <div className="absolute -top-1 -right-1 text-lg animate-bounce-subtle">
+                      <div className="absolute -top-1 -right-1 text-sm animate-bounce-in">
                         {item.emoji}
                       </div>
                     )}
                   </div>
                   
                   <span className={`
-                    text-xs font-medium transition-all duration-300
-                    ${isActive ? 'font-bold' : ''}
+                    text-xs transition-all duration-200
+                    ${isActive ? 'font-semibold text-primary' : 'font-medium text-muted-foreground'}
                   `}>
                     {item.label}
                   </span>
                 </div>
-                
-                {/* Active indicator */}
-                {isActive && (
-                  <div className="absolute -bottom-0.5 w-8 h-1 bg-primary rounded-full shadow-lg shadow-primary/50" />
-                )}
               </Link>
             );
           })}

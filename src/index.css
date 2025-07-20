@@ -2,54 +2,55 @@
 @tailwind components;
 @tailwind utilities;
 
-/* SocialGym Design System - Gamified Social Skills Training App */
+/* SocialGym Unified Design System - Premium Gamified Experience */
 
 @layer base {
   :root {
-    /* Warm immersive backgrounds */
-    --background: 0 15% 97%;
-    --background-warm: 10 100% 97%;
-    --foreground: 345 25% 15%;
+    /* Core backgrounds - calming foundation */
+    --background: 220 15% 97%;
+    --background-warm: 220 20% 98%;
+    --foreground: 220 25% 15%;
 
-    /* Card system - warm, inviting */
-    --card: 0 20% 98%;
-    --card-foreground: 345 25% 15%;
-    --card-warm: 10 25% 96%;
+    /* Card system - elevated surfaces */
+    --card: 0 0% 100%;
+    --card-foreground: 220 25% 15%;
+    --card-warm: 220 20% 99%;
 
-    /* Primary - intense emotional purple for action */
+    /* UNIFIED COLOR STRATEGY */
+    /* Purple = Level/Progress (Primary Actions) */
     --primary: 262 83% 58%;
     --primary-foreground: 0 0% 100%;
     --primary-glow: 262 83% 68%;
 
-    /* Secondary - warm amber for support */
-    --secondary: 32 100% 50%;
+    /* Orange = XP/Streak (Gamification) */
+    --secondary: 25 95% 53%;
     --secondary-foreground: 0 0% 100%;
-    --secondary-glow: 32 100% 60%;
+    --secondary-glow: 25 95% 63%;
 
-    /* Success - passionate red for achievements */
-    --success: 0 84% 55%;
+    /* Green = Success/Unlocked */
+    --success: 142 76% 47%;
     --success-foreground: 0 0% 100%;
-    --success-glow: 0 84% 65%;
+    --success-glow: 142 76% 57%;
 
-    /* Warning - burnt orange for motivation */
-    --warning: 25 95% 53%;
-    --warning-foreground: 0 0% 100%;
-    --warning-glow: 25 95% 63%;
+    /* Red = Danger/Exit */
+    --destructive: 0 84% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --destructive-glow: 0 84% 65%;
 
-    /* Accent - deep burgundy for intensity */
-    --accent: 345 75% 45%;
+    /* Neutral tones */
+    --accent: 220 15% 25%;
     --accent-foreground: 0 0% 100%;
-    --accent-glow: 345 75% 55%;
+    --accent-glow: 220 15% 35%;
 
-    /* Muted - subtle grays */
+    /* Supporting neutrals */
     --muted: 220 14% 96%;
-    --muted-foreground: 220 9% 46%;
+    --muted-foreground: 220 9% 55%;
 
-    /* XP colors - gamification palette */
-    --xp-bronze: 28 100% 52%;
-    --xp-silver: 240 5% 65%;
+    /* XP tier colors - consistent with orange theme */
+    --xp-bronze: 25 85% 45%;
+    --xp-silver: 220 5% 60%;
     --xp-gold: 45 93% 58%;
-    --xp-diamond: 200 100% 70%;
+    --xp-diamond: 262 83% 68%;
 
     /* Category themes - distinct color palettes */
     --dating-primary: 300 76% 62%;
@@ -68,14 +69,14 @@
     --speaking-secondary: 0 0% 10%;
     --speaking-bg: 25 100% 98%;
 
-    /* Gradients - intense and motivational */
+    /* Strategic gradients - refined and purposeful */
     --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
+    --gradient-secondary: linear-gradient(135deg, hsl(var(--secondary)), hsl(var(--secondary-glow)));
     --gradient-success: linear-gradient(135deg, hsl(var(--success)), hsl(var(--success-glow)));
-    --gradient-warning: linear-gradient(135deg, hsl(var(--warning)), hsl(var(--warning-glow)));
-    --gradient-accent: linear-gradient(135deg, hsl(var(--accent)), hsl(var(--accent-glow)));
-    --gradient-xp: linear-gradient(90deg, hsl(var(--warning)), hsl(var(--success)));
-    --gradient-background: linear-gradient(135deg, hsl(var(--background-warm)), hsl(var(--card-warm)));
-    --gradient-intense: linear-gradient(135deg, hsl(var(--accent)), hsl(var(--primary)));
+    --gradient-destructive: linear-gradient(135deg, hsl(var(--destructive)), hsl(var(--destructive-glow)));
+    --gradient-xp: linear-gradient(135deg, hsl(var(--secondary)), hsl(var(--secondary-glow)));
+    --gradient-background: linear-gradient(135deg, hsl(var(--background)), hsl(var(--background-warm)));
+    --gradient-subtle: linear-gradient(135deg, hsl(var(--muted)), hsl(var(--card)));
     
     /* Category gradients */
     --gradient-dating: linear-gradient(135deg, hsl(var(--dating-primary)), hsl(var(--dating-secondary)));
@@ -83,23 +84,27 @@
     --gradient-charisma: linear-gradient(135deg, hsl(var(--charisma-primary)), hsl(var(--charisma-secondary)));
     --gradient-speaking: linear-gradient(135deg, hsl(var(--speaking-primary)), hsl(var(--speaking-secondary)));
 
-    /* Interactive states */
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
-
+    /* UI elements */
     --border: 220 13% 91%;
     --input: 220 13% 91%;
-    --ring: 217 91% 60%;
+    --ring: 262 83% 58%;
 
-    /* Design tokens */
+    /* Design tokens - consistent spacing system */
     --radius: 0.75rem;
     --radius-lg: 1rem;
     --radius-xl: 1.5rem;
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 1.5rem;
+    --spacing-lg: 2rem;
+    --spacing-xl: 3rem;
 
-    /* Shadows - depth and elevation */
-    --shadow-card: 0 1px 3px 0 hsl(220 43% 11% / 0.1), 0 1px 2px -1px hsl(220 43% 11% / 0.1);
-    --shadow-elevation: 0 4px 6px -1px hsl(220 43% 11% / 0.1), 0 2px 4px -2px hsl(220 43% 11% / 0.1);
-    --shadow-glow: 0 0 20px hsl(var(--primary) / 0.3);
+    /* Refined shadow system */
+    --shadow-card: 0 1px 3px 0 hsl(220 43% 11% / 0.08), 0 1px 2px -1px hsl(220 43% 11% / 0.08);
+    --shadow-elevation: 0 4px 12px -2px hsl(220 43% 11% / 0.12), 0 2px 4px -1px hsl(220 43% 11% / 0.06);
+    --shadow-glow-primary: 0 0 24px hsl(var(--primary) / 0.4);
+    --shadow-glow-secondary: 0 0 24px hsl(var(--secondary) / 0.4);
+    --shadow-glow-success: 0 0 24px hsl(var(--success) / 0.4);
 
     /* Animations - smooth and engaging */
     --animation-bounce-subtle: cubic-bezier(0.68, -0.55, 0.265, 1.55);
@@ -161,153 +166,226 @@
 }
 
 @layer components {
-  /* Gamification components */
-  .xp-badge {
-    @apply inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium;
-    background: var(--gradient-xp);
+  /* UNIFIED COMPONENT SYSTEM */
+  
+  /* Typography Hierarchy */
+  .heading-hero {
+    @apply text-4xl font-bold tracking-tight;
+    font-family: 'Rubik', 'Inter', sans-serif;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .heading-section {
+    @apply text-2xl font-bold mb-6 text-foreground;
+    font-family: 'Rubik', 'Inter', sans-serif;
+  }
+  
+  .heading-card {
+    @apply text-lg font-semibold text-foreground;
+    font-family: 'Rubik', 'Inter', sans-serif;
+  }
+  
+  .text-stats-primary {
+    @apply text-xl font-bold;
+    color: hsl(var(--primary));
+  }
+  
+  .text-stats-secondary {
+    @apply text-lg font-semibold;
+    color: hsl(var(--secondary));
+  }
+
+  /* Button Hierarchy - Clear Priority Tiers */
+  .btn-tier-1 {
+    @apply px-6 py-4 rounded-xl font-bold text-lg transition-all duration-200 active:scale-95 relative overflow-hidden shadow-elevation;
+    background: var(--gradient-primary);
+    color: hsl(var(--primary-foreground));
+    font-family: 'Rubik', 'Inter', sans-serif;
+  }
+  
+  .btn-tier-1:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-elevation), var(--shadow-glow-primary);
+  }
+  
+  .btn-tier-2 {
+    @apply px-5 py-3 rounded-lg font-semibold text-base transition-all duration-200 active:scale-95 shadow-card;
+    background: var(--gradient-secondary);
+    color: hsl(var(--secondary-foreground));
+    font-family: 'Rubik', 'Inter', sans-serif;
+  }
+  
+  .btn-tier-2:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-card), var(--shadow-glow-secondary);
+  }
+  
+  .btn-tier-3 {
+    @apply px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200 active:scale-95 border;
+    background: hsl(var(--card));
     color: hsl(var(--foreground));
+    border-color: hsl(var(--border));
+    font-family: 'Inter', sans-serif;
+  }
+  
+  .btn-tier-3:hover {
+    background: hsl(var(--muted));
+    border-color: hsl(var(--primary));
+  }
+  
+  .btn-success {
+    @apply px-5 py-3 rounded-lg font-semibold text-base transition-all duration-200 active:scale-95 shadow-card;
+    background: var(--gradient-success);
+    color: hsl(var(--success-foreground));
+    font-family: 'Rubik', 'Inter', sans-serif;
+  }
+  
+  .btn-success:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-card), var(--shadow-glow-success);
+  }
+  
+  .btn-destructive {
+    @apply px-5 py-3 rounded-lg font-semibold text-base transition-all duration-200 active:scale-95 shadow-card;
+    background: var(--gradient-destructive);
+    color: hsl(var(--destructive-foreground));
+    font-family: 'Rubik', 'Inter', sans-serif;
   }
 
-  .streak-flame {
-    @apply relative;
+  /* Card System with Clear Hierarchy */
+  .card-primary {
+    @apply bg-card rounded-xl border shadow-elevation p-6 transition-all duration-200;
+    border-color: hsl(var(--border));
+  }
+  
+  .card-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-elevation), var(--shadow-glow-primary);
+  }
+  
+  .card-secondary {
+    @apply bg-card rounded-lg border shadow-card p-4 transition-all duration-200;
+    border-color: hsl(var(--border));
+  }
+  
+  .card-secondary:hover {
+    box-shadow: var(--shadow-elevation);
+  }
+  
+  .card-info {
+    @apply bg-card/80 backdrop-blur-sm rounded-lg border p-3 transition-all duration-200;
+    border-color: hsl(var(--border) / 0.5);
+    box-shadow: var(--shadow-card);
   }
 
-  .streak-flame::before {
-    content: '🔥';
-    @apply absolute -top-1 -right-1 text-xs animate-pulse;
+  /* Gamification Components */
+  .xp-badge {
+    @apply inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-semibold;
+    background: var(--gradient-xp);
+    color: hsl(var(--secondary-foreground));
+    box-shadow: var(--shadow-card);
   }
 
-  .level-glow {
-    @apply relative;
-    box-shadow: var(--shadow-glow);
+  .level-badge {
+    @apply inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-semibold;
+    background: var(--gradient-primary);
+    color: hsl(var(--primary-foreground));
+    box-shadow: var(--shadow-glow-primary);
   }
 
-  .skill-node-completed {
-    @apply bg-success text-success-foreground rounded-full p-3 shadow-md;
-    box-shadow: 0 0 15px hsl(var(--success) / 0.4);
+  .progress-bar-primary {
+    @apply w-full bg-muted rounded-full h-4 overflow-hidden;
+    box-shadow: inset 0 1px 2px hsl(220 43% 11% / 0.1);
   }
 
-  .skill-node-locked {
-    @apply bg-muted text-muted-foreground rounded-full p-3 opacity-50;
-  }
-
-  .skill-node-current {
-    @apply bg-primary text-primary-foreground rounded-full p-3 shadow-lg animate-pulse;
-    box-shadow: var(--shadow-glow);
-  }
-
-  /* Card variants */
-  .card-elevated {
-    @apply bg-card rounded-xl border shadow-elevation;
-  }
-
-  .card-glow {
-    @apply bg-card rounded-xl border;
-    box-shadow: var(--shadow-card), var(--shadow-glow);
-  }
-
-  /* Progress components */
-  .progress-bar {
-    @apply w-full bg-muted rounded-full h-3 overflow-hidden;
-  }
-
-  .progress-fill {
+  .progress-fill-primary {
     @apply h-full rounded-full transition-all duration-500 ease-out;
     background: var(--gradient-primary);
   }
-
-  /* Button variants with shine effects */
-  .btn-primary {
-    @apply px-6 py-3 rounded-xl font-semibold text-primary-foreground transition-all duration-200 active:scale-95 relative overflow-hidden;
-    background: var(--gradient-primary);
-    box-shadow: var(--shadow-elevation);
+  
+  .progress-fill-secondary {
+    @apply h-full rounded-full transition-all duration-500 ease-out;
+    background: var(--gradient-secondary);
   }
 
-  .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-elevation), 0 0 25px hsl(var(--primary) / 0.5);
+  /* Skill Nodes */
+  .skill-node-completed {
+    @apply bg-success text-success-foreground rounded-full p-4 shadow-lg transition-all duration-200;
+    box-shadow: var(--shadow-glow-success);
   }
 
-  .btn-primary:active::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 255, 255, 0.4),
-      transparent
-    );
-    animation: shine 0.6s ease-out;
+  .skill-node-locked {
+    @apply bg-muted text-muted-foreground rounded-full p-4 opacity-60 transition-all duration-200;
   }
 
-  .btn-warning {
-    @apply px-6 py-3 rounded-xl font-semibold text-warning-foreground transition-all duration-200 active:scale-95 relative overflow-hidden;
-    background: var(--gradient-warning);
-    box-shadow: var(--shadow-elevation);
+  .skill-node-current {
+    @apply bg-primary text-primary-foreground rounded-full p-4 shadow-lg animate-pulse-subtle;
+    box-shadow: var(--shadow-glow-primary);
   }
 
-  .btn-warning:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-elevation), 0 0 25px hsl(var(--warning) / 0.5);
+  /* Layout Containers */
+  .section-container {
+    @apply py-8 px-4;
   }
-
-  .btn-warning:active::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 255, 255, 0.4),
-      transparent
-    );
-    animation: shine 0.6s ease-out;
+  
+  .section-container-sm {
+    @apply py-6 px-4;
   }
-
-  /* Warm gradient cards */
-  .card-warm {
-    @apply rounded-xl border shadow-elevation;
-    background: var(--gradient-background);
-    backdrop-filter: blur(10px);
-  }
-
-  /* Intense progress bar */
-  .progress-fill-intense {
-    @apply h-full rounded-full transition-all duration-1000 ease-out;
-    background: var(--gradient-xp);
-    animation: progress-glow 2s ease-in-out infinite alternate;
-  }
-
-  /* Level up glow effect */
-  .level-up-glow {
-    @apply animate-pulse;
-    box-shadow: 0 0 30px hsl(var(--warning) / 0.6), 0 0 60px hsl(var(--success) / 0.4);
+  
+  .section-container-lg {
+    @apply py-12 px-4;
   }
 
   /* Navigation styles */
   .nav-tab-active {
-    @apply text-primary font-semibold relative;
+    @apply text-primary font-semibold relative transition-all duration-200;
   }
 
   .nav-tab-active::after {
     content: '';
-    @apply absolute -bottom-1 left-0 right-0 h-0.5 bg-primary rounded-full;
+    @apply absolute -bottom-1 left-0 right-0 h-0.5 rounded-full;
+    background: var(--gradient-primary);
+  }
+  
+  .nav-tab-inactive {
+    @apply text-muted-foreground font-medium transition-all duration-200;
+  }
+  
+  .nav-tab-inactive:hover {
+    @apply text-foreground;
   }
 
-  /* Toast animations */
-  .toast-enter {
-    @apply animate-in slide-in-from-top-2 fade-in duration-300;
+  /* Animation & Feedback */
+  .pulse-success {
+    animation: pulse-success 1s ease-in-out;
+  }
+  
+  .bounce-in {
+    animation: bounce-in 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+  
+  .shimmer-effect {
+    position: relative;
+    overflow: hidden;
   }
 
-  .toast-exit {
-    @apply animate-out slide-out-to-top-2 fade-out duration-200;
+  .shimmer-effect::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+    transition: left 0.8s ease-out;
+    z-index: 1;
+  }
+
+  .shimmer-effect.shimmer-active::before {
+    left: 100%;
   }
 }
 
@@ -493,4 +571,16 @@
 @keyframes pulse-subtle {
   0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.9; transform: scale(1.02); }
+}
+
+@keyframes pulse-success {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+@keyframes bounce-in {
+  0% { transform: scale(0.3); opacity: 0; }
+  50% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
 }
