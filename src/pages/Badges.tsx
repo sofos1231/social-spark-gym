@@ -80,7 +80,7 @@ const BadgeCard = ({ badge }: { badge: BadgeData }) => {
         <div className={`relative cursor-pointer transition-all duration-300 transform hover:scale-105 ${
           isLocked 
             ? 'opacity-60' 
-            : `animate-pulse-subtle hover:shadow-2xl ${getCategoryGlow(badge.category)}`
+            : `hover:shadow-2xl ${getCategoryGlow(badge.category)}`
         }`}>
           {/* Main badge card with gradient background */}
           <div className={`
@@ -93,7 +93,7 @@ const BadgeCard = ({ badge }: { badge: BadgeData }) => {
             
             {/* Glow effect for unlocked badges */}
             {!isLocked && (
-              <div className={`absolute inset-0 bg-gradient-to-br ${getCategoryColor(badge.category)} rounded-2xl blur-xl opacity-30 -z-10 animate-pulse`} />
+              <div className={`absolute inset-0 bg-gradient-to-br ${getCategoryColor(badge.category)} rounded-2xl blur-xl opacity-30 -z-10`} />
             )}
             
             {/* Lock overlay for locked badges */}
