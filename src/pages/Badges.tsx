@@ -54,70 +54,125 @@ const categories = [
 const BadgeCard = ({ badge }: { badge: BadgeData }) => {
   const isLocked = !badge.unlocked;
   
+  const getCategoryColor = (category: string) => {
+    switch (category) {
+      case 'xp': return 'from-purple-400 to-purple-600';
+      case 'social': return 'from-emerald-400 to-emerald-600';
+      case 'practice': return 'from-orange-400 to-orange-600';
+      case 'community': return 'from-blue-400 to-blue-600';
+      default: return 'from-gray-400 to-gray-600';
+    }
+  };
+  
+  const getCategoryGlow = (category: string) => {
+    switch (category) {
+      case 'xp': return 'shadow-purple-500/50';
+      case 'social': return 'shadow-emerald-500/50';
+      case 'practice': return 'shadow-orange-500/50';
+      case 'community': return 'shadow-blue-500/50';
+      default: return 'shadow-gray-500/50';
+    }
+  };
+  
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <div className={`relative card-subtle p-4 cursor-pointer transition-all duration-200 hover:scale-105 ${
-          isLocked ? 'opacity-50' : 'hover:shadow-lg'
+        <div className={`relative cursor-pointer transition-all duration-300 transform hover:scale-105 ${
+          isLocked 
+            ? 'opacity-60' 
+            : `animate-pulse-subtle hover:shadow-2xl ${getCategoryGlow(badge.category)}`
         }`}>
-          {/* Lock overlay for locked badges */}
-          {isLocked && (
-            <div className="absolute inset-0 flex items-center justify-center bg-background/80 rounded-lg">
-              <Lock size={20} className="text-muted-foreground" />
+          {/* Main badge card with gradient background */}
+          <div className={`
+            relative p-6 rounded-2xl border-2 transition-all duration-300
+            ${isLocked 
+              ? 'bg-white/10 border-white/20 backdrop-blur-sm' 
+              : `bg-gradient-to-br ${getCategoryColor(badge.category)} border-white/40 backdrop-blur-sm shadow-xl`
+            }
+          `}>
+            
+            {/* Glow effect for unlocked badges */}
+            {!isLocked && (
+              <div className={`absolute inset-0 bg-gradient-to-br ${getCategoryColor(badge.category)} rounded-2xl blur-xl opacity-30 -z-10 animate-pulse`} />
+            )}
+            
+            {/* Lock overlay for locked badges */}
+            {isLocked && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black/20 rounded-2xl backdrop-blur-sm">
+                <div className="bg-white/20 p-3 rounded-full">
+                  <Lock size={24} className="text-white" />
+                </div>
+              </div>
+            )}
+            
+            {/* Badge content */}
+            <div className="text-center relative z-10">
+              <div className={`text-4xl mb-3 ${isLocked ? 'grayscale' : 'drop-shadow-lg'}`}>
+                {badge.icon}
+              </div>
+              <h3 className="font-bold text-white text-sm mb-2 drop-shadow-md">{badge.name}</h3>
+              
+              {/* Tier indicators */}
+              {badge.tier && badge.maxTier && (
+                <div className="flex justify-center gap-1 mb-3">
+                  {Array.from({ length: badge.maxTier }, (_, i) => (
+                    <div
+                      key={i}
+                      className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+                        i < badge.tier 
+                          ? 'bg-white shadow-lg' 
+                          : 'bg-white/30'
+                      }`}
+                    />
+                  ))}
+                </div>
+              )}
+              
+              {/* Progress bar for badges with progress */}
+              {badge.progress !== undefined && badge.maxProgress && (
+                <div className="mt-3">
+                  <div className="bg-white/20 rounded-full h-2 mb-2 overflow-hidden">
+                    <div 
+                      className="h-full bg-white rounded-full transition-all duration-500 shadow-lg"
+                      style={{ width: `${(badge.progress / badge.maxProgress) * 100}%` }}
+                    />
+                  </div>
+                  <p className="text-xs text-white/90 font-medium">
+                    {badge.progress}/{badge.maxProgress}
+                  </p>
+                </div>
+              )}
+              
+              {/* Unlocked indicator with sparkle effect */}
+              {badge.unlocked && !isLocked && (
+                <div className="absolute -top-2 -right-2 w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-lg animate-bounce">
+                  <span className="text-amber-500 text-sm font-bold">✨</span>
+                </div>
+              )}
             </div>
-          )}
-          
-          {/* Badge content */}
-          <div className="text-center">
-            <div className={`text-3xl mb-2 ${isLocked ? 'grayscale' : ''}`}>
-              {badge.icon}
-            </div>
-            <h3 className="font-semibold text-sm mb-1">{badge.name}</h3>
-            
-            {/* Tier indicators */}
-            {badge.tier && badge.maxTier && (
-              <div className="flex justify-center gap-1 mb-2">
-                {Array.from({ length: badge.maxTier }, (_, i) => (
-                  <div
-                    key={i}
-                    className={`w-2 h-2 rounded-full ${
-                      i < badge.tier ? 'bg-primary' : 'bg-muted'
-                    }`}
-                  />
-                ))}
-              </div>
-            )}
-            
-            {/* Progress bar for badges with progress */}
-            {badge.progress !== undefined && badge.maxProgress && (
-              <div className="mt-2">
-                <Progress value={(badge.progress / badge.maxProgress) * 100} className="h-1" />
-                <p className="text-xs text-muted-foreground mt-1">
-                  {badge.progress}/{badge.maxProgress}
-                </p>
-              </div>
-            )}
-            
-            {/* Unlocked indicator */}
-            {badge.unlocked && !isLocked && (
-              <div className="absolute -top-1 -right-1 w-4 h-4 bg-success rounded-full flex items-center justify-center">
-                <span className="text-white text-xs">✓</span>
-              </div>
-            )}
           </div>
         </div>
       </DialogTrigger>
       
-      <DialogContent className="max-w-sm mx-auto">
+      <DialogContent className="max-w-sm mx-auto bg-gradient-to-br from-white to-gray-50 border-2 border-white/50 shadow-2xl">
         <DialogHeader>
           <DialogTitle className="text-center">
-            <div className="flex flex-col items-center gap-3">
-              <div className={`text-4xl ${isLocked ? 'grayscale' : ''}`}>
+            <div className="flex flex-col items-center gap-4">
+              <div className={`
+                text-5xl p-4 rounded-full transition-all duration-300
+                ${isLocked 
+                  ? 'grayscale bg-gray-100' 
+                  : `bg-gradient-to-br ${getCategoryColor(badge.category)} shadow-xl`
+                }
+              `}>
                 {badge.icon}
               </div>
               <div>
-                <h2 className="text-lg font-bold">{badge.name}</h2>
-                <Badge variant={isLocked ? 'outline' : 'default'} className="mt-2">
+                <h2 className="text-xl font-bold text-gray-800 mb-2">{badge.name}</h2>
+                <Badge 
+                  variant={isLocked ? 'outline' : 'default'} 
+                  className={`${!isLocked ? `bg-gradient-to-r ${getCategoryColor(badge.category)} text-white border-none shadow-lg` : ''}`}
+                >
                   {isLocked ? 'Locked' : 'Unlocked'}
                 </Badge>
               </div>
@@ -125,24 +180,24 @@ const BadgeCard = ({ badge }: { badge: BadgeData }) => {
           </DialogTitle>
         </DialogHeader>
         
-        <div className="space-y-4">
+        <div className="space-y-6">
           <div>
-            <h3 className="font-semibold mb-2">Description</h3>
-            <p className="text-muted-foreground">{badge.description}</p>
+            <h3 className="font-bold mb-2 text-gray-800">Description</h3>
+            <p className="text-gray-600">{badge.description}</p>
           </div>
           
           {/* Tier progression */}
           {badge.tier && badge.maxTier && (
             <div>
-              <h3 className="font-semibold mb-2">Tier Progress</h3>
-              <div className="flex justify-center gap-2">
+              <h3 className="font-bold mb-3 text-gray-800">Tier Progress</h3>
+              <div className="flex justify-center gap-3">
                 {Array.from({ length: badge.maxTier }, (_, i) => (
                   <div
                     key={i}
-                    className={`w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm font-bold ${
+                    className={`w-10 h-10 rounded-full border-3 flex items-center justify-center text-sm font-bold transition-all duration-300 ${
                       i < badge.tier 
-                        ? 'bg-primary border-primary text-primary-foreground' 
-                        : 'border-muted text-muted-foreground'
+                        ? `bg-gradient-to-br ${getCategoryColor(badge.category)} border-white text-white shadow-lg` 
+                        : 'border-gray-300 text-gray-400 bg-gray-50'
                     }`}
                   >
                     {i + 1}
@@ -155,9 +210,14 @@ const BadgeCard = ({ badge }: { badge: BadgeData }) => {
           {/* Current progress */}
           {badge.progress !== undefined && badge.maxProgress && (
             <div>
-              <h3 className="font-semibold mb-2">Progress</h3>
-              <Progress value={(badge.progress / badge.maxProgress) * 100} className="mb-2" />
-              <p className="text-center text-sm text-muted-foreground">
+              <h3 className="font-bold mb-3 text-gray-800">Progress</h3>
+              <div className="bg-gray-200 rounded-full h-3 mb-3 overflow-hidden">
+                <div 
+                  className={`h-full bg-gradient-to-r ${getCategoryColor(badge.category)} rounded-full transition-all duration-500 shadow-inner`}
+                  style={{ width: `${(badge.progress / badge.maxProgress) * 100}%` }}
+                />
+              </div>
+              <p className="text-center text-sm text-gray-600 font-medium">
                 {badge.progress} / {badge.maxProgress}
               </p>
             </div>
@@ -166,9 +226,9 @@ const BadgeCard = ({ badge }: { badge: BadgeData }) => {
           {/* Reward */}
           {badge.reward && (
             <div>
-              <h3 className="font-semibold mb-2">Reward</h3>
-              <div className="bg-muted/50 p-3 rounded-lg">
-                <p className="text-sm">{badge.reward}</p>
+              <h3 className="font-bold mb-2 text-gray-800">Reward</h3>
+              <div className={`bg-gradient-to-r ${getCategoryColor(badge.category)} p-4 rounded-xl shadow-lg`}>
+                <p className="text-sm font-medium text-white">{badge.reward}</p>
               </div>
             </div>
           )}

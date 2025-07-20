@@ -444,3 +444,8 @@
   0% { box-shadow: 0 0 5px hsl(var(--warning) / 0.3); }
   100% { box-shadow: 0 0 15px hsl(var(--success) / 0.6), 0 0 25px hsl(var(--warning) / 0.4); }
 }
+
+@keyframes pulse-subtle {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.9; transform: scale(1.02); }
+}
