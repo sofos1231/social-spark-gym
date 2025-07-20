@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { Heart, Users, Briefcase, Mic, LucideIcon } from 'lucide-react';
 import PracticeCard from '@/components/PracticeCard';
-import StreakFireButton from '@/components/StreakFireButton';
+import JourneyFlashcards from '@/components/JourneyFlashcards';
 
 interface CategoryData {
   id: string;
@@ -72,43 +72,8 @@ const PracticeHub = () => {
     }
   ];
 
-  const infoCards: InfoCardData[] = [
-    {
-      id: 'insight',
-      icon: '💡',
-      title: 'AI Insight',
-      subtitle: ''
-    },
-    {
-      id: 'progress',
-      icon: '📈',
-      title: 'Weekly XP',
-      subtitle: ''
-    },
-    {
-      id: 'badges',
-      icon: '🎖️',
-      title: '8 Badges',
-      subtitle: ''
-    },
-    {
-      id: 'level',
-      icon: '🏆',
-      title: 'Level 3',
-      subtitle: ''
-    }
-  ];
-
   const handleCategoryClick = (category: CategoryData) => {
     navigate(category.route);
-  };
-
-  const handleInfoCardClick = (cardId: string) => {
-    if (cardId === 'badges') {
-      navigate('/badges');
-    } else if (cardId === 'level') {
-      navigate('/level-milestones');
-    }
   };
 
   return (
@@ -156,55 +121,7 @@ const PracticeHub = () => {
       {/* Stats Section */}
       <div className="section-container-sm">
         <h2 className="heading-section">Your Journey</h2>
-        <div className="grid grid-cols-4 gap-4">
-          {infoCards.map((card, index) => {
-            const getCardStyle = (cardId: string) => {
-              switch (cardId) {
-                case 'level':
-                  return 'bg-gradient-primary text-primary-foreground shadow-glow-primary/50';
-                case 'badges':
-                  return 'bg-gradient-secondary text-secondary-foreground shadow-glow-secondary/50';
-                case 'progress':
-                  return 'bg-gradient-success text-success-foreground shadow-glow-success/50';
-                case 'insight':
-                  return 'bg-card text-card-foreground shadow-elevation border border-border';
-                default:
-                  return 'bg-card text-card-foreground shadow-card';
-              }
-            };
-
-            // Special handling for progress card to show StreakFireButton
-            if (card.id === 'progress') {
-              return (
-                <StreakFireButton
-                  key={card.id}
-                  streak={7}
-                  weeklyXP={2890}
-                  currentLevel={3}
-                  levelTitle="Rising Charmer"
-                />
-              );
-            }
-
-            return (
-              <div 
-                key={card.id} 
-                className={`
-                  animate-scale-in p-4 rounded-xl transition-all duration-200 h-20 w-full
-                  ${getCardStyle(card.id)}
-                  ${(card.id === 'badges' || card.id === 'level') ? 'cursor-pointer hover:scale-105 hover:shadow-elevation' : 'hover:scale-102'}
-                `}
-                style={{ animationDelay: `${(index + 4) * 120}ms` }}
-                onClick={() => handleInfoCardClick(card.id)}
-              >
-                <div className="flex flex-col items-center justify-center h-full text-center">
-                  <span className="text-lg mb-1">{card.icon}</span>
-                  <span className="text-sm font-semibold">{card.title}</span>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+        <JourneyFlashcards />
       </div>
 
       {/* Motivational Footer */}
