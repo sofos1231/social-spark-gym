@@ -102,6 +102,12 @@ const PracticeHub = () => {
     navigate(category.route);
   };
 
+  const handleInfoCardClick = (cardId: string) => {
+    if (cardId === 'badges') {
+      navigate('/badges');
+    }
+  };
+
   return (
     <div 
       className="min-h-screen pb-20"
@@ -151,8 +157,11 @@ const PracticeHub = () => {
           {infoCards.map((card, index) => (
             <div 
               key={card.id} 
-              className="info-card flex-shrink-0 animate-scale-in"
+              className={`info-card flex-shrink-0 animate-scale-in ${
+                card.id === 'badges' ? 'cursor-pointer hover:scale-105 transition-transform' : ''
+              }`}
               style={{ animationDelay: `${(index + 4) * 100}ms` }}
+              onClick={() => handleInfoCardClick(card.id)}
             >
               <div className="flex items-center gap-2 mb-2">
                 <span className="text-lg">{card.icon}</span>

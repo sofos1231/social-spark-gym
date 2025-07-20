@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
-import { Home, BarChart3, User, ShoppingBag, Award } from 'lucide-react';
+import { Home, BarChart3, User, ShoppingBag } from 'lucide-react';
 
 const Navigation = () => {
   const location = useLocation();
@@ -9,7 +9,6 @@ const Navigation = () => {
   const navItems = [
     { path: '/', icon: Home, label: 'Practice', emoji: '🏋️' },
     { path: '/stats', icon: BarChart3, label: 'Stats', emoji: '📊' },
-    { path: '/badges', icon: Award, label: 'Badges', emoji: '🏆' },
     { path: '/shop', icon: ShoppingBag, label: 'Shop', emoji: '💰' },
     { path: '/profile', icon: User, label: 'Profile', emoji: '👤' },
   ];

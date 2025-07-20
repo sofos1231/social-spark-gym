@@ -189,16 +189,23 @@ const Badges = () => {
   const totalCount = badges.length;
 
   return (
-    <div className="min-h-screen bg-background pb-20">
+    <div 
+      className="min-h-screen pb-20"
+      style={{ 
+        background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 25%, #eab308 50%, #f59e0b 75%, #fbbf24 100%)'
+      }}
+    >
       <div className="section-mobile">
         {/* Header */}
         <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold mb-2">Badges</h1>
-          <p className="text-muted-foreground mb-4">
+          <h1 className="text-4xl font-display font-bold mb-3 text-white drop-shadow-lg">
+            Badges
+          </h1>
+          <p className="text-white/90 mb-4 font-display font-medium">
             Track your milestones and mastery 🏆
           </p>
-          <div className="card-subtle p-3 inline-block">
-            <span className="text-sm font-semibold">
+          <div className="bg-white/20 backdrop-blur-sm p-3 inline-block rounded-lg border border-white/30">
+            <span className="text-sm font-semibold text-white">
               {unlockedCount}/{totalCount} badges unlocked
             </span>
           </div>
@@ -217,8 +224,8 @@ const Badges = () => {
                   onClick={() => setSelectedCategory(category.id)}
                   className={`flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap transition-all ${
                     isSelected 
-                      ? 'bg-primary text-primary-foreground' 
-                      : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                      ? 'bg-white text-amber-600 shadow-lg' 
+                      : 'bg-white/20 text-white hover:bg-white/30 border border-white/30'
                   }`}
                 >
                   <Icon size={16} />
@@ -238,9 +245,9 @@ const Badges = () => {
 
         {/* Motivational Footer */}
         <div className="mt-8 text-center">
-          <div className="card-subtle p-6">
-            <h3 className="font-bold mb-2">Keep Growing! 🌱</h3>
-            <p className="text-muted-foreground text-sm">
+          <div className="bg-white/20 backdrop-blur-sm p-6 rounded-lg border border-white/30">
+            <h3 className="font-bold mb-2 text-white">Keep Growing! 🌱</h3>
+            <p className="text-white/90 text-sm">
               Each badge represents a step forward in your social confidence journey. 
               What will you unlock next?
             </p>
