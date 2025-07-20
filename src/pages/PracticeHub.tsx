@@ -74,16 +74,10 @@ const PracticeHub = () => {
 
   const infoCards: InfoCardData[] = [
     {
-      id: 'level',
-      icon: '🏆',
-      title: 'Level 3',
-      subtitle: 'Rising Charmer'
-    },
-    {
-      id: 'badges',
-      icon: '🎖️',
-      title: '8 Badges',
-      subtitle: 'Achievement hunter'
+      id: 'insight',
+      icon: '💡',
+      title: 'AI Insight',
+      subtitle: 'Focus on eye contact'
     },
     {
       id: 'progress',
@@ -92,10 +86,16 @@ const PracticeHub = () => {
       subtitle: '2,890 / 3,500'
     },
     {
-      id: 'insight',
-      icon: '💡',
-      title: 'AI Insight',
-      subtitle: 'Focus on eye contact'
+      id: 'badges',
+      icon: '🎖️',
+      title: '8 Badges',
+      subtitle: 'Achievement hunter'
+    },
+    {
+      id: 'level',
+      icon: '🏆',
+      title: 'Level 3',
+      subtitle: 'Rising Charmer'
     }
   ];
 
