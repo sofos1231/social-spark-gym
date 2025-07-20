@@ -140,9 +140,9 @@ const StreakFireButton = ({ streak, weeklyXP, currentLevel, levelTitle }: Streak
           
           {/* Main Content */}
           <div className="relative z-10">
-            <div className="flex items-center gap-2 mb-2">
+            <div className="flex flex-col items-center justify-center text-center h-full">
               <span 
-                className="text-lg filter drop-shadow-sm transition-all duration-300"
+                className="text-lg filter drop-shadow-sm mb-1 transition-all duration-300"
                 style={{ 
                   transform: `scale(${flameSize})`,
                   filter: tapCount > 0 ? 'drop-shadow(0 0 8px rgba(255,165,0,0.8))' : 'drop-shadow-sm'
@@ -153,9 +153,6 @@ const StreakFireButton = ({ streak, weeklyXP, currentLevel, levelTitle }: Streak
               <span className="text-sm font-bold drop-shadow-sm">
                 {streak} Day Streak
               </span>
-            </div>
-            <div className="text-xs opacity-90 drop-shadow-sm">
-              Keep the fire burning!
             </div>
           </div>
 

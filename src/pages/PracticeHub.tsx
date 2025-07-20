@@ -77,25 +77,25 @@ const PracticeHub = () => {
       id: 'insight',
       icon: '💡',
       title: 'AI Insight',
-      subtitle: 'Focus on eye contact'
+      subtitle: ''
     },
     {
       id: 'progress',
       icon: '📈',
       title: 'Weekly XP',
-      subtitle: '2,890 / 3,500'
+      subtitle: ''
     },
     {
       id: 'badges',
       icon: '🎖️',
       title: '8 Badges',
-      subtitle: 'Achievement hunter'
+      subtitle: ''
     },
     {
       id: 'level',
       icon: '🏆',
       title: 'Level 3',
-      subtitle: 'Rising Charmer'
+      subtitle: ''
     }
   ];
 
@@ -197,12 +197,9 @@ const PracticeHub = () => {
                 style={{ animationDelay: `${(index + 4) * 100}ms` }}
                 onClick={() => handleInfoCardClick(card.id)}
               >
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-lg filter drop-shadow-sm">{card.icon}</span>
+                <div className="flex flex-col items-center justify-center h-full text-center">
+                  <span className="text-lg filter drop-shadow-sm mb-1">{card.icon}</span>
                   <span className="text-sm font-bold drop-shadow-sm">{card.title}</span>
-                </div>
-                <div className="text-xs opacity-90 drop-shadow-sm">
-                  {card.subtitle}
                 </div>
               </div>
             );
