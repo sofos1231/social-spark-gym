@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { Heart, Users, Briefcase, Mic, LucideIcon } from 'lucide-react';
 import PracticeCard from '@/components/PracticeCard';
+import StreakFireButton from '@/components/StreakFireButton';
 
 interface CategoryData {
   id: string;
@@ -105,6 +106,8 @@ const PracticeHub = () => {
   const handleInfoCardClick = (cardId: string) => {
     if (cardId === 'badges') {
       navigate('/badges');
+    } else if (cardId === 'level') {
+      navigate('/level-milestones');
     }
   };
 
@@ -170,13 +173,26 @@ const PracticeHub = () => {
               }
             };
 
+            // Special handling for progress card to show StreakFireButton
+            if (card.id === 'progress') {
+              return (
+                <StreakFireButton
+                  key={card.id}
+                  streak={7}
+                  weeklyXP={2890}
+                  currentLevel={3}
+                  levelTitle="Rising Charmer"
+                />
+              );
+            }
+
             return (
               <div 
                 key={card.id} 
                 className={`
                   flex-shrink-0 animate-scale-in p-4 rounded-xl backdrop-blur-sm border border-white/20 transition-all duration-300
                   ${getCardStyle(card.id)}
-                  ${card.id === 'badges' ? 'cursor-pointer hover:scale-105 hover:shadow-2xl' : 'hover:scale-102'}
+                  ${(card.id === 'badges' || card.id === 'level') ? 'cursor-pointer hover:scale-105 hover:shadow-2xl' : 'hover:scale-102'}
                 `}
                 style={{ animationDelay: `${(index + 4) * 100}ms` }}
                 onClick={() => handleInfoCardClick(card.id)}

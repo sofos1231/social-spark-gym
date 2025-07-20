@@ -12,6 +12,7 @@ import Profile from "./pages/Profile";
 import Upgrade from "./pages/Upgrade";
 import Shop from "./pages/Shop";
 import Badges from "./pages/Badges";
+import LevelMilestones from "./pages/LevelMilestones";
 import Navigation from "./components/Navigation";
 import NotFound from "./pages/NotFound";
 
@@ -34,6 +35,7 @@ const App = () => (
             <Route path="/upgrade" element={<Upgrade />} />
             <Route path="/shop" element={<Shop />} />
             <Route path="/badges" element={<Badges />} />
+            <Route path="/level-milestones" element={<LevelMilestones />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
