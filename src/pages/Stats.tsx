@@ -38,17 +38,15 @@ const Stats = () => {
   return (
     <div 
       className="min-h-screen pb-20"
-      style={{ 
-        background: 'linear-gradient(135deg, #0f1323 0%, #1a1a2e 50%, #16213e 100%)' 
-      }}
+      style={{ background: 'var(--gradient-background)' }}
     >
       {/* Header */}
-      <div className="section-mobile">
+      <div className="section-container">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-display font-bold mb-3 text-gradient-intense">
+          <h1 className="heading-hero mb-3">
             Your Progress
           </h1>
-          <p className="text-lg text-muted-foreground font-display font-medium">
+          <p className="text-subtitle">
             Track your transformation journey
           </p>
         </div>
