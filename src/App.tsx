@@ -3,6 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import PageTransition from "./components/PageTransition";
 import PracticeHub from "./pages/PracticeHub";
 import PracticeRoad from "./pages/PracticeRoad";
 import QuickDrill from "./pages/QuickDrill";
@@ -24,20 +25,20 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <div className="relative">
+        <div className="relative overflow-hidden">
           <Routes>
-            <Route path="/" element={<PracticeHub />} />
-            <Route path="/practice-road/:categoryId" element={<PracticeRoad />} />
-            <Route path="/quick-drill" element={<QuickDrill />} />
-            <Route path="/shadow-practice" element={<ShadowPractice />} />
-            <Route path="/stats" element={<Stats />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/upgrade" element={<Upgrade />} />
-            <Route path="/shop" element={<Shop />} />
-            <Route path="/badges" element={<Badges />} />
-            <Route path="/level-milestones" element={<LevelMilestones />} />
+            <Route path="/" element={<PageTransition><PracticeHub /></PageTransition>} />
+            <Route path="/practice-road/:categoryId" element={<PageTransition><PracticeRoad /></PageTransition>} />
+            <Route path="/quick-drill" element={<PageTransition><QuickDrill /></PageTransition>} />
+            <Route path="/shadow-practice" element={<PageTransition><ShadowPractice /></PageTransition>} />
+            <Route path="/stats" element={<PageTransition><Stats /></PageTransition>} />
+            <Route path="/profile" element={<PageTransition><Profile /></PageTransition>} />
+            <Route path="/upgrade" element={<PageTransition><Upgrade /></PageTransition>} />
+            <Route path="/shop" element={<PageTransition><Shop /></PageTransition>} />
+            <Route path="/badges" element={<PageTransition><Badges /></PageTransition>} />
+            <Route path="/level-milestones" element={<PageTransition><LevelMilestones /></PageTransition>} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
+            <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
           </Routes>
           <Navigation />
         </div>
