@@ -27,18 +27,18 @@ const App = () => (
       <BrowserRouter>
         <div className="relative overflow-hidden">
           <Routes>
-            <Route path="/" element={<PageTransition><PracticeHub /></PageTransition>} />
-            <Route path="/practice-road/:categoryId" element={<PageTransition><PracticeRoad /></PageTransition>} />
-            <Route path="/quick-drill" element={<PageTransition><QuickDrill /></PageTransition>} />
-            <Route path="/shadow-practice" element={<PageTransition><ShadowPractice /></PageTransition>} />
-            <Route path="/stats" element={<PageTransition><Stats /></PageTransition>} />
-            <Route path="/profile" element={<PageTransition><Profile /></PageTransition>} />
-            <Route path="/upgrade" element={<PageTransition><Upgrade /></PageTransition>} />
-            <Route path="/shop" element={<PageTransition><Shop /></PageTransition>} />
-            <Route path="/badges" element={<PageTransition><Badges /></PageTransition>} />
-            <Route path="/level-milestones" element={<PageTransition><LevelMilestones /></PageTransition>} />
+            <Route path="/" element={<PageTransition currentPath="/"><PracticeHub /></PageTransition>} />
+            <Route path="/practice-road/:categoryId" element={<PageTransition currentPath="/practice-road"><PracticeRoad /></PageTransition>} />
+            <Route path="/quick-drill" element={<PageTransition currentPath="/quick-drill"><QuickDrill /></PageTransition>} />
+            <Route path="/shadow-practice" element={<PageTransition currentPath="/shadow-practice"><ShadowPractice /></PageTransition>} />
+            <Route path="/stats" element={<PageTransition currentPath="/stats"><Stats /></PageTransition>} />
+            <Route path="/profile" element={<PageTransition currentPath="/profile"><Profile /></PageTransition>} />
+            <Route path="/upgrade" element={<PageTransition currentPath="/upgrade"><Upgrade /></PageTransition>} />
+            <Route path="/shop" element={<PageTransition currentPath="/shop"><Shop /></PageTransition>} />
+            <Route path="/badges" element={<PageTransition currentPath="/badges"><Badges /></PageTransition>} />
+            <Route path="/level-milestones" element={<PageTransition currentPath="/level-milestones"><LevelMilestones /></PageTransition>} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
+            <Route path="*" element={<PageTransition currentPath="*"><NotFound /></PageTransition>} />
           </Routes>
           <Navigation />
         </div>
