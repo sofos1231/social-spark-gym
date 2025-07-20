@@ -13,6 +13,7 @@ const Stats = () => {
     streak: 7,
     todayTime: 45,
     weeklyXP: [220, 340, 180, 420, 310, 480, 290],
+    weeklySocialScore: [72, 76, 68, 81, 74, 79, 77],
     totalSessions: 23,
     insights: [
       "Your confidence level peaked during afternoon sessions",
@@ -31,7 +32,8 @@ const Stats = () => {
   ];
 
   const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-  const maxXP = Math.max(...stats.weeklyXP);
+  const maxScore = Math.max(...stats.weeklySocialScore);
+  const currentSocialScore = Math.round(traits.reduce((sum, trait) => sum + trait.value, 0) / traits.length);
 
   return (
     <div 
@@ -128,18 +130,26 @@ const Stats = () => {
         </div>
       </div>
 
-      {/* Weekly Progress Chart */}
+      {/* Social Score Chart */}
       <div className="px-4 mb-6">
         <div className="card-warm p-6 animate-scale-in" style={{animationDelay: '500ms'}}>
-          <h3 className="text-xl font-display font-bold mb-4 text-foreground">Weekly Activity</h3>
+          <h3 className="text-xl font-display font-bold mb-2 text-foreground">Social Score Tracker</h3>
+          <p className="text-sm text-muted-foreground mb-4">Combined score from all communication traits</p>
+          
+          <div className="flex items-center justify-center mb-4">
+            <div className="text-center">
+              <div className="text-3xl font-bold text-gradient-primary mb-1">{currentSocialScore}</div>
+              <div className="text-sm text-muted-foreground">Current Score</div>
+            </div>
+          </div>
           
           <div className="flex items-end justify-between h-32 mb-4">
-            {stats.weeklyXP.map((xp, index) => (
+            {stats.weeklySocialScore.map((score, index) => (
               <div key={index} className="flex flex-col items-center flex-1">
                 <div 
-                  className="w-8 bg-gradient-xp rounded-t-lg transition-all duration-500 animate-scale-in relative overflow-hidden"
+                  className="w-8 bg-gradient-primary rounded-t-lg transition-all duration-500 animate-scale-in relative overflow-hidden"
                   style={{ 
-                    height: `${(xp / maxXP) * 100}%`,
+                    height: `${(score / maxScore) * 100}%`,
                     minHeight: '8px',
                     animationDelay: `${600 + index * 100}ms`
                   }}
@@ -150,7 +160,7 @@ const Stats = () => {
                   {weekDays[index]}
                 </div>
                 <div className="text-xs text-foreground font-bold">
-                  {xp}
+                  {score}
                 </div>
               </div>
             ))}
