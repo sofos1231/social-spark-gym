@@ -6,15 +6,17 @@
 
 @layer base {
   :root {
-    /* Core backgrounds - calming foundation */
-    --background: 220 15% 97%;
-    --background-warm: 220 20% 98%;
-    --foreground: 220 25% 15%;
+    /* Premium Navy × Blue-Gray Background System */
+    --background: 216 28% 7%;           /* #10131C - primary base */
+    --background-deep: 220 30% 5%;      /* #0D0F1A - gradient start */
+    --background-elevated: 217 25% 9%;  /* #141519 - gradient end */
+    --background-warm: 216 28% 8%;      /* Slightly warmer variant */
+    --foreground: 0 0% 100%;            /* #FFFFFF - high contrast text */
 
-    /* Card system - elevated surfaces */
-    --card: 0 0% 100%;
-    --card-foreground: 220 25% 15%;
-    --card-warm: 220 20% 99%;
+    /* Card system - floating above the navy base */
+    --card: 220 25% 12%;                /* Cards elevated from background */
+    --card-foreground: 0 0% 100%;       /* High contrast card text */
+    --card-warm: 216 28% 10%;           /* Warm card variant */
 
     /* UNIFIED COLOR STRATEGY */
     /* Purple = Level/Progress (Primary Actions) */
@@ -42,9 +44,9 @@
     --accent-foreground: 0 0% 100%;
     --accent-glow: 220 15% 35%;
 
-    /* Supporting neutrals */
-    --muted: 220 14% 96%;
-    --muted-foreground: 220 9% 55%;
+    /* Supporting neutrals - high contrast on navy */
+    --muted: 220 20% 25%;               /* Elevated muted backgrounds */
+    --muted-foreground: 0 0% 71%;       /* #B6B6B6 - muted text */
 
     /* XP tier colors - consistent with orange theme */
     --xp-bronze: 25 85% 45%;
@@ -69,14 +71,15 @@
     --speaking-secondary: 0 0% 10%;
     --speaking-bg: 25 100% 98%;
 
-    /* Strategic gradients - refined and purposeful */
+    /* Premium gradient system - depth without distraction */
     --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
     --gradient-secondary: linear-gradient(135deg, hsl(var(--secondary)), hsl(var(--secondary-glow)));
     --gradient-success: linear-gradient(135deg, hsl(var(--success)), hsl(var(--success-glow)));
     --gradient-destructive: linear-gradient(135deg, hsl(var(--destructive)), hsl(var(--destructive-glow)));
     --gradient-xp: linear-gradient(135deg, hsl(var(--secondary)), hsl(var(--secondary-glow)));
-    --gradient-background: linear-gradient(135deg, hsl(var(--background)), hsl(var(--background-warm)));
-    --gradient-subtle: linear-gradient(135deg, hsl(var(--muted)), hsl(var(--card)));
+    --gradient-background: linear-gradient(to bottom, #0D0F1A 0%, #141519 100%);
+    --gradient-background-warm: linear-gradient(to bottom, hsl(var(--background-deep)), hsl(var(--background-warm)));
+    --gradient-subtle: linear-gradient(135deg, hsl(var(--card)), hsl(var(--card-warm)));
     
     /* Category gradients */
     --gradient-dating: linear-gradient(135deg, hsl(var(--dating-primary)), hsl(var(--dating-secondary)));
@@ -84,10 +87,10 @@
     --gradient-charisma: linear-gradient(135deg, hsl(var(--charisma-primary)), hsl(var(--charisma-secondary)));
     --gradient-speaking: linear-gradient(135deg, hsl(var(--speaking-primary)), hsl(var(--speaking-secondary)));
 
-    /* UI elements */
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 262 83% 58%;
+    /* UI elements - optimized for navy background */
+    --border: 220 25% 20%;              /* Visible borders on navy */
+    --input: 220 25% 15%;               /* Input backgrounds */
+    --ring: 262 83% 58%;                /* Focus rings */
 
     /* Design tokens - premium visual system */
     --radius: 0.75rem;
@@ -107,13 +110,16 @@
     --shadow-glow-secondary: 0 8px 24px hsl(var(--secondary) / 0.4), 0 0 0 1px hsl(var(--secondary) / 0.1);
     --shadow-glow-success: 0 8px 24px hsl(var(--success) / 0.4), 0 0 0 1px hsl(var(--success) / 0.1);
 
-    /* High-contrast text tokens */
-    --text-primary: 0 0% 100%;      /* #FFFFFF - titles, metrics */
-    --text-secondary: 0 0% 92%;     /* #EAEAEA - subtitles */
-    --text-muted: 0 0% 71%;         /* #B6B6B6 - disabled text */
-    --text-dark-primary: 220 25% 15%;
-    --text-dark-secondary: 220 15% 25%;
-    --text-dark-muted: 220 9% 55%;
+    /* High-contrast text tokens - optimized for navy */
+    --text-primary: 0 0% 100%;          /* #FFFFFF - titles, metrics */
+    --text-secondary: 0 0% 92%;         /* #EAEAEA - subtitles */
+    --text-muted: 0 0% 71%;             /* #B6B6B6 - disabled text */
+    --text-accent: 262 83% 68%;         /* Accent colored text */
+    
+    /* Dark mode optimization (already optimized for navy) */
+    --text-dark-primary: 0 0% 100%;
+    --text-dark-secondary: 0 0% 92%;
+    --text-dark-muted: 0 0% 71%;
 
     /* Animations - smooth and engaging */
     --animation-bounce-subtle: cubic-bezier(0.68, -0.55, 0.265, 1.55);
@@ -164,7 +170,9 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    @apply font-sans antialiased;
+    background: var(--gradient-background);
+    color: hsl(var(--foreground));
   }
 
   /* Smooth scrolling for mobile */
@@ -280,10 +288,11 @@
     font-family: 'Rubik', 'Inter', sans-serif;
   }
 
-  /* Card System - Enhanced Separation & Depth */
+  /* Card System - Floating on Navy Base */
   .card-primary {
-    @apply bg-card rounded-xl border p-6 transition-all duration-200;
-    border-color: rgba(255, 255, 255, 0.06);
+    @apply rounded-xl p-6 transition-all duration-200;
+    background: hsl(var(--card));
+    border: 1px solid rgba(255, 255, 255, 0.08);
     box-shadow: var(--shadow-elevation);
   }
   
@@ -293,8 +302,9 @@
   }
   
   .card-secondary {
-    @apply bg-card rounded-lg border p-4 transition-all duration-200;
-    border-color: rgba(255, 255, 255, 0.06);
+    @apply rounded-lg p-4 transition-all duration-200;
+    background: hsl(var(--card));
+    border: 1px solid rgba(255, 255, 255, 0.06);
     box-shadow: var(--shadow-card);
     margin-bottom: 1.5rem;
   }
@@ -305,24 +315,21 @@
   }
   
   .card-trait-panel {
-    @apply bg-card/80 backdrop-blur-sm rounded-xl border p-4 transition-all duration-200;
-    border-color: rgba(255, 255, 255, 0.08);
+    @apply rounded-xl p-4 transition-all duration-200;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     box-shadow: var(--shadow-card);
     margin-bottom: 1rem;
+    backdrop-filter: blur(8px);
   }
   
   .card-section {
-    @apply rounded-xl border p-6;
-    border-color: rgba(255, 255, 255, 0.06);
+    @apply rounded-xl p-6;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
     box-shadow: var(--shadow-card);
-    background: rgba(255, 255, 255, 0.02);
     margin-bottom: 1.5rem;
-  }
-  
-  .card-info {
-    @apply bg-card/90 backdrop-blur-sm rounded-lg border p-3 transition-all duration-200;
-    border-color: rgba(255, 255, 255, 0.06);
-    box-shadow: var(--shadow-card);
+    backdrop-filter: blur(8px);
   }
 
   /* Gamification Components */
