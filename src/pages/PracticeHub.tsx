@@ -156,7 +156,7 @@ const PracticeHub = () => {
       {/* Stats Section */}
       <div className="px-4">
         <h2 className="text-xl font-display font-bold mb-4 text-foreground">Your Journey</h2>
-        <div className="flex gap-3 overflow-x-auto pb-2">
+        <div className="grid grid-cols-4 gap-3">{/* Changed from flex to grid for equal sizing */}
           {infoCards.map((card, index) => {
             const getCardStyle = (cardId: string) => {
               switch (cardId) {
@@ -190,7 +190,7 @@ const PracticeHub = () => {
               <div 
                 key={card.id} 
                 className={`
-                  flex-shrink-0 animate-scale-in p-4 rounded-xl backdrop-blur-sm border border-white/20 transition-all duration-300
+                  animate-scale-in p-4 rounded-xl backdrop-blur-sm border border-white/20 transition-all duration-300 h-20 w-full
                   ${getCardStyle(card.id)}
                   ${(card.id === 'badges' || card.id === 'level') ? 'cursor-pointer hover:scale-105 hover:shadow-2xl' : 'hover:scale-102'}
                 `}
