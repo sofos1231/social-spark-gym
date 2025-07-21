@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { TrendingUp, Flame, Clock, Trophy, Zap, Target, Brain, Heart, Sparkles } from 'lucide-react';
 import ProgressBar from '../components/ProgressBar';
+import TopStatusBar from '../components/TopStatusBar';
 
 const Stats = () => {
   const [timeframe, setTimeframe] = useState<'week' | 'month'>('week');
@@ -36,23 +37,30 @@ const Stats = () => {
   const currentSocialScore = Math.round(traits.reduce((sum, trait) => sum + trait.value, 0) / traits.length);
 
   return (
-    <div 
-      className="min-h-screen pb-20"
-      style={{ background: 'var(--gradient-background)' }}
-    >
-      {/* Header */}
-      <div className="section-container">
-        <div className="text-center mb-8">
-          <h1 className="heading-hero mb-3">
-            Your Progress
-          </h1>
-          <p className="text-subtitle">
-            Track your transformation journey
-          </p>
+    <>
+      <TopStatusBar 
+        streak={stats.streak}
+        level={stats.level}
+        currentXP={stats.xp}
+        nextLevelXP={stats.xpToNext}
+      />
+      <div 
+        className="min-h-screen pt-16 pb-20"
+        style={{ background: 'var(--gradient-background)' }}
+      >
+        {/* Header */}
+        <div className="section-container pt-6">
+          <div className="text-center mb-6">
+            <h1 className="heading-hero mb-2">
+              Your Progress
+            </h1>
+            <p className="text-subtitle">
+              Track your transformation journey
+            </p>
         </div>
       </div>
 
-      {/* Level & XP Banner */}
+        {/* Level & XP Banner */}
       <div className="px-4 mb-6">
         <div className="card-warm p-6 relative overflow-hidden animate-scale-in">
           <div className="flex items-center gap-4 mb-4">
@@ -230,8 +238,9 @@ const Stats = () => {
             Keep practicing to unlock your full social potential
           </p>
         </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
