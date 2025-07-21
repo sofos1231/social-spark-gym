@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Coins, Gem, Zap, RotateCcw, Unlock, Crown, Star, Gift, Sparkles } from 'lucide-react';
-import TopStatusBar from '../components/TopStatusBar';
 
 const Shop = () => {
   const [currency] = useState({
@@ -103,26 +102,23 @@ const Shop = () => {
   };
 
   return (
-    <>
-      <TopStatusBar 
-        coins={currency.coins}
-        gems={currency.diamonds}
-      />
-      <div 
-        className="min-h-screen pt-16 pb-20"
-        style={{ background: 'var(--gradient-background)' }}
-      >
-        {/* Header */}
-        <div className="section-mobile pt-6">
-          <div className="text-center mb-6">
-            <h1 className="text-3xl font-display font-bold mb-2 text-gradient-intense">
-              Power Shop
-            </h1>
-            <p className="text-base text-muted-foreground font-display font-medium">
-              Boost your social training
-            </p>
-          </div>
+    <div 
+      className="min-h-screen pb-20"
+      style={{ 
+        background: 'linear-gradient(135deg, #0f1323 0%, #1a1a2e 50%, #16213e 100%)' 
+      }}
+    >
+      {/* Header */}
+      <div className="section-mobile">
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-display font-bold mb-3 text-gradient-intense">
+            Power Shop
+          </h1>
+          <p className="text-lg text-muted-foreground font-display font-medium">
+            Boost your social training
+          </p>
         </div>
+      </div>
 
       {/* Currency Balance */}
       <div className="px-4 mb-6">
@@ -302,8 +298,7 @@ const Shop = () => {
           </p>
         </div>
       </div>
-      </div>
-    </>
+    </div>
   );
 };
 

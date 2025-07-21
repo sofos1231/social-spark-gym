@@ -4,7 +4,6 @@ import {
   User, Mail, Calendar, Settings, Crown, 
   Bell, Shield, HelpCircle, LogOut, Share2, Trophy, Star, Target
 } from 'lucide-react';
-import TopStatusBar from '../components/TopStatusBar';
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -41,28 +40,23 @@ const Profile = () => {
   ];
 
   return (
-    <>
-      <TopStatusBar 
-        streak={userInfo.streak}
-        level={userInfo.level}
-        currentXP={userInfo.xp}
-        nextLevelXP={3500}
-      />
-      <div 
-        className="min-h-screen pt-16 pb-20"
-        style={{ background: 'var(--gradient-background)' }}
-      >
-        {/* Header */}
-        <div className="section-mobile pt-6">
-          <div className="text-center mb-6">
-            <h1 className="text-3xl font-display font-bold mb-2 text-gradient-intense">
-              Your Profile
-            </h1>
-            <p className="text-base text-muted-foreground font-display font-medium">
-              Your social mastery dashboard
-            </p>
-          </div>
+    <div 
+      className="min-h-screen pb-20"
+      style={{ 
+        background: 'linear-gradient(135deg, #0f1323 0%, #1a1a2e 50%, #16213e 100%)' 
+      }}
+    >
+      {/* Header */}
+      <div className="section-mobile">
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-display font-bold mb-3 text-gradient-intense">
+            Your Profile
+          </h1>
+          <p className="text-lg text-muted-foreground font-display font-medium">
+            Your social mastery dashboard
+          </p>
         </div>
+      </div>
 
       {/* User Profile Card */}
       <div className="px-4 mb-6">
@@ -268,8 +262,7 @@ const Profile = () => {
           </p>
         </div>
       </div>
-      </div>
-    </>
+    </div>
   );
 };
 
