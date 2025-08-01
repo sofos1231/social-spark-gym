@@ -107,11 +107,12 @@ const TopStatusBar = () => {
                 <span className="text-primary-foreground font-bold">{user.level}</span>
               </div>
               
-              {/* Green XP Bonus Glow Ring */}
+              {/* Green XP Bonus Glow Ring with Enhanced Pulse */}
               {hasXPBonus && (
                 <div 
-                  className="absolute inset-0 rounded-lg animate-pulse pointer-events-none"
+                  className="absolute inset-0 rounded-lg pointer-events-none"
                   style={{ 
+                    animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                     boxShadow: '0 0 15px 2px rgba(34, 197, 94, 0.5), 0 0 25px 4px rgba(34, 197, 94, 0.3)',
                     border: '2px solid rgba(34, 197, 94, 0.7)'
                   }}
@@ -140,19 +141,21 @@ const TopStatusBar = () => {
               )}
             </div>
             
-            {/* Compact XP Progress */}
-            <div className="flex-1 min-w-0 max-w-[120px]">
-              <div className="w-full bg-black/20 rounded-full h-1.5 overflow-hidden">
-                <div 
-                  className="h-full rounded-full transition-all duration-500 ease-out"
-                  style={{ 
-                    width: `${xpProgress}%`,
-                    background: 'var(--gradient-primary)'
-                  }}
-                />
+            {/* Level Text and XP Progress Bar */}
+            <div className="flex items-center gap-2 flex-1 min-w-0 max-w-[140px]">
+              <div className="text-xs font-bold text-white whitespace-nowrap">
+                Level {user.level}
               </div>
-              <div className="text-[10px] text-white/60 mt-0.5">
-                {user.currentXP}/{user.nextLevelXP}
+              <div className="flex-1 min-w-0">
+                <div className="w-full bg-black/20 rounded-full h-1.5 overflow-hidden">
+                  <div 
+                    className="h-full rounded-full transition-all duration-500 ease-out"
+                    style={{ 
+                      width: `${xpProgress}%`,
+                      background: 'var(--gradient-primary)'
+                    }}
+                  />
+                </div>
               </div>
             </div>
           </div>
