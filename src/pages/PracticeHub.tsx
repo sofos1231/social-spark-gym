@@ -317,16 +317,6 @@ const PracticeHub = () => {
     >
       {/* Profile Card Hero */}
       <ProfileCard />
-      
-      {/* Header */}
-      <div className="section-container text-center mb-8 mt-6">
-        <h1 className="heading-hero mb-3 bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">
-          Practice Hub
-        </h1>
-        <p className="text-lg text-muted-foreground font-medium">
-          Master social skills through interactive training
-        </p>
-      </div>
 
       {/* Category Sections with Horizontal Carousels */}
       <div className="space-y-8">
