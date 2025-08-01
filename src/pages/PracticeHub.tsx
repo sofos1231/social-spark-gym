@@ -78,7 +78,7 @@ const PracticeHub = () => {
 
   return (
     <div 
-      className="min-h-screen pb-20"
+      className="min-h-screen pb-20 pt-24"
       style={{ background: 'var(--gradient-background)' }}
     >
       {/* Header */}

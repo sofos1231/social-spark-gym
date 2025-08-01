@@ -15,6 +15,7 @@ import Shop from "./pages/Shop";
 import Badges from "./pages/Badges";
 import LevelMilestones from "./pages/LevelMilestones";
 import Navigation from "./components/Navigation";
+import TopStatusBar from "./components/TopStatusBar";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,6 +27,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <div className="relative overflow-hidden">
+          <TopStatusBar />
           <Routes>
             <Route path="/" element={<PageTransition currentPath="/"><PracticeHub /></PageTransition>} />
             <Route path="/practice-road/:categoryId" element={<PageTransition currentPath="/practice-road"><PracticeRoad /></PageTransition>} />

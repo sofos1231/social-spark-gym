@@ -58,7 +58,7 @@ const LevelMilestones = () => {
 
   return (
     <div 
-      className="min-h-screen pb-20"
+      className="min-h-screen pb-20 pt-24"
       style={{ 
         background: 'linear-gradient(135deg, #0f1323 0%, #1a1a2e 50%, #16213e 100%)' 
       }}

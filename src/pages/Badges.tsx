@@ -250,7 +250,7 @@ const Badges = () => {
 
   return (
     <div 
-      className="min-h-screen pb-20"
+      className="min-h-screen pb-20 pt-24"
       style={{ 
         background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 25%, #eab308 50%, #f59e0b 75%, #fbbf24 100%)'
       }}
