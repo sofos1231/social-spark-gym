@@ -3,6 +3,7 @@ import { Heart, Users, Briefcase, Mic, Smile, Crown, Star, LucideIcon, Flame, Za
 import CategorySection from '@/components/CategorySection';
 import JourneyFlashcards from '@/components/JourneyFlashcards';
 import ProfileCard from '@/components/ProfileCard';
+import WeeklyStreakChart from '@/components/WeeklyStreakChart';
 
 // Import illustrations
 import eyeContactIllustration from '@/assets/eye-contact-illustration.jpg';
@@ -317,6 +318,9 @@ const PracticeHub = () => {
     >
       {/* Profile Card Hero */}
       <ProfileCard />
+
+      {/* Weekly Streak Chart */}
+      <WeeklyStreakChart />
 
       {/* Category Sections with Horizontal Carousels */}
       <div className="space-y-8">
