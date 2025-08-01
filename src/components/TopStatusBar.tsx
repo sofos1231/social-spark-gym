@@ -15,6 +15,7 @@ const TopStatusBar = () => {
 
   const [animatingCurrency, setAnimatingCurrency] = useState<'coins' | 'gems' | null>(null);
   const [streakBurst, setStreakBurst] = useState(false);
+  const [showXPBonusPopup, setShowXPBonusPopup] = useState(false);
 
   const xpProgress = (user.currentXP / user.nextLevelXP) * 100;
   const streakMultiplier = Math.min(10 + (user.streak * 2), 50); // 10% base + 2% per day, max 50%
@@ -40,6 +41,33 @@ const TopStatusBar = () => {
     }
   };
 
+  const handleTrophyClick = () => {
+    if (hasXPBonus) {
+      setShowXPBonusPopup(true);
+      // Auto-dismiss after 2.5 seconds
+      setTimeout(() => setShowXPBonusPopup(false), 2500);
+      
+      // Simulate haptic feedback
+      if (navigator.vibrate) {
+        navigator.vibrate(100);
+      }
+    }
+  };
+
+  // Close popup on outside click
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (showXPBonusPopup) {
+        setShowXPBonusPopup(false);
+      }
+    };
+
+    if (showXPBonusPopup) {
+      document.addEventListener('click', handleClickOutside);
+      return () => document.removeEventListener('click', handleClickOutside);
+    }
+  }, [showXPBonusPopup]);
+
   return (
     <div className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl">
       <div 
@@ -55,9 +83,11 @@ const TopStatusBar = () => {
           <div className="flex items-center gap-4 flex-1 min-w-0">
             <div className="relative">
               <div 
+                onClick={handleTrophyClick}
                 className={`
                   relative flex items-center justify-center w-14 h-14 rounded-xl font-bold text-sm transition-all duration-300
                   ${user.isLevelingUp ? 'animate-pulse-glow' : ''}
+                  ${hasXPBonus ? 'cursor-pointer hover:scale-105' : ''}
                 `}
                 style={{ 
                   background: 'var(--gradient-primary)',
@@ -75,12 +105,49 @@ const TopStatusBar = () => {
               {/* Green XP Bonus Glow */}
               {hasXPBonus && (
                 <div 
-                  className="absolute inset-0 rounded-xl animate-pulse"
+                  className="absolute inset-0 rounded-xl animate-pulse pointer-events-none"
                   style={{ 
                     boxShadow: '0 0 20px 3px rgba(34, 197, 94, 0.4), 0 0 30px 6px rgba(34, 197, 94, 0.2)',
                     border: '2px solid rgba(34, 197, 94, 0.6)'
                   }}
                 />
+              )}
+
+              {/* XP Bonus Popup */}
+              {showXPBonusPopup && hasXPBonus && (
+                <div 
+                  className="absolute -top-24 left-1/2 transform -translate-x-1/2 z-[60] animate-fade-in"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div 
+                    className="relative px-4 py-3 rounded-2xl backdrop-blur-xl border border-green-400/30 shadow-2xl min-w-[200px] text-center"
+                    style={{
+                      background: 'rgba(34, 197, 94, 0.1)',
+                      backdropFilter: 'blur(20px)',
+                      boxShadow: '0 20px 40px rgba(0, 0, 0, 0.3), 0 0 20px rgba(34, 197, 94, 0.3)'
+                    }}
+                  >
+                    {/* Arrow pointing down */}
+                    <div 
+                      className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-4 h-4 rotate-45"
+                      style={{
+                        background: 'rgba(34, 197, 94, 0.1)',
+                        border: '1px solid rgba(34, 197, 94, 0.3)',
+                        borderTop: 'none',
+                        borderLeft: 'none'
+                      }}
+                    />
+                    
+                    <div className="relative z-10">
+                      <div className="text-sm font-bold text-green-400 mb-1 flex items-center justify-center gap-1">
+                        🔥 You have a +{streakMultiplier}% XP Bonus!
+                      </div>
+                      <div className="text-xs text-green-300">
+                        Earn more XP while this is active.
+                      </div>
+                    </div>
+                  </div>
+                </div>
               )}
             </div>
             
