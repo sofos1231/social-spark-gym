@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { Heart, Users, Briefcase, Mic, Smile, Crown, Star, LucideIcon, Flame, Zap, Brain } from 'lucide-react';
 import CategorySection from '@/components/CategorySection';
 import JourneyFlashcards from '@/components/JourneyFlashcards';
+import ProfileCard from '@/components/ProfileCard';
 
 // Import illustrations
 import eyeContactIllustration from '@/assets/eye-contact-illustration.jpg';
@@ -311,11 +312,14 @@ const PracticeHub = () => {
 
   return (
     <div 
-      className="min-h-screen pb-20 pt-16"
+      className="min-h-screen pb-20 pt-4"
       style={{ background: 'var(--gradient-background)' }}
     >
+      {/* Profile Card Hero */}
+      <ProfileCard />
+      
       {/* Header */}
-      <div className="section-container text-center mb-8">
+      <div className="section-container text-center mb-8 mt-6">
         <h1 className="heading-hero mb-3 bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">
           Practice Hub
         </h1>
