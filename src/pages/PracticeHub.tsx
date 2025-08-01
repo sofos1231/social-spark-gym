@@ -1,9 +1,13 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Heart, Users, Briefcase, Mic, Smile, Crown, Star, LucideIcon, Flame, Zap, Brain, Lock } from 'lucide-react';
+import { Heart, Users, Briefcase, Mic, Smile, Crown, Star, LucideIcon, Flame, Zap, Brain, Lock, ChevronDown, ChevronUp, CheckCircle, Play, Diamond, Clock, Trophy } from 'lucide-react';
 import CategorySection from '@/components/CategorySection';
 import JourneyFlashcards from '@/components/JourneyFlashcards';
 import ProfileCard from '@/components/ProfileCard';
 import WeeklyStreakChart from '@/components/WeeklyStreakChart';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Progress } from '@/components/ui/progress';
 
 // Import illustrations
 import eyeContactIllustration from '@/assets/eye-contact-illustration.jpg';
@@ -38,8 +42,170 @@ interface Category {
   missions: Mission[];
 }
 
+interface ChapterMission {
+  id: number;
+  title: string;
+  description: string;
+  type: 'chat' | 'video' | 'boss' | 'premium';
+  duration: string;
+  xpReward: number;
+  status: 'locked' | 'available' | 'completed' | 'current';
+  difficulty: 'easy' | 'medium' | 'hard';
+}
+
+interface Chapter {
+  id: string;
+  title: string;
+  description: string;
+  icon: LucideIcon;
+  gradient: string;
+  missions: ChapterMission[];
+  completedMissions: number;
+  totalMissions: number;
+  isLocked: boolean;
+}
+
 const PracticeHub = () => {
   const navigate = useNavigate();
+  const [expandedChapter, setExpandedChapter] = useState<string | null>(null);
+
+  // Chapter data with mission roads
+  const chapters: Chapter[] = [
+    {
+      id: 'dating-romance',
+      title: 'Dating & Romance',
+      description: 'Master romantic connection skills',
+      icon: Heart,
+      gradient: 'from-pink-500 to-rose-500',
+      completedMissions: 3,
+      totalMissions: 10,
+      isLocked: false,
+      missions: [
+        {
+          id: 1,
+          title: "Flirty Hello",
+          description: "Master the art of an engaging first impression",
+          type: 'chat',
+          duration: '3 min',
+          xpReward: 50,
+          status: 'completed',
+          difficulty: 'easy'
+        },
+        {
+          id: 2,
+          title: "Playful Disagreement",
+          description: "Navigate disagreements with charm and wit",
+          type: 'chat',
+          duration: '4 min',
+          xpReward: 75,
+          status: 'completed',
+          difficulty: 'easy'
+        },
+        {
+          id: 3,
+          title: "Reading the Room",
+          description: "Pick up on subtle social cues and respond appropriately",
+          type: 'chat',
+          duration: '5 min',
+          xpReward: 100,
+          status: 'completed',
+          difficulty: 'medium'
+        },
+        {
+          id: 4,
+          title: "Storytelling Magic",
+          description: "Captivate with engaging personal anecdotes",
+          type: 'chat',
+          duration: '6 min',
+          xpReward: 125,
+          status: 'current',
+          difficulty: 'medium'
+        },
+        {
+          id: 5,
+          title: "Confident Compliments",
+          description: "Give genuine compliments that create connection",
+          type: 'chat',
+          duration: '4 min',
+          xpReward: 100,
+          status: 'available',
+          difficulty: 'medium'
+        },
+        {
+          id: 6,
+          title: "Handling Awkward Silence",
+          description: "Turn uncomfortable pauses into opportunities",
+          type: 'chat',
+          duration: '5 min',
+          xpReward: 150,
+          status: 'locked',
+          difficulty: 'hard'
+        },
+        {
+          id: 7,
+          title: "Teasing & Banter",
+          description: "Master playful conversation dynamics",
+          type: 'premium',
+          duration: '7 min',
+          xpReward: 200,
+          status: 'locked',
+          difficulty: 'hard'
+        },
+        {
+          id: 8,
+          title: "Deep Connection",
+          description: "Move beyond surface-level conversation",
+          type: 'chat',
+          duration: '8 min',
+          xpReward: 175,
+          status: 'locked',
+          difficulty: 'hard'
+        },
+        {
+          id: 9,
+          title: "The Perfect Exit",
+          description: "End conversations memorably and gracefully",
+          type: 'chat',
+          duration: '4 min',
+          xpReward: 125,
+          status: 'locked',
+          difficulty: 'medium'
+        },
+        {
+          id: 10,
+          title: "Video: Convince Her You're Not Boring",
+          description: "Put it all together in a real conversation challenge",
+          type: 'boss',
+          duration: '3 min',
+          xpReward: 300,
+          status: 'locked',
+          difficulty: 'hard'
+        }
+      ]
+    },
+    {
+      id: 'job-interviews',
+      title: 'Job Interviews',
+      description: 'Land your dream job with confidence',
+      icon: Briefcase,
+      gradient: 'from-blue-500 to-indigo-500',
+      completedMissions: 0,
+      totalMissions: 12,
+      isLocked: true,
+      missions: []
+    },
+    {
+      id: 'charisma-social',
+      title: 'Charisma & Social',
+      description: 'Become naturally magnetic',
+      icon: Users,
+      gradient: 'from-green-500 to-emerald-500',
+      completedMissions: 0,
+      totalMissions: 15,
+      isLocked: true,
+      missions: []
+    }
+  ];
 
   const categories: Category[] = [
     {
@@ -311,6 +477,57 @@ const PracticeHub = () => {
     }
   };
 
+  const handleChapterMissionClick = (mission: ChapterMission) => {
+    if (mission.status === 'locked') return;
+    
+    if (mission.type === 'premium') {
+      navigate('/upgrade');
+    } else {
+      navigate(`/practice/${mission.id}`);
+    }
+  };
+
+  const getMissionIcon = (mission: ChapterMission) => {
+    if (mission.status === 'completed') return <CheckCircle className="w-6 h-6 text-green-400" />;
+    if (mission.status === 'locked') return <Lock className="w-6 h-6 text-slate-500" />;
+    if (mission.type === 'boss') return <Flame className="w-6 h-6 text-orange-400" />;
+    if (mission.type === 'premium') return <Diamond className="w-6 h-6 text-purple-400" />;
+    if (mission.type === 'video') return <Play className="w-6 h-6 text-blue-400" />;
+    return <Star className="w-6 h-6 text-yellow-400" />;
+  };
+
+  const getMissionNodeStyle = (mission: ChapterMission) => {
+    const baseClasses = "relative w-16 h-16 rounded-full flex items-center justify-center transition-all duration-300 border-2 cursor-pointer";
+    
+    if (mission.status === 'completed') {
+      return `${baseClasses} bg-green-500/20 border-green-400 shadow-lg shadow-green-400/30`;
+    }
+    if (mission.status === 'current') {
+      return `${baseClasses} bg-primary/20 border-primary shadow-lg shadow-primary/40 animate-pulse`;
+    }
+    if (mission.status === 'available') {
+      return `${baseClasses} bg-slate-700/50 border-slate-600 hover:border-primary hover:bg-primary/10`;
+    }
+    if (mission.type === 'boss') {
+      return `${baseClasses} bg-gradient-to-r from-orange-500/20 to-red-500/20 border-orange-400 shadow-lg shadow-orange-400/30`;
+    }
+    if (mission.type === 'premium') {
+      return `${baseClasses} bg-gradient-to-r from-purple-500/20 to-pink-500/20 border-purple-400 shadow-lg shadow-purple-400/30`;
+    }
+    return `${baseClasses} bg-slate-800/50 border-slate-700`;
+  };
+
+  const getPathStyle = (index: number, missions: ChapterMission[]) => {
+    const mission = missions[index];
+    if (mission.status === 'completed') {
+      return "bg-gradient-to-b from-green-400 to-green-600";
+    }
+    if (mission.status === 'current' && index > 0) {
+      return "bg-gradient-to-b from-green-400 to-primary";
+    }
+    return "bg-slate-700";
+  };
+
   return (
     <div 
       className="min-h-screen pb-20 pt-4"
@@ -326,101 +543,194 @@ const PracticeHub = () => {
       <div className="section-container-sm mb-8">
         <h2 className="heading-section mb-6">Chapter Roads</h2>
         <div className="grid grid-cols-1 gap-4">
-          {/* Dating & Romance Chapter */}
-          <div 
-            onClick={() => navigate('/practice-road/dating-romance')}
-            className="card-warm p-6 cursor-pointer transform transition-all duration-200 hover:scale-102 active:scale-98"
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-pink-500 to-rose-500 flex items-center justify-center">
-                  <Heart className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-white">Dating & Romance</h3>
-                  <p className="text-sm text-slate-300">Master romantic connection skills</p>
-                  <div className="flex items-center gap-3 mt-1">
-                    <span className="text-xs text-green-400">3/10 missions completed</span>
-                    <div className="w-2 h-2 rounded-full bg-gradient-to-r from-orange-400 to-red-500 animate-pulse"></div>
-                    <span className="text-xs text-orange-300">Boss Mission Available</span>
+          {chapters.map((chapter) => {
+            const progressPercentage = (chapter.completedMissions / chapter.totalMissions) * 100;
+            const isExpanded = expandedChapter === chapter.id;
+            
+            return (
+              <div key={chapter.id} className="card-warm overflow-hidden">
+                {/* Chapter Header */}
+                <div 
+                  onClick={() => !chapter.isLocked && setExpandedChapter(isExpanded ? null : chapter.id)}
+                  className={`p-6 cursor-pointer transform transition-all duration-200 ${!chapter.isLocked ? 'hover:scale-102 active:scale-98' : ''} ${chapter.isLocked ? 'opacity-60' : ''}`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${chapter.gradient} flex items-center justify-center`}>
+                        <chapter.icon className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-bold text-white">{chapter.title}</h3>
+                        <p className="text-sm text-slate-300">{chapter.description}</p>
+                        <div className="flex items-center gap-3 mt-1">
+                          {chapter.isLocked ? (
+                            <>
+                              <span className="text-xs text-slate-400">{chapter.completedMissions}/{chapter.totalMissions} missions completed</span>
+                              <Lock className="w-3 h-3 text-slate-500" />
+                              <span className="text-xs text-slate-500">Locked</span>
+                            </>
+                          ) : (
+                            <>
+                              <span className="text-xs text-green-400">{chapter.completedMissions}/{chapter.totalMissions} missions completed</span>
+                              {chapter.id === 'dating-romance' && (
+                                <>
+                                  <div className="w-2 h-2 rounded-full bg-gradient-to-r from-orange-400 to-red-500 animate-pulse"></div>
+                                  <span className="text-xs text-orange-300">Boss Mission Available</span>
+                                </>
+                              )}
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="text-right">
+                        <div className={`text-2xl font-bold ${chapter.isLocked ? 'text-slate-500' : 'text-gradient-xp'}`}>
+                          {Math.round(progressPercentage)}%
+                        </div>
+                        <div className="text-xs text-slate-400">Complete</div>
+                      </div>
+                      {!chapter.isLocked && (
+                        <div className="text-slate-400">
+                          {isExpanded ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <div className="mt-4">
+                    <div className="w-full bg-slate-700 rounded-full h-2">
+                      <div 
+                        className={`h-full ${chapter.isLocked ? 'bg-slate-600' : `bg-gradient-to-r ${chapter.gradient}`} rounded-full transition-all duration-500`}
+                        style={{ width: `${progressPercentage}%` }}
+                      ></div>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="text-right">
-                <div className="text-2xl font-bold text-gradient-xp">30%</div>
-                <div className="text-xs text-slate-400">Complete</div>
-              </div>
-            </div>
-            <div className="mt-4">
-              <div className="w-full bg-slate-700 rounded-full h-2">
-                <div className="h-full bg-gradient-to-r from-pink-400 to-rose-500 rounded-full w-[30%] transition-all duration-500"></div>
-              </div>
-            </div>
-          </div>
 
-          {/* Job Interviews Chapter */}
-          <div 
-            onClick={() => navigate('/practice-road/job-interviews')}
-            className="card-warm p-6 cursor-pointer transform transition-all duration-200 hover:scale-102 active:scale-98"
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-500 flex items-center justify-center">
-                  <Briefcase className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-white">Job Interviews</h3>
-                  <p className="text-sm text-slate-300">Land your dream job with confidence</p>
-                  <div className="flex items-center gap-3 mt-1">
-                    <span className="text-xs text-slate-400">0/12 missions completed</span>
-                    <Lock className="w-3 h-3 text-slate-500" />
-                    <span className="text-xs text-slate-500">Locked</span>
-                  </div>
-                </div>
-              </div>
-              <div className="text-right">
-                <div className="text-2xl font-bold text-slate-500">0%</div>
-                <div className="text-xs text-slate-400">Complete</div>
-              </div>
-            </div>
-            <div className="mt-4">
-              <div className="w-full bg-slate-700 rounded-full h-2">
-                <div className="h-full bg-slate-600 rounded-full w-0 transition-all duration-500"></div>
-              </div>
-            </div>
-          </div>
+                {/* Expanded Mission Road */}
+                {isExpanded && !chapter.isLocked && chapter.missions.length > 0 && (
+                  <div className="px-6 pb-6 pt-2 border-t border-slate-700/50">
+                    <div className="mb-4">
+                      <div className="flex items-center justify-between text-sm mb-2">
+                        <span className="text-slate-300">Mission Progress</span>
+                        <div className="flex items-center gap-1">
+                          <Trophy className="w-3 h-3 text-yellow-400" />
+                          <span className="text-yellow-400 font-medium">
+                            {chapter.missions.reduce((sum, m) => m.status === 'completed' ? sum + m.xpReward : sum, 0)} XP earned
+                          </span>
+                        </div>
+                      </div>
+                    </div>
 
-          {/* Charisma & Social Chapter */}
-          <div 
-            onClick={() => navigate('/practice-road/charisma-social')}
-            className="card-warm p-6 cursor-pointer transform transition-all duration-200 hover:scale-102 active:scale-98"
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-green-500 to-emerald-500 flex items-center justify-center">
-                  <Users className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-white">Charisma & Social</h3>
-                  <p className="text-sm text-slate-300">Become naturally magnetic</p>
-                  <div className="flex items-center gap-3 mt-1">
-                    <span className="text-xs text-slate-400">0/15 missions completed</span>
-                    <Lock className="w-3 h-3 text-slate-500" />
-                    <span className="text-xs text-slate-500">Locked</span>
+                    {/* Mission Road */}
+                    <div className="relative max-w-md mx-auto">
+                      {chapter.missions.map((mission, index) => (
+                        <div key={mission.id} className="relative">
+                          {/* Mission Node */}
+                          <div 
+                            className={`flex items-center ${index % 2 === 0 ? 'justify-start' : 'justify-end'} mb-6`}
+                          >
+                            <div className="flex items-center gap-3">
+                              {index % 2 === 1 && (
+                                <Card 
+                                  className={`p-3 max-w-[180px] card-warm cursor-pointer transform transition-all duration-200 hover:scale-102 ${mission.status === 'locked' ? 'opacity-50' : ''}`}
+                                  onClick={() => handleChapterMissionClick(mission)}
+                                >
+                                  <div className="text-right">
+                                    <div className="flex items-center justify-end gap-2 mb-1">
+                                      {mission.type === 'boss' && <Flame className="w-3 h-3 text-orange-400" />}
+                                      {mission.type === 'premium' && <Diamond className="w-3 h-3 text-purple-400" />}
+                                      <h3 className="text-sm font-semibold text-white">{mission.title}</h3>
+                                    </div>
+                                    <p className="text-xs text-slate-300 mb-2">{mission.description}</p>
+                                    <div className="flex items-center justify-end gap-3 text-xs text-slate-400">
+                                      <div className="flex items-center gap-1">
+                                        <Clock className="w-3 h-3" />
+                                        {mission.duration}
+                                      </div>
+                                      <div className="flex items-center gap-1">
+                                        <Zap className="w-3 h-3 text-yellow-400" />
+                                        {mission.xpReward} XP
+                                      </div>
+                                    </div>
+                                  </div>
+                                </Card>
+                              )}
+
+                              {/* Mission Node Circle */}
+                              <div 
+                                className={getMissionNodeStyle(mission)}
+                                onClick={() => handleChapterMissionClick(mission)}
+                              >
+                                {getMissionIcon(mission)}
+                                
+                                {/* Boss Mission Fire Effect */}
+                                {mission.type === 'boss' && mission.status !== 'locked' && (
+                                  <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-orange-400 to-red-500 opacity-20 animate-pulse" />
+                                )}
+                                
+                                {/* Premium Mission Glow */}
+                                {mission.type === 'premium' && (
+                                  <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-purple-400 to-pink-400 opacity-30 animate-pulse" />
+                                )}
+                              </div>
+
+                              {index % 2 === 0 && (
+                                <Card 
+                                  className={`p-3 max-w-[180px] card-warm cursor-pointer transform transition-all duration-200 hover:scale-102 ${mission.status === 'locked' ? 'opacity-50' : ''}`}
+                                  onClick={() => handleChapterMissionClick(mission)}
+                                >
+                                  <div className="flex items-center gap-2 mb-1">
+                                    <h3 className="text-sm font-semibold text-white">{mission.title}</h3>
+                                    {mission.type === 'boss' && <Flame className="w-3 h-3 text-orange-400" />}
+                                    {mission.type === 'premium' && <Diamond className="w-3 h-3 text-purple-400" />}
+                                  </div>
+                                  <p className="text-xs text-slate-300 mb-2">{mission.description}</p>
+                                  <div className="flex items-center gap-3 text-xs text-slate-400">
+                                    <div className="flex items-center gap-1">
+                                      <Clock className="w-3 h-3" />
+                                      {mission.duration}
+                                    </div>
+                                    <div className="flex items-center gap-1">
+                                      <Zap className="w-3 h-3 text-yellow-400" />
+                                      {mission.xpReward} XP
+                                    </div>
+                                  </div>
+                                </Card>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Connection Path */}
+                          {index < chapter.missions.length - 1 && (
+                            <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-6 -mt-3 mb-3">
+                              <div className={`w-full h-full ${getPathStyle(index, chapter.missions)} transition-all duration-500`} />
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Chapter Complete Celebration */}
+                    {progressPercentage === 100 && (
+                      <Card className="mt-6 p-4 card-warm text-center">
+                        <Trophy className="w-8 h-8 text-yellow-500 mx-auto mb-2" />
+                        <h3 className="text-sm font-display font-bold text-gradient-xp mb-1">
+                          Chapter Complete! 🎉
+                        </h3>
+                        <p className="text-xs text-muted-foreground mb-3">
+                          You've mastered the basics. Ready for the next challenge?
+                        </p>
+                        <Button size="sm" className="w-full">
+                          Continue to Next Chapter
+                        </Button>
+                      </Card>
+                    )}
                   </div>
-                </div>
+                )}
               </div>
-              <div className="text-right">
-                <div className="text-2xl font-bold text-slate-500">0%</div>
-                <div className="text-xs text-slate-400">Complete</div>
-              </div>
-            </div>
-            <div className="mt-4">
-              <div className="w-full bg-slate-700 rounded-full h-2">
-                <div className="h-full bg-slate-600 rounded-full w-0 transition-all duration-500"></div>
-              </div>
-            </div>
-          </div>
+            );
+          })}
         </div>
       </div>
 
