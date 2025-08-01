@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Coins, Gem, Flame, Trophy } from 'lucide-react';
+import { Coins, Gem, Flame, Trophy, Plus } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 
 const TopStatusBar = () => {
@@ -54,6 +54,15 @@ const TopStatusBar = () => {
     }
   };
 
+  const handleShopClick = () => {
+    // Navigate to shop when + button is clicked
+    // Simulate haptic feedback
+    if (navigator.vibrate) {
+      navigator.vibrate(50);
+    }
+    console.log('Opening shop...');
+  };
+
   // Close popup on outside click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -69,46 +78,42 @@ const TopStatusBar = () => {
   }, [showXPBonusPopup]);
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl">
+    <div className="fixed top-0 left-0 right-0 z-50">
       <div 
-        className="px-4 py-3 border-b"
+        className="px-3 py-2 backdrop-blur-xl"
         style={{ 
-          background: 'var(--gradient-background)',
-          borderColor: 'hsl(var(--border) / 0.3)'
+          background: 'rgba(255, 255, 255, 0.05)',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
         }}
       >
-        {/* Main Status Row */}
-        <div className="flex items-center justify-between gap-4">
-          {/* Level & XP Progress */}
-          <div className="flex items-center gap-4 flex-1 min-w-0">
+        {/* Clash Royale Style Status Row */}
+        <div className="flex items-center justify-between gap-2">
+          {/* Left: Level Trophy + XP Bar */}
+          <div className="flex items-center gap-3 flex-1 min-w-0">
             <div className="relative">
               <div 
                 onClick={handleTrophyClick}
                 className={`
-                  relative flex items-center justify-center w-14 h-14 rounded-xl font-bold text-sm transition-all duration-300
+                  relative flex items-center justify-center w-10 h-10 rounded-lg font-bold text-xs transition-all duration-300
                   ${user.isLevelingUp ? 'animate-pulse-glow' : ''}
                   ${hasXPBonus ? 'cursor-pointer hover:scale-105' : ''}
                 `}
                 style={{ 
                   background: 'var(--gradient-primary)',
-                  boxShadow: user.isLevelingUp ? 'var(--shadow-glow-primary)' : 'var(--shadow-elevation)'
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)'
                 }}
               >
-                <Trophy size={18} className="text-primary-foreground mr-1" />
-                <span className="text-primary-foreground font-display font-bold">{user.level}</span>
-                {user.isLevelingUp && (
-                  <div className="absolute inset-0 rounded-xl animate-ping opacity-75" 
-                       style={{ background: 'var(--gradient-primary)' }} />
-                )}
+                <Trophy size={14} className="text-primary-foreground mr-0.5" />
+                <span className="text-primary-foreground font-bold">{user.level}</span>
               </div>
               
-              {/* Green XP Bonus Glow */}
+              {/* Green XP Bonus Glow Ring */}
               {hasXPBonus && (
                 <div 
-                  className="absolute inset-0 rounded-xl animate-pulse pointer-events-none"
+                  className="absolute inset-0 rounded-lg animate-pulse pointer-events-none"
                   style={{ 
-                    boxShadow: '0 0 20px 3px rgba(34, 197, 94, 0.4), 0 0 30px 6px rgba(34, 197, 94, 0.2)',
-                    border: '2px solid rgba(34, 197, 94, 0.6)'
+                    boxShadow: '0 0 15px 2px rgba(34, 197, 94, 0.5), 0 0 25px 4px rgba(34, 197, 94, 0.3)',
+                    border: '2px solid rgba(34, 197, 94, 0.7)'
                   }}
                 />
               )}
@@ -116,49 +121,28 @@ const TopStatusBar = () => {
               {/* XP Bonus Popup */}
               {showXPBonusPopup && hasXPBonus && (
                 <div 
-                  className="absolute -top-24 left-1/2 transform -translate-x-1/2 z-[60] animate-fade-in"
+                  className="absolute -top-16 left-1/2 transform -translate-x-1/2 z-[60] animate-fade-in"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <div 
-                    className="relative px-4 py-3 rounded-2xl backdrop-blur-xl border border-green-400/30 shadow-2xl min-w-[200px] text-center"
+                    className="px-3 py-2 rounded-xl backdrop-blur-xl border border-green-400/40 shadow-xl text-center"
                     style={{
-                      background: 'rgba(34, 197, 94, 0.1)',
+                      background: 'rgba(34, 197, 94, 0.15)',
                       backdropFilter: 'blur(20px)',
-                      boxShadow: '0 20px 40px rgba(0, 0, 0, 0.3), 0 0 20px rgba(34, 197, 94, 0.3)'
+                      boxShadow: '0 10px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(34, 197, 94, 0.4)'
                     }}
                   >
-                    {/* Arrow pointing down */}
-                    <div 
-                      className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-4 h-4 rotate-45"
-                      style={{
-                        background: 'rgba(34, 197, 94, 0.1)',
-                        border: '1px solid rgba(34, 197, 94, 0.3)',
-                        borderTop: 'none',
-                        borderLeft: 'none'
-                      }}
-                    />
-                    
-                    <div className="relative z-10">
-                      <div className="text-sm font-bold text-green-400 mb-1 flex items-center justify-center gap-1">
-                        🔥 You have a +{streakMultiplier}% XP Bonus!
-                      </div>
-                      <div className="text-xs text-green-300">
-                        Earn more XP while this is active.
-                      </div>
+                    <div className="text-xs font-bold text-green-400">
+                      +{streakMultiplier}% XP Bonus Active
                     </div>
                   </div>
                 </div>
               )}
             </div>
             
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center justify-between mb-1.5">
-                <span className="text-xs font-medium text-muted-foreground">Level {user.level}</span>
-                <span className="text-xs font-bold text-foreground">
-                  {user.currentXP}/{user.nextLevelXP} XP
-                </span>
-              </div>
-              <div className="w-full bg-muted/50 rounded-full h-2.5 overflow-hidden">
+            {/* Compact XP Progress */}
+            <div className="flex-1 min-w-0 max-w-[120px]">
+              <div className="w-full bg-black/20 rounded-full h-1.5 overflow-hidden">
                 <div 
                   className="h-full rounded-full transition-all duration-500 ease-out"
                   style={{ 
@@ -167,27 +151,30 @@ const TopStatusBar = () => {
                   }}
                 />
               </div>
+              <div className="text-[10px] text-white/60 mt-0.5">
+                {user.currentXP}/{user.nextLevelXP}
+              </div>
             </div>
           </div>
 
-          {/* Currency Section */}
-          <div className="flex items-center gap-3">
+          {/* Center: Currency + Shop Button */}
+          <div className="flex items-center gap-1.5">
             {/* Coins */}
             <div 
               onClick={() => handleCurrencyClick('coins')}
               className={`
-                flex items-center gap-2 px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-200 active:scale-95
+                flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg cursor-pointer transition-all duration-200 active:scale-95
                 ${animatingCurrency === 'coins' ? 'animate-bounce-subtle' : ''}
               `}
               style={{ 
-                background: 'hsl(var(--card) / 0.9)',
-                boxShadow: 'var(--shadow-card)'
+                background: 'rgba(0, 0, 0, 0.3)',
+                backdropFilter: 'blur(10px)'
               }}
             >
-              <div className="w-7 h-7 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center shadow-sm">
-                <Coins size={16} className="text-white" />
+              <div className="w-5 h-5 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center">
+                <Coins size={12} className="text-white" />
               </div>
-              <span className="text-sm font-bold text-foreground min-w-[3rem] text-left">
+              <span className="text-xs font-bold text-white">
                 {user.coins.toLocaleString()}
               </span>
             </div>
@@ -196,46 +183,58 @@ const TopStatusBar = () => {
             <div 
               onClick={() => handleCurrencyClick('gems')}
               className={`
-                flex items-center gap-2 px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-200 active:scale-95
+                flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg cursor-pointer transition-all duration-200 active:scale-95
                 ${animatingCurrency === 'gems' ? 'animate-bounce-subtle' : ''}
               `}
               style={{ 
-                background: 'hsl(var(--card) / 0.9)',
-                boxShadow: 'var(--shadow-card)'
+                background: 'rgba(0, 0, 0, 0.3)',
+                backdropFilter: 'blur(10px)'
               }}
             >
-              <div className="w-7 h-7 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center shadow-sm">
-                <Gem size={16} className="text-white" />
+              <div className="w-5 h-5 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center">
+                <Gem size={12} className="text-white" />
               </div>
-              <span className="text-sm font-bold text-foreground min-w-[1.5rem] text-left">
+              <span className="text-xs font-bold text-white">
                 {user.gems}
               </span>
             </div>
 
-            {/* Streak */}
+            {/* Green Shop + Button */}
+            <div 
+              onClick={handleShopClick}
+              className="w-8 h-8 rounded-full bg-gradient-to-br from-green-400 to-green-500 flex items-center justify-center cursor-pointer transition-all duration-200 hover:scale-110 active:scale-95 shadow-lg"
+              style={{
+                boxShadow: '0 0 15px rgba(34, 197, 94, 0.4)'
+              }}
+            >
+              <Plus size={14} className="text-white font-bold" />
+            </div>
+          </div>
+
+          {/* Right: Streak */}
+          <div className="flex items-center">
             <div 
               onClick={handleStreakClick}
               className={`
-                flex items-center gap-2 px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-200 active:scale-95 relative overflow-hidden
+                flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg cursor-pointer transition-all duration-200 active:scale-95 relative overflow-hidden
                 ${streakBurst ? 'animate-pulse-glow' : ''}
               `}
               style={{ 
-                background: 'var(--gradient-secondary)',
-                boxShadow: 'var(--shadow-glow-secondary)'
+                background: 'rgba(0, 0, 0, 0.3)',
+                backdropFilter: 'blur(10px)'
               }}
             >
               {streakBurst && (
                 <>
-                  <div className="absolute inset-0 animate-ping bg-secondary opacity-75 rounded-xl" />
-                  <div className="absolute -top-2 -left-2 text-xl animate-bounce-in">🔥</div>
-                  <div className="absolute -top-2 -right-2 text-xl animate-bounce-in" style={{animationDelay: '100ms'}}>💥</div>
-                  <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 text-lg animate-bounce-in" style={{animationDelay: '200ms'}}>✨</div>
+                  <div className="absolute inset-0 animate-ping bg-orange-500 opacity-50 rounded-lg" />
+                  <div className="absolute -top-1 -left-1 text-sm animate-bounce-in">🔥</div>
+                  <div className="absolute -top-1 -right-1 text-sm animate-bounce-in" style={{animationDelay: '100ms'}}>✨</div>
                 </>
               )}
               
-              <div className="relative z-10 flex items-center gap-2">
-                <Flame size={16} className="text-secondary-foreground" />
-                <span className="text-sm font-bold text-secondary-foreground">
+              <div className="relative z-10 flex items-center gap-1.5">
+                <Flame size={12} className="text-orange-400" />
+                <span className="text-xs font-bold text-white">
                   {user.streak}
                 </span>
               </div>
