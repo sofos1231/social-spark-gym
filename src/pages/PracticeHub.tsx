@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Heart, Users, Briefcase, Mic, Smile, Crown, Star, LucideIcon, Flame, Zap, Brain } from 'lucide-react';
+import { Heart, Users, Briefcase, Mic, Smile, Crown, Star, LucideIcon, Flame, Zap, Brain, Lock } from 'lucide-react';
 import CategorySection from '@/components/CategorySection';
 import JourneyFlashcards from '@/components/JourneyFlashcards';
 import ProfileCard from '@/components/ProfileCard';
@@ -321,6 +321,108 @@ const PracticeHub = () => {
 
       {/* Weekly Streak Chart */}
       <WeeklyStreakChart />
+
+      {/* Chapter Roads Section */}
+      <div className="section-container-sm mb-8">
+        <h2 className="heading-section mb-6">Chapter Roads</h2>
+        <div className="grid grid-cols-1 gap-4">
+          {/* Dating & Romance Chapter */}
+          <div 
+            onClick={() => navigate('/practice-road/dating-romance')}
+            className="card-warm p-6 cursor-pointer transform transition-all duration-200 hover:scale-102 active:scale-98"
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-pink-500 to-rose-500 flex items-center justify-center">
+                  <Heart className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-white">Dating & Romance</h3>
+                  <p className="text-sm text-slate-300">Master romantic connection skills</p>
+                  <div className="flex items-center gap-3 mt-1">
+                    <span className="text-xs text-green-400">3/10 missions completed</span>
+                    <div className="w-2 h-2 rounded-full bg-gradient-to-r from-orange-400 to-red-500 animate-pulse"></div>
+                    <span className="text-xs text-orange-300">Boss Mission Available</span>
+                  </div>
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="text-2xl font-bold text-gradient-xp">30%</div>
+                <div className="text-xs text-slate-400">Complete</div>
+              </div>
+            </div>
+            <div className="mt-4">
+              <div className="w-full bg-slate-700 rounded-full h-2">
+                <div className="h-full bg-gradient-to-r from-pink-400 to-rose-500 rounded-full w-[30%] transition-all duration-500"></div>
+              </div>
+            </div>
+          </div>
+
+          {/* Job Interviews Chapter */}
+          <div 
+            onClick={() => navigate('/practice-road/job-interviews')}
+            className="card-warm p-6 cursor-pointer transform transition-all duration-200 hover:scale-102 active:scale-98"
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-500 flex items-center justify-center">
+                  <Briefcase className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-white">Job Interviews</h3>
+                  <p className="text-sm text-slate-300">Land your dream job with confidence</p>
+                  <div className="flex items-center gap-3 mt-1">
+                    <span className="text-xs text-slate-400">0/12 missions completed</span>
+                    <Lock className="w-3 h-3 text-slate-500" />
+                    <span className="text-xs text-slate-500">Locked</span>
+                  </div>
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="text-2xl font-bold text-slate-500">0%</div>
+                <div className="text-xs text-slate-400">Complete</div>
+              </div>
+            </div>
+            <div className="mt-4">
+              <div className="w-full bg-slate-700 rounded-full h-2">
+                <div className="h-full bg-slate-600 rounded-full w-0 transition-all duration-500"></div>
+              </div>
+            </div>
+          </div>
+
+          {/* Charisma & Social Chapter */}
+          <div 
+            onClick={() => navigate('/practice-road/charisma-social')}
+            className="card-warm p-6 cursor-pointer transform transition-all duration-200 hover:scale-102 active:scale-98"
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-green-500 to-emerald-500 flex items-center justify-center">
+                  <Users className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-white">Charisma & Social</h3>
+                  <p className="text-sm text-slate-300">Become naturally magnetic</p>
+                  <div className="flex items-center gap-3 mt-1">
+                    <span className="text-xs text-slate-400">0/15 missions completed</span>
+                    <Lock className="w-3 h-3 text-slate-500" />
+                    <span className="text-xs text-slate-500">Locked</span>
+                  </div>
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="text-2xl font-bold text-slate-500">0%</div>
+                <div className="text-xs text-slate-400">Complete</div>
+              </div>
+            </div>
+            <div className="mt-4">
+              <div className="w-full bg-slate-700 rounded-full h-2">
+                <div className="h-full bg-slate-600 rounded-full w-0 transition-all duration-500"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* Category Sections with Horizontal Carousels */}
       <div className="space-y-8">

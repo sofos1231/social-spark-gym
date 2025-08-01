@@ -1,222 +1,364 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Crown, Zap } from 'lucide-react';
-import PracticeStepCard from '@/components/PracticeStepCard';
+import { 
+  ArrowLeft, 
+  Lock, 
+  CheckCircle, 
+  Play, 
+  Flame, 
+  Diamond,
+  Star,
+  Clock,
+  Trophy,
+  Zap
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Progress } from '@/components/ui/progress';
+import { Card } from '@/components/ui/card';
 
-interface StepData {
-  id: string;
+interface Mission {
+  id: number;
   title: string;
-  icon: string;
-  status: 'locked' | 'unlocked' | 'completed';
-}
-
-interface CategoryConfig {
-  title: string;
-  subtitle: string;
-  theme: 'dating' | 'interview' | 'charisma' | 'speaking';
-  steps: StepData[];
-  totalXP: number;
-  level: number;
+  description: string;
+  type: 'chat' | 'video' | 'boss' | 'premium';
+  duration: string;
+  xpReward: number;
+  status: 'locked' | 'available' | 'completed' | 'current';
+  difficulty: 'easy' | 'medium' | 'hard';
 }
 
 const PracticeRoad = () => {
-  const { categoryId } = useParams<{ categoryId: string }>();
+  const { chapterId } = useParams();
   const navigate = useNavigate();
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [selectedMission, setSelectedMission] = useState<Mission | null>(null);
+  const [completedAnimations, setCompletedAnimations] = useState<Set<number>>(new Set());
 
-  useEffect(() => {
-    setIsLoaded(true);
-  }, []);
-
-  const categoryConfigs: Record<string, CategoryConfig> = {
-    dating: {
-      title: 'Dating & Romance',
-      subtitle: 'Master the art of romantic connection',
-      theme: 'dating',
-      totalXP: 1450,
-      level: 3,
-      steps: [
-        { id: 'conversation', title: 'Start a Conversation', icon: '💬', status: 'completed' },
-        { id: 'playful', title: 'Be Playful', icon: '😄', status: 'completed' },
-        { id: 'tension', title: 'Build Tension', icon: '💓', status: 'completed' },
-        { id: 'spark', title: 'Create Spark', icon: '🔥', status: 'unlocked' },
-        { id: 'rejection', title: 'Handle Rejection', icon: '❌', status: 'locked' },
-        { id: 'chemistry', title: 'Build Chemistry', icon: '⚡', status: 'locked' },
-        { id: 'escalation', title: 'Physical Escalation', icon: '👫', status: 'locked' }
-      ]
+  // Sample mission data for "Dating & Romance" chapter
+  const missions: Mission[] = [
+    {
+      id: 1,
+      title: "Flirty Hello",
+      description: "Master the art of an engaging first impression",
+      type: 'chat',
+      duration: '3 min',
+      xpReward: 50,
+      status: 'completed',
+      difficulty: 'easy'
     },
-    interviews: {
-      title: 'Job Interviews',
-      subtitle: 'Land your dream job with confidence',
-      theme: 'interview',
-      totalXP: 890,
-      level: 2,
-      steps: [
-        { id: 'intro', title: 'Introduce Yourself', icon: '🧑‍💼', status: 'completed' },
-        { id: 'star', title: 'Answer with STAR', icon: '🎯', status: 'completed' },
-        { id: 'eye-contact', title: 'Maintain Eye Contact', icon: '👁️', status: 'unlocked' },
-        { id: 'time-management', title: 'Time Management', icon: '⏱️', status: 'unlocked' },
-        { id: 'confidence', title: 'Show Confidence', icon: '🧘', status: 'locked' },
-        { id: 'questions', title: 'Ask Smart Questions', icon: '🤔', status: 'locked' }
-      ]
+    {
+      id: 2,
+      title: "Playful Disagreement",
+      description: "Navigate disagreements with charm and wit",
+      type: 'chat',
+      duration: '4 min',
+      xpReward: 75,
+      status: 'completed',
+      difficulty: 'easy'
     },
-    charisma: {
-      title: 'Charisma & Social Manners',
-      subtitle: 'Become naturally magnetic and likeable',
-      theme: 'charisma',
-      totalXP: 2100,
-      level: 4,
-      steps: [
-        { id: 'first-impression', title: 'First Impressions', icon: '✨', status: 'completed' },
-        { id: 'active-listening', title: 'Active Listening', icon: '👂', status: 'completed' },
-        { id: 'storytelling', title: 'Storytelling', icon: '📚', status: 'completed' },
-        { id: 'humor', title: 'Use Humor', icon: '😂', status: 'completed' },
-        { id: 'presence', title: 'Command Presence', icon: '👑', status: 'unlocked' },
-        { id: 'networking', title: 'Smart Networking', icon: '🤝', status: 'unlocked' },
-        { id: 'influence', title: 'Gentle Influence', icon: '🎭', status: 'locked' }
-      ]
+    {
+      id: 3,
+      title: "Reading the Room",
+      description: "Pick up on subtle social cues and respond appropriately",
+      type: 'chat',
+      duration: '5 min',
+      xpReward: 100,
+      status: 'completed',
+      difficulty: 'medium'
     },
-    speaking: {
-      title: 'Public Speaking',
-      subtitle: 'Captivate any audience with confidence',
-      theme: 'speaking',
-      totalXP: 650,
-      level: 1,
-      steps: [
-        { id: 'nerves', title: 'Overcome Nerves', icon: '😰', status: 'completed' },
-        { id: 'voice', title: 'Voice Control', icon: '🎤', status: 'unlocked' },
-        { id: 'gestures', title: 'Body Language', icon: '👋', status: 'unlocked' },
-        { id: 'structure', title: 'Speech Structure', icon: '🏗️', status: 'locked' },
-        { id: 'audience', title: 'Read the Audience', icon: '👥', status: 'locked' },
-        { id: 'impact', title: 'Memorable Endings', icon: '🎯', status: 'locked' }
-      ]
+    {
+      id: 4,
+      title: "Storytelling Magic",
+      description: "Captivate with engaging personal anecdotes",
+      type: 'chat',
+      duration: '6 min',
+      xpReward: 125,
+      status: 'current',
+      difficulty: 'medium'
+    },
+    {
+      id: 5,
+      title: "Confident Compliments",
+      description: "Give genuine compliments that create connection",
+      type: 'chat',
+      duration: '4 min',
+      xpReward: 100,
+      status: 'available',
+      difficulty: 'medium'
+    },
+    {
+      id: 6,
+      title: "Handling Awkward Silence",
+      description: "Turn uncomfortable pauses into opportunities",
+      type: 'chat',
+      duration: '5 min',
+      xpReward: 150,
+      status: 'locked',
+      difficulty: 'hard'
+    },
+    {
+      id: 7,
+      title: "Teasing & Banter",
+      description: "Master playful conversation dynamics",
+      type: 'premium',
+      duration: '7 min',
+      xpReward: 200,
+      status: 'locked',
+      difficulty: 'hard'
+    },
+    {
+      id: 8,
+      title: "Deep Connection",
+      description: "Move beyond surface-level conversation",
+      type: 'chat',
+      duration: '8 min',
+      xpReward: 175,
+      status: 'locked',
+      difficulty: 'hard'
+    },
+    {
+      id: 9,
+      title: "The Perfect Exit",
+      description: "End conversations memorably and gracefully",
+      type: 'chat',
+      duration: '4 min',
+      xpReward: 125,
+      status: 'locked',
+      difficulty: 'medium'
+    },
+    {
+      id: 10,
+      title: "Video: Convince Her You're Not Boring",
+      description: "Put it all together in a real conversation challenge",
+      type: 'boss',
+      duration: '3 min',
+      xpReward: 300,
+      status: 'locked',
+      difficulty: 'hard'
     }
+  ];
+
+  const completedMissions = missions.filter(m => m.status === 'completed').length;
+  const totalMissions = missions.length;
+  const progressPercentage = (completedMissions / totalMissions) * 100;
+
+  const getMissionIcon = (mission: Mission) => {
+    if (mission.status === 'completed') return <CheckCircle className="w-6 h-6 text-green-400" />;
+    if (mission.status === 'locked') return <Lock className="w-6 h-6 text-slate-500" />;
+    if (mission.type === 'boss') return <Flame className="w-6 h-6 text-orange-400" />;
+    if (mission.type === 'premium') return <Diamond className="w-6 h-6 text-purple-400" />;
+    if (mission.type === 'video') return <Play className="w-6 h-6 text-blue-400" />;
+    return <Star className="w-6 h-6 text-yellow-400" />;
   };
 
-  const config = categoryConfigs[categoryId || ''];
-
-  if (!config) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-foreground mb-4">Category not found</h1>
-          <button 
-            onClick={() => navigate('/')}
-            className="btn-primary"
-          >
-            Return to Practice Hub
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  const getThemeBackground = () => {
-    switch (config.theme) {
-      case 'dating':
-        return 'linear-gradient(135deg, #3d1a3d 0%, #6b2154 30%, #b83280 70%, #e91e63 100%)';
-      case 'interview':
-        return 'linear-gradient(135deg, #0d1421 0%, #1e3a5f 30%, #1e88e5 70%, #42a5f5 100%)';
-      case 'charisma':
-        return 'linear-gradient(135deg, #0d2818 0%, #1a4d3a 30%, #00c896 70%, #4dd0e1 100%)';
-      case 'speaking':
-        return 'linear-gradient(135deg, #2d1810 0%, #5d3317 30%, #ff8f00 70%, #ffb74d 100%)';
-      default:
-        return 'linear-gradient(135deg, #0f1323 0%, #1a1a2e 100%)';
+  const getMissionNodeStyle = (mission: Mission) => {
+    const baseClasses = "relative w-16 h-16 rounded-full flex items-center justify-center transition-all duration-300 border-2 cursor-pointer";
+    
+    if (mission.status === 'completed') {
+      return `${baseClasses} bg-green-500/20 border-green-400 shadow-lg shadow-green-400/30`;
     }
+    if (mission.status === 'current') {
+      return `${baseClasses} bg-primary/20 border-primary shadow-lg shadow-primary/40 animate-pulse`;
+    }
+    if (mission.status === 'available') {
+      return `${baseClasses} bg-slate-700/50 border-slate-600 hover:border-primary hover:bg-primary/10`;
+    }
+    if (mission.type === 'boss') {
+      return `${baseClasses} bg-gradient-to-r from-orange-500/20 to-red-500/20 border-orange-400 shadow-lg shadow-orange-400/30`;
+    }
+    if (mission.type === 'premium') {
+      return `${baseClasses} bg-gradient-to-r from-purple-500/20 to-pink-500/20 border-purple-400 shadow-lg shadow-purple-400/30`;
+    }
+    return `${baseClasses} bg-slate-800/50 border-slate-700`;
   };
 
-  const completedSteps = config.steps.filter(step => step.status === 'completed').length;
-  const progressPercentage = Math.round((completedSteps / config.steps.length) * 100);
+  const getPathStyle = (index: number) => {
+    const mission = missions[index];
+    if (mission.status === 'completed') {
+      return "bg-gradient-to-b from-green-400 to-green-600";
+    }
+    if (mission.status === 'current' && index > 0) {
+      return "bg-gradient-to-b from-green-400 to-primary";
+    }
+    return "bg-slate-700";
+  };
+
+  const handleMissionClick = (mission: Mission) => {
+    if (mission.status === 'locked') return;
+    
+    // Add haptic feedback simulation
+    if ('vibrate' in navigator) {
+      navigator.vibrate(50);
+    }
+    
+    setSelectedMission(mission);
+    
+    // Navigate to mission after a brief delay for visual feedback
+    setTimeout(() => {
+      if (mission.type === 'premium') {
+        navigate('/upgrade');
+      } else {
+        navigate(`/practice/${mission.id}`);
+      }
+    }, 150);
+  };
 
   return (
     <div 
-      className={`min-h-screen pb-20 transition-all duration-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
-      style={{ background: getThemeBackground() }}
+      className="min-h-screen pb-20 pt-16"
+      style={{ background: 'var(--gradient-background)' }}
     >
       {/* Header */}
-      <div className="relative pt-6 pb-8">
-        {/* Back button */}
-        <button
-          onClick={() => navigate('/')}
-          className="absolute top-6 left-4 z-10 p-2 rounded-full bg-black/20 backdrop-blur-sm text-white hover:bg-black/30 transition-colors"
-        >
-          <ArrowLeft size={20} />
-        </button>
+      <div className="fixed top-0 left-0 right-0 z-50 px-4 pt-4 pb-2" style={{ background: 'var(--gradient-background)' }}>
+        <div className="flex items-center justify-between mb-4">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => navigate('/practice')}
+            className="text-white hover:bg-white/10"
+          >
+            <ArrowLeft className="w-5 h-5 mr-2" />
+            Back
+          </Button>
+          <div className="text-center">
+            <h1 className="text-lg font-display font-bold text-white">Dating & Romance</h1>
+            <p className="text-sm text-slate-300">Chapter 1</p>
+          </div>
+          <div className="w-16" /> {/* Spacer */}
+        </div>
 
-        {/* Header content */}
-        <div className="px-4 pt-12">
-          <div className="text-center text-white mb-6">
-            <div className="flex items-center justify-center gap-2 mb-2">
-              <Crown size={20} className="text-yellow-300" />
-              <span className="text-sm font-bold text-yellow-200">Level {config.level}</span>
-            </div>
-            <h1 className="text-3xl font-display font-bold mb-2">{config.title}</h1>
-            <p className="text-lg font-display opacity-90 mb-4">{config.subtitle}</p>
-            
-            {/* Progress overview */}
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 max-w-sm mx-auto">
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-2">
-                  <Zap size={16} className="text-yellow-300" />
-                  <span className="text-sm font-bold">{config.totalXP.toLocaleString()} XP</span>
-                </div>
-                <span className="text-sm font-bold text-green-200">{progressPercentage}% complete</span>
-              </div>
-              <div className="w-full bg-white/20 rounded-full h-2">
-                <div 
-                  className="h-full bg-white/70 rounded-full transition-all duration-700"
-                  style={{ width: `${progressPercentage}%` }}
-                />
-              </div>
-              <div className="text-xs opacity-75 mt-1">
-                {completedSteps} of {config.steps.length} skills mastered
-              </div>
+        {/* Progress Bar */}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between text-sm">
+            <span className="text-slate-300">Progress</span>
+            <span className="text-white font-medium">{completedMissions}/{totalMissions} missions</span>
+          </div>
+          <Progress 
+            value={progressPercentage} 
+            className="h-2 bg-slate-800"
+          />
+          <div className="flex items-center justify-between text-xs text-slate-400">
+            <span>{Math.round(progressPercentage)}% Complete</span>
+            <div className="flex items-center gap-1">
+              <Trophy className="w-3 h-3" />
+              <span>{missions.reduce((sum, m) => m.status === 'completed' ? sum + m.xpReward : sum, 0)} XP earned</span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Steps Road */}
-      <div className="px-6 relative">
-        {/* Vertical connector line */}
-        <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-white/20" />
-        
-        <div className="space-y-4">
-          {config.steps.map((step, index) => (
-            <PracticeStepCard
-              key={step.id}
-              step={step}
-              theme={config.theme}
-              order={index + 1}
-              onPress={() => {
-                if (step.status !== 'locked') {
-                  // Navigate to specific drill/training
-                  navigate('/quick-drill', { 
-                    state: { 
-                      category: config.theme, 
-                      skill: step.id,
-                      title: step.title 
-                    } 
-                  });
-                }
-              }}
-            />
+      {/* Mission Road */}
+      <div className="px-8 pt-32">
+        <div className="relative max-w-md mx-auto">
+          {missions.map((mission, index) => (
+            <div key={mission.id} className="relative">
+              {/* Mission Node */}
+              <div 
+                className={`flex items-center ${index % 2 === 0 ? 'justify-start' : 'justify-end'} mb-8`}
+              >
+                <div className="flex items-center gap-4">
+                  {index % 2 === 1 && (
+                    <Card 
+                      className={`p-3 max-w-[200px] card-warm cursor-pointer transform transition-all duration-200 ${
+                        selectedMission?.id === mission.id ? 'scale-105' : 'hover:scale-102'
+                      } ${mission.status === 'locked' ? 'opacity-50' : ''}`}
+                      onClick={() => handleMissionClick(mission)}
+                    >
+                      <div className="text-right">
+                        <div className="flex items-center justify-end gap-2 mb-1">
+                          {mission.type === 'boss' && <Flame className="w-3 h-3 text-orange-400" />}
+                          {mission.type === 'premium' && <Diamond className="w-3 h-3 text-purple-400" />}
+                          <h3 className="text-sm font-semibold text-white">{mission.title}</h3>
+                        </div>
+                        <p className="text-xs text-slate-300 mb-2">{mission.description}</p>
+                        <div className="flex items-center justify-end gap-3 text-xs text-slate-400">
+                          <div className="flex items-center gap-1">
+                            <Clock className="w-3 h-3" />
+                            {mission.duration}
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <Zap className="w-3 h-3 text-yellow-400" />
+                            {mission.xpReward} XP
+                          </div>
+                        </div>
+                      </div>
+                    </Card>
+                  )}
+
+                  {/* Mission Node Circle */}
+                  <div 
+                    className={getMissionNodeStyle(mission)}
+                    onClick={() => handleMissionClick(mission)}
+                  >
+                    {getMissionIcon(mission)}
+                    
+                    {/* Boss Mission Fire Effect */}
+                    {mission.type === 'boss' && mission.status !== 'locked' && (
+                      <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-orange-400 to-red-500 opacity-20 animate-pulse" />
+                    )}
+                    
+                    {/* Premium Mission Glow */}
+                    {mission.type === 'premium' && (
+                      <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-purple-400 to-pink-400 opacity-30 animate-pulse" />
+                    )}
+                  </div>
+
+                  {index % 2 === 0 && (
+                    <Card 
+                      className={`p-3 max-w-[200px] card-warm cursor-pointer transform transition-all duration-200 ${
+                        selectedMission?.id === mission.id ? 'scale-105' : 'hover:scale-102'
+                      } ${mission.status === 'locked' ? 'opacity-50' : ''}`}
+                      onClick={() => handleMissionClick(mission)}
+                    >
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="text-sm font-semibold text-white">{mission.title}</h3>
+                        {mission.type === 'boss' && <Flame className="w-3 h-3 text-orange-400" />}
+                        {mission.type === 'premium' && <Diamond className="w-3 h-3 text-purple-400" />}
+                      </div>
+                      <p className="text-xs text-slate-300 mb-2">{mission.description}</p>
+                      <div className="flex items-center gap-3 text-xs text-slate-400">
+                        <div className="flex items-center gap-1">
+                          <Clock className="w-3 h-3" />
+                          {mission.duration}
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Zap className="w-3 h-3 text-yellow-400" />
+                          {mission.xpReward} XP
+                        </div>
+                      </div>
+                    </Card>
+                  )}
+                </div>
+              </div>
+
+              {/* Connection Path */}
+              {index < missions.length - 1 && (
+                <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-8 -mt-4 mb-4">
+                  <div className={`w-full h-full ${getPathStyle(index)} transition-all duration-500`} />
+                </div>
+              )}
+            </div>
           ))}
         </div>
+
+        {/* Chapter Complete Celebration */}
+        {progressPercentage === 100 && (
+          <Card className="mt-8 p-6 card-warm text-center animate-scale-in">
+            <Trophy className="w-12 h-12 text-yellow-500 mx-auto mb-4" />
+            <h3 className="text-lg font-display font-bold text-gradient-xp mb-2">
+              Chapter Complete! 🎉
+            </h3>
+            <p className="text-sm text-muted-foreground mb-4">
+              You've mastered the basics of dating communication. Ready for the next challenge?
+            </p>
+            <Button className="w-full">
+              Continue to Chapter 2
+            </Button>
+          </Card>
+        )}
       </div>
 
-      {/* Bottom motivational section */}
-      <div className="mt-12 px-4">
-        <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center text-white">
-          <p className="text-sm font-medium opacity-90">
-            {config.theme === 'dating' && "💕 Love is a skill that can be learned"}
-            {config.theme === 'interview' && "🎯 Your next opportunity awaits"}
-            {config.theme === 'charisma' && "✨ Charisma is your superpower"}
-            {config.theme === 'speaking' && "🎤 Your voice deserves to be heard"}
-          </p>
-        </div>
-      </div>
+      {/* Bottom Spacing */}
+      <div className="h-20" />
     </div>
   );
 };
