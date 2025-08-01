@@ -13,10 +13,13 @@
     --background-warm: 216 28% 8%;      /* Slightly warmer variant */
     --foreground: 0 0% 100%;            /* #FFFFFF - high contrast text */
 
-    /* Card system - floating above the navy base */
-    --card: 220 25% 12%;                /* Cards elevated from background */
+    /* Card system - Apple Vision Pro Inspired Metallic Blue */
+    --card: 218 45% 12%;                /* Deep navy-blue metallic base */
     --card-foreground: 0 0% 100%;       /* High contrast card text */
-    --card-warm: 216 28% 10%;           /* Warm card variant */
+    --card-warm: 215 40% 15%;           /* Slightly warmer metallic blue */
+    --card-metallic: linear-gradient(135deg, hsl(218, 50%, 10%) 0%, hsl(215, 45%, 18%) 100%);
+    --card-border: 210 35% 35%;         /* Light bluish steel border */
+    --card-glow: 218 60% 25%;           /* Soft blue glow for active states */
 
     /* UNIFIED COLOR STRATEGY */
     /* Purple = Level/Progress (Primary Actions) */
@@ -102,13 +105,15 @@
     --spacing-lg: 2rem;
     --spacing-xl: 3rem;
 
-    /* Premium shadow system - enhanced depth */
-    --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
-    --shadow-elevation: 0 8px 24px rgba(0, 0, 0, 0.15), 0 4px 8px rgba(0, 0, 0, 0.06);
-    --shadow-elevated: 0 12px 32px rgba(0, 0, 0, 0.18), 0 6px 12px rgba(0, 0, 0, 0.08);
+    /* Premium shadow system - Apple Vision Pro inspired */
+    --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.25), 0 2px 4px rgba(0, 0, 0, 0.15);
+    --shadow-elevation: 0 8px 24px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.2);
+    --shadow-elevated: 0 12px 32px rgba(0, 0, 0, 0.4), 0 6px 12px rgba(0, 0, 0, 0.25);
     --shadow-glow-primary: 0 8px 24px hsl(var(--primary) / 0.4), 0 0 0 1px hsl(var(--primary) / 0.1);
     --shadow-glow-secondary: 0 8px 24px hsl(var(--secondary) / 0.4), 0 0 0 1px hsl(var(--secondary) / 0.1);
     --shadow-glow-success: 0 8px 24px hsl(var(--success) / 0.4), 0 0 0 1px hsl(var(--success) / 0.1);
+    --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    --shadow-glow-blue: 0 0 20px hsl(var(--card-glow) / 0.6), 0 0 40px hsl(var(--card-glow) / 0.3);
 
     /* High-contrast text tokens - optimized for navy */
     --text-primary: 0 0% 100%;          /* #FFFFFF - titles, metrics */
@@ -330,6 +335,33 @@
     box-shadow: var(--shadow-card);
     margin-bottom: 1.5rem;
     backdrop-filter: blur(8px);
+  }
+
+  /* Apple Vision Pro Inspired Card - Premium Metallic Blue */
+  .card-warm {
+    @apply rounded-xl transition-all duration-300 ease-out cursor-pointer relative overflow-hidden;
+    background: var(--card-metallic);
+    border: 1px solid hsl(var(--card-border));
+    box-shadow: var(--shadow-glass);
+    backdrop-filter: blur(12px);
+    position: relative;
+  }
+
+  .card-warm::before {
+    content: '';
+    @apply absolute inset-0 rounded-xl opacity-30;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%, rgba(255, 255, 255, 0.05) 100%);
+    pointer-events: none;
+  }
+
+  .card-warm:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: var(--shadow-glass), var(--shadow-glow-blue);
+    border-color: hsl(var(--card-glow));
+  }
+
+  .card-warm:active {
+    transform: translateY(-2px) scale(1.01);
   }
 
   /* Gamification Components */

@@ -129,63 +129,63 @@ const Stats = () => {
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {/* Speaking Pace */}
-              <div className="p-4 bg-gradient-to-br from-blue-50/50 to-indigo-50/50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl">
+              <div className="p-4 card-warm">
                 <div className="flex items-center gap-2 mb-2">
-                  <Volume2 className="w-4 h-4 text-blue-600" />
-                  <span className="text-sm font-medium">Speaking Pace</span>
+                  <Volume2 className="w-4 h-4 text-blue-400" />
+                  <span className="text-sm font-medium text-white">Speaking Pace</span>
                 </div>
-                <div className="text-2xl font-bold text-blue-600 mb-1">{keyMetrics.speakingPace} WPM</div>
-                <p className="text-xs text-muted-foreground">Slightly faster than typical 120-150 WPM</p>
+                <div className="text-2xl font-bold text-blue-300 mb-1">{keyMetrics.speakingPace} WPM</div>
+                <p className="text-xs text-slate-300">Slightly faster than typical 120-150 WPM</p>
               </div>
 
               {/* Filler Words */}
-              <div className="p-4 bg-gradient-to-br from-orange-50/50 to-red-50/50 dark:from-orange-900/20 dark:to-red-900/20 rounded-xl">
+              <div className="p-4 card-warm">
                 <div className="flex items-center gap-2 mb-2">
-                  <MessageCircle className="w-4 h-4 text-orange-600" />
-                  <span className="text-sm font-medium">Filler Words</span>
+                  <MessageCircle className="w-4 h-4 text-orange-400" />
+                  <span className="text-sm font-medium text-white">Filler Words</span>
                 </div>
-                <div className="text-2xl font-bold text-orange-600 mb-1">{keyMetrics.fillerWordFreq}/min</div>
-                <p className="text-xs text-muted-foreground">Improved from ~5/min last month</p>
+                <div className="text-2xl font-bold text-orange-300 mb-1">{keyMetrics.fillerWordFreq}/min</div>
+                <p className="text-xs text-slate-300">Improved from ~5/min last month</p>
               </div>
 
               {/* Talk-Listen Ratio */}
-              <div className="p-4 bg-gradient-to-br from-green-50/50 to-emerald-50/50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl">
+              <div className="p-4 card-warm">
                 <div className="flex items-center gap-2 mb-2">
-                  <Users className="w-4 h-4 text-green-600" />
-                  <span className="text-sm font-medium">Talk-Listen Ratio</span>
+                  <Users className="w-4 h-4 text-green-400" />
+                  <span className="text-sm font-medium text-white">Talk-Listen Ratio</span>
                 </div>
-                <div className="text-2xl font-bold text-green-600 mb-1">{keyMetrics.talkListenRatio.talk}:{keyMetrics.talkListenRatio.listen}</div>
-                <p className="text-xs text-muted-foreground">Healthy balance in meetings</p>
+                <div className="text-2xl font-bold text-green-300 mb-1">{keyMetrics.talkListenRatio.talk}:{keyMetrics.talkListenRatio.listen}</div>
+                <p className="text-xs text-slate-300">Healthy balance in meetings</p>
               </div>
 
               {/* Sentiment */}
-              <div className="p-4 bg-gradient-to-br from-purple-50/50 to-pink-50/50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl">
+              <div className="p-4 card-warm">
                 <div className="flex items-center gap-2 mb-2">
-                  <Smile className="w-4 h-4 text-purple-600" />
-                  <span className="text-sm font-medium">Sentiment</span>
+                  <Smile className="w-4 h-4 text-purple-400" />
+                  <span className="text-sm font-medium text-white">Sentiment</span>
                 </div>
-                <div className="text-2xl font-bold text-purple-600 mb-1">{keyMetrics.sentiment.positive}%</div>
-                <p className="text-xs text-muted-foreground">Positive tone dominance</p>
+                <div className="text-2xl font-bold text-purple-300 mb-1">{keyMetrics.sentiment.positive}%</div>
+                <p className="text-xs text-slate-300">Positive tone dominance</p>
               </div>
 
               {/* Confidence */}
-              <div className="p-4 bg-gradient-to-br from-yellow-50/50 to-orange-50/50 dark:from-yellow-900/20 dark:to-orange-900/20 rounded-xl">
+              <div className="p-4 card-warm">
                 <div className="flex items-center gap-2 mb-2">
-                  <Trophy className="w-4 h-4 text-yellow-600" />
-                  <span className="text-sm font-medium">Confidence Level</span>
+                  <Trophy className="w-4 h-4 text-yellow-400" />
+                  <span className="text-sm font-medium text-white">Confidence Level</span>
                 </div>
-                <div className="text-2xl font-bold text-yellow-600 mb-1">{keyMetrics.confidenceLevel}</div>
-                <p className="text-xs text-muted-foreground">Steady and credible delivery</p>
+                <div className="text-2xl font-bold text-yellow-300 mb-1">{keyMetrics.confidenceLevel}</div>
+                <p className="text-xs text-slate-300">Steady and credible delivery</p>
               </div>
 
               {/* Energy & Clarity */}
-              <div className="p-4 bg-gradient-to-br from-teal-50/50 to-cyan-50/50 dark:from-teal-900/20 dark:to-cyan-900/20 rounded-xl">
+              <div className="p-4 card-warm">
                 <div className="flex items-center gap-2 mb-2">
-                  <Zap className="w-4 h-4 text-teal-600" />
-                  <span className="text-sm font-medium">Energy & Clarity</span>
+                  <Zap className="w-4 h-4 text-teal-400" />
+                  <span className="text-sm font-medium text-white">Energy & Clarity</span>
                 </div>
-                <div className="text-2xl font-bold text-teal-600 mb-1">{keyMetrics.energyClarity}</div>
-                <p className="text-xs text-muted-foreground">Clear articulation, stable energy</p>
+                <div className="text-2xl font-bold text-teal-300 mb-1">{keyMetrics.energyClarity}</div>
+                <p className="text-xs text-slate-300">Clear articulation, stable energy</p>
               </div>
             </div>
           </CardContent>
@@ -224,8 +224,8 @@ const Stats = () => {
                 </div>
               ))}
             </div>
-            <div className="mt-4 p-4 bg-gradient-to-r from-orange-50/50 to-red-50/50 dark:from-orange-900/20 dark:to-red-900/20 rounded-xl">
-              <p className="text-sm text-foreground leading-relaxed">
+            <div className="mt-4 p-4 card-warm">
+              <p className="text-sm text-white leading-relaxed">
                 <strong>Key Insight:</strong> "Um" and "like" account for 60% of your filler words. 
                 Targeting these for reduction can improve your speech clarity by up to 20%.
               </p>
@@ -249,17 +249,17 @@ const Stats = () => {
           <CardContent>
             <div className="space-y-4">
               {strengths.map((strength, index) => (
-                <div key={strength.title} className="p-4 bg-gradient-to-r from-green-50/50 to-emerald-50/50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl animate-slide-up" style={{animationDelay: `${300 + index * 100}ms`}}>
+                <div key={strength.title} className="p-4 card-warm animate-slide-up" style={{animationDelay: `${300 + index * 100}ms`}}>
                   <div className="flex items-start gap-3">
-                    <div className="text-green-600 mt-1">
+                    <div className="text-green-400 mt-1">
                       {strength.icon}
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center justify-between mb-2">
-                        <h4 className="font-semibold text-foreground">{strength.title}</h4>
-                        <span className="text-sm font-bold text-green-600">{strength.score}%</span>
+                        <h4 className="font-semibold text-white">{strength.title}</h4>
+                        <span className="text-sm font-bold text-green-300">{strength.score}%</span>
                       </div>
-                      <p className="text-sm text-muted-foreground">{strength.description}</p>
+                      <p className="text-sm text-slate-300">{strength.description}</p>
                     </div>
                   </div>
                 </div>
@@ -284,23 +284,23 @@ const Stats = () => {
           <CardContent>
             <div className="space-y-4">
               {improvements.map((improvement, index) => (
-                <div key={improvement.title} className="p-4 bg-gradient-to-r from-blue-50/50 to-indigo-50/50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl animate-slide-up" style={{animationDelay: `${400 + index * 100}ms`}}>
+                <div key={improvement.title} className="p-4 card-warm animate-slide-up" style={{animationDelay: `${400 + index * 100}ms`}}>
                   <div className="flex items-start gap-3">
-                    <div className="text-blue-600 mt-1">
+                    <div className="text-blue-400 mt-1">
                       {improvement.icon}
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center justify-between mb-2">
-                        <h4 className="font-semibold text-foreground">{improvement.title}</h4>
+                        <h4 className="font-semibold text-white">{improvement.title}</h4>
                         <span className={`text-xs px-2 py-1 rounded-full font-medium ${
                           improvement.priority === 'High' 
-                            ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300'
-                            : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300'
+                            ? 'bg-red-500/20 text-red-300 border border-red-400/30'
+                            : 'bg-yellow-500/20 text-yellow-300 border border-yellow-400/30'
                         }`}>
                           {improvement.priority} Priority
                         </span>
                       </div>
-                      <p className="text-sm text-muted-foreground">{improvement.description}</p>
+                      <p className="text-sm text-slate-300">{improvement.description}</p>
                     </div>
                   </div>
                 </div>
@@ -325,12 +325,12 @@ const Stats = () => {
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {funFacts.map((fact, index) => (
-                <div key={fact.label} className="p-4 bg-gradient-to-br from-purple-50/50 to-pink-50/50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl animate-scale-in" style={{animationDelay: `${500 + index * 100}ms`}}>
+                <div key={fact.label} className="p-4 card-warm animate-scale-in" style={{animationDelay: `${500 + index * 100}ms`}}>
                   <div className="flex items-start gap-3">
                     <span className="text-2xl">{fact.emoji}</span>
                     <div>
-                      <h4 className="font-medium text-foreground text-sm mb-1">{fact.label}</h4>
-                      <p className="text-sm text-muted-foreground">{fact.value}</p>
+                      <h4 className="font-medium text-white text-sm mb-1">{fact.label}</h4>
+                      <p className="text-sm text-slate-300">{fact.value}</p>
                     </div>
                   </div>
                 </div>
