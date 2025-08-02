@@ -6,12 +6,20 @@ import {
   Heart, 
   BarChart3, 
   Brain,
+  Lock,
+  Mic,
+  Sparkles,
+  Eye,
+  Volume2,
 } from 'lucide-react';
 import StatTile from '../components/StatTile';
 import StatPopup from '../components/StatPopup';
+import { Button } from '../components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 
 const Stats = () => {
   const [selectedStat, setSelectedStat] = useState<string | null>(null);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
   const statTiles = [
     {
@@ -88,6 +96,33 @@ const Stats = () => {
     }
   ];
 
+  const premiumTiles = [
+    {
+      id: 'tone-mastery',
+      title: 'Tone Mastery',
+      description: 'Measures pitch control, tension, pauses, nuance',
+      icon: Mic,
+    },
+    {
+      id: 'charisma-index',
+      title: 'Charisma Index',
+      description: 'Based on humor, storytelling, presence',
+      icon: Sparkles,
+    },
+    {
+      id: 'body-language',
+      title: 'Body Language Score',
+      description: 'Based on posture, facial cues, gestures',
+      icon: Eye,
+    },
+    {
+      id: 'speaking-habits',
+      title: 'Speaking Habits Scan',
+      description: 'Unique patterns & quirks in your speech',
+      icon: Volume2,
+    }
+  ];
+
   return (
     <div 
       className="min-h-screen pb-20 pt-24 px-4"
@@ -105,9 +140,9 @@ const Stats = () => {
         </p>
       </div>
 
-      {/* 2x3 Stats Grid */}
-      <div className="max-w-4xl mx-auto">
-        <div className="grid grid-cols-2 lg:grid-cols-2 gap-6 md:gap-8">
+      {/* Free Stats Grid - 2x3 */}
+      <div className="max-w-5xl mx-auto mb-16">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
           {statTiles.map((tile, index) => (
             <StatTile
               key={tile.id}
@@ -122,7 +157,58 @@ const Stats = () => {
         </div>
       </div>
 
-      {/* Popups */}
+      {/* Premium Locked Section - 2x2 */}
+      <div className="max-w-4xl mx-auto mb-12">
+        <div className="text-center mb-8">
+          <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
+            Premium Deep Insights
+          </h2>
+          <p className="text-white/60">
+            Unlock advanced personality and communication analytics
+          </p>
+        </div>
+        
+        <div className="grid grid-cols-2 gap-4 md:gap-6 mb-8">
+          {premiumTiles.map((tile) => (
+            <div
+              key={tile.id}
+              onClick={() => setShowUpgradeModal(true)}
+              className="group relative p-6 rounded-2xl border border-yellow-400/30 bg-gradient-to-br from-yellow-400/5 to-purple-600/10 backdrop-blur-sm cursor-pointer transition-all duration-300 hover:scale-105 hover:border-yellow-400/50 hover:shadow-lg hover:shadow-yellow-400/20"
+            >
+              {/* Lock Icon Overlay */}
+              <div className="absolute top-4 right-4">
+                <Lock className="w-5 h-5 text-yellow-400" />
+              </div>
+              
+              {/* Glow Effect */}
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-yellow-400/10 to-purple-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+              
+              {/* Content */}
+              <div className="relative z-10">
+                <tile.icon className="w-8 h-8 text-yellow-400/70 mb-4" />
+                <h3 className="text-lg font-semibold text-white mb-2">
+                  {tile.title}
+                </h3>
+                <p className="text-sm text-white/60">
+                  {tile.description}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Upgrade CTA */}
+        <div className="text-center">
+          <Button
+            onClick={() => setShowUpgradeModal(true)}
+            className="bg-gradient-to-r from-yellow-400 to-purple-600 hover:from-yellow-500 hover:to-purple-700 text-black font-semibold px-8 py-3 rounded-xl text-lg shadow-lg shadow-yellow-400/20 transition-all duration-300 hover:scale-105"
+          >
+            🔓 Unlock Deep Personality Stats
+          </Button>
+        </div>
+      </div>
+
+      {/* Free Stats Popups */}
       {statTiles.map((tile) => (
         <StatPopup
           key={`popup-${tile.id}`}
@@ -137,6 +223,60 @@ const Stats = () => {
           color={tile.color}
         />
       ))}
+
+      {/* Premium Upgrade Modal */}
+      {showUpgradeModal && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-gradient-to-br from-gray-900 to-black border border-yellow-400/30 rounded-3xl p-8 max-w-md w-full relative animate-scale-in shadow-2xl shadow-yellow-400/20">
+            {/* Close Button */}
+            <button
+              onClick={() => setShowUpgradeModal(false)}
+              className="absolute top-4 right-4 text-white/60 hover:text-white transition-colors"
+            >
+              ✕
+            </button>
+
+            {/* Header */}
+            <div className="text-center mb-6">
+              <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <Lock className="w-8 h-8 text-black" />
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-2">
+                Unlock Deep Personality Stats
+              </h3>
+              <p className="text-white/70">
+                See how your tone, charisma, and body language truly show up
+              </p>
+            </div>
+
+            {/* Premium Features */}
+            <div className="space-y-3 mb-6">
+              {premiumTiles.map((tile) => (
+                <div key={tile.id} className="flex items-center space-x-3 p-3 rounded-xl bg-white/5 border border-white/10">
+                  <tile.icon className="w-5 h-5 text-yellow-400" />
+                  <div>
+                    <h4 className="text-sm font-semibold text-white">{tile.title}</h4>
+                    <p className="text-xs text-white/60">{tile.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Upgrade Button */}
+            <Button
+              onClick={() => setShowUpgradeModal(false)}
+              className="w-full bg-gradient-to-r from-yellow-400 to-purple-600 hover:from-yellow-500 hover:to-purple-700 text-black font-semibold py-4 rounded-xl text-lg shadow-lg shadow-yellow-400/20 transition-all duration-300 hover:scale-105"
+            >
+              Upgrade to Premium - $9.99/month
+            </Button>
+
+            {/* Additional Info */}
+            <p className="text-center text-xs text-white/40 mt-4">
+              Cancel anytime • 7-day free trial • Advanced AI insights
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
