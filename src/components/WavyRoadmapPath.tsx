@@ -55,14 +55,7 @@ const WavyRoadmapPath: React.FC<WavyRoadmapPathProps> = ({ missionCount, classNa
         style={{ height: `${totalHeight}px` }}
         preserveAspectRatio="none"
       >
-        {/* Background path (full trail) */}
-        <path
-          d={generateSmoothPath()}
-          stroke="hsl(var(--muted-foreground) / 0.2)"
-          strokeWidth="4"
-          fill="none"
-          className="drop-shadow-sm"
-        />
+        {/* Background path removed */}
         
         {/* Completed path overlay will be added via props */}
         <defs>
