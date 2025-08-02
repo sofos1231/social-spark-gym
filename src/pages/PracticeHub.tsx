@@ -473,7 +473,8 @@ const PracticeHub = () => {
 
   const handleMissionClick = (mission: Mission) => {
     if (!mission.isLocked) {
-      navigate(`/practice/${mission.id}`);
+      // Navigate to PracticeRoad with category parameter
+      navigate(`/practice-road/${mission.category}`);
     }
   };
 

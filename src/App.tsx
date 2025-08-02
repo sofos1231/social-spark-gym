@@ -30,7 +30,7 @@ const App = () => (
           <TopStatusBar />
           <Routes>
             <Route path="/" element={<PageTransition currentPath="/"><PracticeHub /></PageTransition>} />
-            <Route path="/practice-road/:chapterId" element={<PageTransition currentPath="/practice-road"><PracticeRoad /></PageTransition>} />
+            <Route path="/practice-road/:category" element={<PageTransition currentPath="/practice-road"><PracticeRoad /></PageTransition>} />
             <Route path="/practice" element={<PageTransition currentPath="/practice"><PracticeHub /></PageTransition>} />
             <Route path="/quick-drill" element={<PageTransition currentPath="/quick-drill"><QuickDrill /></PageTransition>} />
             <Route path="/shadow-practice" element={<PageTransition currentPath="/shadow-practice"><ShadowPractice /></PageTransition>} />

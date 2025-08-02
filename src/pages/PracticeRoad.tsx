@@ -28,114 +28,195 @@ interface Mission {
 }
 
 const PracticeRoad = () => {
-  const { chapterId } = useParams();
+  const { category } = useParams();
   const navigate = useNavigate();
   const [selectedMission, setSelectedMission] = useState<Mission | null>(null);
   const [completedAnimations, setCompletedAnimations] = useState<Set<number>>(new Set());
 
-  // Sample mission data for "Dating & Romance" chapter
-  const missions: Mission[] = [
-    {
-      id: 1,
-      title: "Flirty Hello",
-      description: "Master the art of an engaging first impression",
-      type: 'chat',
-      duration: '3 min',
-      xpReward: 50,
-      status: 'completed',
-      difficulty: 'easy'
-    },
-    {
-      id: 2,
-      title: "Playful Disagreement",
-      description: "Navigate disagreements with charm and wit",
-      type: 'chat',
-      duration: '4 min',
-      xpReward: 75,
-      status: 'completed',
-      difficulty: 'easy'
-    },
-    {
-      id: 3,
-      title: "Reading the Room",
-      description: "Pick up on subtle social cues and respond appropriately",
-      type: 'chat',
-      duration: '5 min',
-      xpReward: 100,
-      status: 'completed',
-      difficulty: 'medium'
-    },
-    {
-      id: 4,
-      title: "Storytelling Magic",
-      description: "Captivate with engaging personal anecdotes",
-      type: 'chat',
-      duration: '6 min',
-      xpReward: 125,
-      status: 'current',
-      difficulty: 'medium'
-    },
-    {
-      id: 5,
-      title: "Confident Compliments",
-      description: "Give genuine compliments that create connection",
-      type: 'chat',
-      duration: '4 min',
-      xpReward: 100,
-      status: 'available',
-      difficulty: 'medium'
-    },
-    {
-      id: 6,
-      title: "Handling Awkward Silence",
-      description: "Turn uncomfortable pauses into opportunities",
-      type: 'chat',
-      duration: '5 min',
-      xpReward: 150,
-      status: 'locked',
-      difficulty: 'hard'
-    },
-    {
-      id: 7,
-      title: "Teasing & Banter",
-      description: "Master playful conversation dynamics",
-      type: 'premium',
-      duration: '7 min',
-      xpReward: 200,
-      status: 'locked',
-      difficulty: 'hard'
-    },
-    {
-      id: 8,
-      title: "Deep Connection",
-      description: "Move beyond surface-level conversation",
-      type: 'chat',
-      duration: '8 min',
-      xpReward: 175,
-      status: 'locked',
-      difficulty: 'hard'
-    },
-    {
-      id: 9,
-      title: "The Perfect Exit",
-      description: "End conversations memorably and gracefully",
-      type: 'chat',
-      duration: '4 min',
-      xpReward: 125,
-      status: 'locked',
-      difficulty: 'medium'
-    },
-    {
-      id: 10,
-      title: "Video: Convince Her You're Not Boring",
-      description: "Put it all together in a real conversation challenge",
-      type: 'boss',
-      duration: '3 min',
-      xpReward: 300,
-      status: 'locked',
-      difficulty: 'hard'
+  // Get mission data based on category
+  const getMissionData = () => {
+    switch (category) {
+      case 'dating':
+        return {
+          title: 'Dating & Romance',
+          chapterNumber: 1,
+          missions: [
+            {
+              id: 1,
+              title: "Flirty Hello",
+              description: "Master the art of an engaging first impression",
+              type: 'chat' as const,
+              duration: '3 min',
+              xpReward: 50,
+              status: 'completed' as const,
+              difficulty: 'easy' as const
+            },
+            {
+              id: 2,
+              title: "Playful Disagreement",
+              description: "Navigate disagreements with charm and wit",
+              type: 'chat' as const,
+              duration: '4 min',
+              xpReward: 75,
+              status: 'completed' as const,
+              difficulty: 'easy' as const
+            },
+            {
+              id: 3,
+              title: "Reading the Room",
+              description: "Pick up on subtle social cues and respond appropriately",
+              type: 'chat' as const,
+              duration: '5 min',
+              xpReward: 100,
+              status: 'completed' as const,
+              difficulty: 'medium' as const
+            },
+            {
+              id: 4,
+              title: "Storytelling Magic",
+              description: "Captivate with engaging personal anecdotes",
+              type: 'chat' as const,
+              duration: '6 min',
+              xpReward: 125,
+              status: 'current' as const,
+              difficulty: 'medium' as const
+            },
+            {
+              id: 5,
+              title: "Confident Compliments",
+              description: "Give genuine compliments that create connection",
+              type: 'chat' as const,
+              duration: '4 min',
+              xpReward: 100,
+              status: 'available' as const,
+              difficulty: 'medium' as const
+            },
+            {
+              id: 6,
+              title: "Handling Awkward Silence",
+              description: "Turn uncomfortable pauses into opportunities",
+              type: 'chat' as const,
+              duration: '5 min',
+              xpReward: 150,
+              status: 'locked' as const,
+              difficulty: 'hard' as const
+            },
+            {
+              id: 7,
+              title: "Teasing & Banter",
+              description: "Master playful conversation dynamics",
+              type: 'premium' as const,
+              duration: '7 min',
+              xpReward: 200,
+              status: 'locked' as const,
+              difficulty: 'hard' as const
+            },
+            {
+              id: 8,
+              title: "Deep Connection",
+              description: "Move beyond surface-level conversation",
+              type: 'chat' as const,
+              duration: '8 min',
+              xpReward: 175,
+              status: 'locked' as const,
+              difficulty: 'hard' as const
+            },
+            {
+              id: 9,
+              title: "The Perfect Exit",
+              description: "End conversations memorably and gracefully",
+              type: 'chat' as const,
+              duration: '4 min',
+              xpReward: 125,
+              status: 'locked' as const,
+              difficulty: 'medium' as const
+            },
+            {
+              id: 10,
+              title: "Video: Convince Her You're Not Boring",
+              description: "Put it all together in a real conversation challenge",
+              type: 'boss' as const,
+              duration: '3 min',
+              xpReward: 300,
+              status: 'locked' as const,
+              difficulty: 'hard' as const
+            }
+          ]
+        };
+      case 'interview':
+        return {
+          title: 'Job Interviews',
+          chapterNumber: 2,
+          missions: [
+            {
+              id: 11,
+              title: "Perfect Introduction",
+              description: "Make a strong first impression in interviews",
+              type: 'chat' as const,
+              duration: '4 min',
+              xpReward: 60,
+              status: 'available' as const,
+              difficulty: 'easy' as const
+            },
+            {
+              id: 12,
+              title: "Answering Tough Questions",
+              description: "Handle challenging interview questions with confidence",
+              type: 'chat' as const,
+              duration: '6 min',
+              xpReward: 100,
+              status: 'locked' as const,
+              difficulty: 'medium' as const
+            },
+            {
+              id: 13,
+              title: "Salary Negotiation",
+              description: "Get the compensation you deserve",
+              type: 'premium' as const,
+              duration: '8 min',
+              xpReward: 200,
+              status: 'locked' as const,
+              difficulty: 'hard' as const
+            }
+          ]
+        };
+      case 'charisma':
+        return {
+          title: 'Charisma & Social Skills',
+          chapterNumber: 3,
+          missions: [
+            {
+              id: 21,
+              title: "Commanding Presence",
+              description: "Enter any room with confidence and authority",
+              type: 'chat' as const,
+              duration: '5 min',
+              xpReward: 75,
+              status: 'available' as const,
+              difficulty: 'medium' as const
+            },
+            {
+              id: 22,
+              title: "Leading Conversations",
+              description: "Guide group discussions naturally",
+              type: 'chat' as const,
+              duration: '7 min',
+              xpReward: 125,
+              status: 'locked' as const,
+              difficulty: 'hard' as const
+            }
+          ]
+        };
+      default:
+        return {
+          title: 'Practice Road',
+          chapterNumber: 1,
+          missions: []
+        };
     }
-  ];
+  };
+
+  const { title, chapterNumber, missions } = getMissionData();
 
   const completedMissions = missions.filter(m => m.status === 'completed').length;
   const totalMissions = missions.length;
@@ -220,8 +301,8 @@ const PracticeRoad = () => {
             Back
           </Button>
           <div className="text-center">
-            <h1 className="text-lg font-display font-bold text-white">Dating & Romance</h1>
-            <p className="text-sm text-slate-300">Chapter 1</p>
+            <h1 className="text-lg font-display font-bold text-white">{title}</h1>
+            <p className="text-sm text-slate-300">Chapter {chapterNumber}</p>
           </div>
           <div className="w-16" /> {/* Spacer */}
         </div>
