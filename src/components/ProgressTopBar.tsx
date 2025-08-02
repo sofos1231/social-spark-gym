@@ -87,13 +87,13 @@ const ProgressTopBar: React.FC<ProgressTopBarProps> = ({
                   cy="24"
                   r="20"
                   fill="none"
-                  stroke="hsl(var(--primary))"
+                  stroke="hsl(var(--success))"
                   strokeWidth="4"
                   strokeLinecap="round"
                   strokeDasharray={`${2 * Math.PI * 20}`}
                   strokeDashoffset={`${2 * Math.PI * 20 * (1 - progressPercentage / 100)}`}
                   className="transition-all duration-500 ease-out drop-shadow-sm"
-                  style={{ filter: progressPercentage > 0 ? 'drop-shadow(0 0 6px hsl(var(--primary) / 0.4))' : 'none' }}
+                  style={{ filter: progressPercentage > 0 ? 'drop-shadow(0 0 6px hsl(var(--success) / 0.4))' : 'none' }}
                 />
               </svg>
               <div className="absolute inset-0 flex items-center justify-center">
@@ -108,7 +108,7 @@ const ProgressTopBar: React.FC<ProgressTopBarProps> = ({
               <div className="text-sm font-bold text-foreground">
                 {completedMissions}/{totalMissions} Missions
               </div>
-              <div className="text-xs text-muted-foreground">
+              <div className="text-xs text-muted-foreground font-mono">
                 {totalMissions - completedMissions} remaining
               </div>
             </div>
@@ -131,17 +131,17 @@ const ProgressTopBar: React.FC<ProgressTopBarProps> = ({
           />
           
           {/* Milestone Indicators */}
-          <div className="flex justify-between text-xs text-muted-foreground">
+          <div className="flex justify-between text-xs text-muted-foreground font-mono">
             <span>Start</span>
             <span className={cn(
               "transition-colors duration-300",
-              progressPercentage >= 50 ? "text-primary font-medium" : ""
+              progressPercentage >= 50 ? "text-success font-medium" : ""
             )}>
               Halfway
             </span>
             <span className={cn(
               "transition-colors duration-300",
-              progressPercentage === 100 ? "text-emerald-500 font-bold" : ""
+              progressPercentage === 100 ? "text-success font-bold" : ""
             )}>
               Complete
             </span>
