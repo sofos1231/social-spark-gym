@@ -121,37 +121,7 @@ const AnimatedConnectorTrail: React.FC<AnimatedConnectorTrailProps> = ({
         
         {/* Completed trail removed */}
         
-        {/* Animated current progression indicator */}
-        {missions.some(m => m.status === 'current') && (
-          <g>
-            {/* Pulsing dots along the next segment */}
-            {pathPoints.slice(0, 3).map((point, index) => (
-              <circle
-                key={`pulse-${index}`}
-                cx={point.x}
-                cy={point.y}
-                r="3"
-                fill="hsl(var(--success))"
-                opacity="0.8"
-              >
-                <animate
-                  attributeName="r"
-                  values="2;5;2"
-                  dur="1.5s"
-                  repeatCount="indefinite"
-                  begin={`${index * 0.3}s`}
-                />
-                <animate
-                  attributeName="opacity"
-                  values="0.3;1;0.3"
-                  dur="1.5s"
-                  repeatCount="indefinite"
-                  begin={`${index * 0.3}s`}
-                />
-              </circle>
-            ))}
-          </g>
-        )}
+        {/* Animated progression indicators removed */}
       </svg>
     </div>
   );
