@@ -1,319 +1,587 @@
-import { useState } from 'react';
-import { Lock, Star, Crown, Trophy, Target, Zap } from 'lucide-react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { 
+  Trophy, Star, Lock, Filter, Search, Share2, 
+  Users, Heart, Mic, Target, Brain, Crown,
+  ChevronLeft, Timer, Zap, ArrowLeft
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Progress } from '@/components/ui/progress';
+import { cn } from '@/lib/utils';
 
 interface BadgeData {
   id: string;
-  name: string;
+  title: string;
   description: string;
-  category: 'xp' | 'social' | 'practice' | 'community';
-  unlocked: boolean;
-  tier?: number;
-  maxTier?: number;
+  category: string;
+  tier: 'bronze' | 'silver' | 'gold' | 'diamond';
+  status: 'locked' | 'in-progress' | 'unlocked';
   progress?: number;
   maxProgress?: number;
   icon: string;
-  reward?: string;
+  unlockedDate?: string;
+  xpReward: number;
 }
 
-const badges: BadgeData[] = [
-  // XP & Progression
-  { id: 'daily-grinder-1', name: 'Daily Grinder I', description: 'Complete practice 3 days in a row', category: 'xp', unlocked: true, tier: 1, maxTier: 5, icon: '🔥', reward: '+50 XP' },
-  { id: 'daily-grinder-2', name: 'Daily Grinder II', description: 'Complete practice 7 days in a row', category: 'xp', unlocked: true, tier: 2, maxTier: 5, icon: '🔥', reward: '+100 XP' },
-  { id: 'daily-grinder-3', name: 'Daily Grinder III', description: 'Complete practice 14 days in a row', category: 'xp', unlocked: false, tier: 3, maxTier: 5, icon: '🔥', reward: '+200 XP' },
-  { id: 'weekly-warrior-1', name: 'Weekly Warrior I', description: 'Complete 5 practice sessions in a week', category: 'xp', unlocked: true, tier: 1, maxTier: 5, icon: '⚔️', reward: '+75 XP' },
-  { id: 'streak-beast', name: 'Streak Beast', description: 'Maintain a 30-day streak', category: 'xp', unlocked: false, progress: 18, maxProgress: 30, icon: '🔥', reward: '+500 XP' },
-  
-  // Social Skills
-  { id: 'smooth-talker', name: 'Smooth Talker', description: 'Score A+ in charisma training', category: 'social', unlocked: true, icon: '💫', reward: 'Unlock smooth voice filter' },
-  { id: 'interview-ace', name: 'Interview Ace', description: 'Pass professional interview simulation', category: 'social', unlocked: false, progress: 2, maxProgress: 3, icon: '👔', reward: 'Interview tips guide' },
-  { id: 'flirt-pro', name: 'Flirt Like a Pro', description: 'Master romantic conversation skills', category: 'social', unlocked: false, icon: '💕', reward: 'Dating confidence course' },
-  { id: 'eye-contact-master', name: 'Eye Contact Master', description: 'Perfect eye contact in 10 sessions', category: 'social', unlocked: true, icon: '👁️', reward: '+25 Confidence XP' },
-  
-  // Practice & Missions
-  { id: 'shadow-master', name: 'Shadow Master', description: 'Complete 10 Shadow Practice sessions', category: 'practice', unlocked: true, icon: '🥷', reward: 'Advanced shadow techniques' },
-  { id: 'challenge-crusher', name: 'Challenge Crusher', description: 'Score perfect on 3 consecutive challenges', category: 'practice', unlocked: false, progress: 1, maxProgress: 3, icon: '💪', reward: '+100 XP' },
-  { id: 'quick-drill-master', name: 'Quick Drill Master', description: 'Complete 50 quick practice drills', category: 'practice', unlocked: false, progress: 32, maxProgress: 50, icon: '⚡', reward: 'Speed training unlock' },
-  
-  // Community
-  { id: 'social-gym-og', name: 'SocialGym OG', description: 'Early adopter badge', category: 'community', unlocked: true, icon: '🏆', reward: 'Exclusive OG badge' },
-  { id: 'player-of-week', name: 'Player of the Week', description: 'Top the weekly leaderboard', category: 'community', unlocked: false, icon: '👑', reward: 'Leaderboard crown' },
-  { id: 'community-helper', name: 'Community Helper', description: 'Help 5 other users improve', category: 'community', unlocked: false, progress: 2, maxProgress: 5, icon: '🤝', reward: 'Helper status' },
-];
+const Badges = () => {
+  const navigate = useNavigate();
+  const [filter, setFilter] = useState<'all' | 'unlocked' | 'in-progress' | 'locked'>('all');
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [searchQuery, setSearchQuery] = useState('');
 
-const categories = [
-  { id: 'all', name: 'All Badges', icon: Trophy, color: 'text-primary' },
-  { id: 'xp', name: 'XP & Progress', icon: Zap, color: 'text-xp' },
-  { id: 'social', name: 'Social Skills', icon: Star, color: 'text-success' },
-  { id: 'practice', name: 'Practice', icon: Target, color: 'text-warning' },
-  { id: 'community', name: 'Community', icon: Crown, color: 'text-accent' },
-];
+  const categories = [
+    { id: 'all', name: 'All Badges', icon: Trophy, color: 'text-primary' },
+    { id: 'conversation', name: 'Conversation', icon: Users, color: 'text-dating-primary' },
+    { id: 'empathy', name: 'Empathy', icon: Heart, color: 'text-success' },
+    { id: 'leadership', name: 'Leadership', icon: Crown, color: 'text-secondary' },
+    { id: 'speaking', name: 'Public Speaking', icon: Mic, color: 'text-speaking-primary' },
+    { id: 'confidence', name: 'Confidence', icon: Target, color: 'text-interview-primary' },
+    { id: 'mindfulness', name: 'Mindfulness', icon: Brain, color: 'text-charisma-primary' }
+  ];
 
-const BadgeCard = ({ badge }: { badge: BadgeData }) => {
-  const isLocked = !badge.unlocked;
-  
-  const getCategoryColor = (category: string) => {
-    switch (category) {
-      case 'xp': return 'from-purple-400 to-purple-600';
-      case 'social': return 'from-emerald-400 to-emerald-600';
-      case 'practice': return 'from-orange-400 to-orange-600';
-      case 'community': return 'from-blue-400 to-blue-600';
-      default: return 'from-gray-400 to-gray-600';
+  const badges: BadgeData[] = [
+    // Conversation Badges
+    {
+      id: 'first-chat',
+      title: 'First Steps',
+      description: 'Complete your first conversation practice',
+      category: 'conversation',
+      tier: 'bronze',
+      status: 'unlocked',
+      icon: '💬',
+      unlockedDate: '2 days ago',
+      xpReward: 50
+    },
+    {
+      id: 'smooth-talker',
+      title: 'Smooth Talker',
+      description: 'Perfect score in 5 dating scenarios',
+      category: 'conversation',
+      tier: 'silver',
+      status: 'in-progress',
+      progress: 3,
+      maxProgress: 5,
+      icon: '😎',
+      xpReward: 150
+    },
+    {
+      id: 'conversation-master',
+      title: 'Conversation Master',
+      description: 'Complete 50 conversation practices',
+      category: 'conversation',
+      tier: 'gold',
+      status: 'locked',
+      progress: 12,
+      maxProgress: 50,
+      icon: '🗣️',
+      xpReward: 300
+    },
+    {
+      id: 'ice-breaker',
+      title: 'Ice Breaker',
+      description: 'Start 20 conversations with strangers',
+      category: 'conversation',
+      tier: 'silver',
+      status: 'in-progress',
+      progress: 8,
+      maxProgress: 20,
+      icon: '🧊',
+      xpReward: 200
+    },
+
+    // Empathy Badges
+    {
+      id: 'active-listener',
+      title: 'Active Listener',
+      description: 'Perfect eye contact in 10 sessions',
+      category: 'empathy',
+      tier: 'bronze',
+      status: 'unlocked',
+      icon: '👂',
+      unlockedDate: '1 week ago',
+      xpReward: 75
+    },
+    {
+      id: 'emotion-reader',
+      title: 'Emotion Reader',
+      description: 'Correctly identify emotions in 20 scenarios',
+      category: 'empathy',
+      tier: 'silver',
+      status: 'in-progress',
+      progress: 14,
+      maxProgress: 20,
+      icon: '🎭',
+      xpReward: 200
+    },
+    {
+      id: 'empath-master',
+      title: 'Empathy Master',
+      description: 'Show perfect empathy in difficult conversations',
+      category: 'empathy',
+      tier: 'gold',
+      status: 'locked',
+      icon: '💝',
+      xpReward: 350
+    },
+
+    // Leadership Badges
+    {
+      id: 'team-player',
+      title: 'Team Player',
+      description: 'Complete 5 group collaboration exercises',
+      category: 'leadership',
+      tier: 'bronze',
+      status: 'unlocked',
+      icon: '🤝',
+      unlockedDate: '3 days ago',
+      xpReward: 100
+    },
+    {
+      id: 'natural-leader',
+      title: 'Natural Leader',
+      description: 'Lead 10 successful group discussions',
+      category: 'leadership',
+      tier: 'gold',
+      status: 'locked',
+      progress: 2,
+      maxProgress: 10,
+      icon: '👑',
+      xpReward: 400
+    },
+    {
+      id: 'motivator',
+      title: 'Team Motivator',
+      description: 'Inspire your team in 15 scenarios',
+      category: 'leadership',
+      tier: 'silver',
+      status: 'locked',
+      icon: '🔥',
+      xpReward: 250
+    },
+
+    // Speaking Badges
+    {
+      id: 'mic-drop',
+      title: 'Mic Drop',
+      description: 'Deliver a flawless 5-minute presentation',
+      category: 'speaking',
+      tier: 'silver',
+      status: 'locked',
+      icon: '🎤',
+      xpReward: 250
+    },
+    {
+      id: 'stage-presence',
+      title: 'Stage Presence',
+      description: 'Maintain confident posture throughout speech',
+      category: 'speaking',
+      tier: 'bronze',
+      status: 'in-progress',
+      progress: 7,
+      maxProgress: 10,
+      icon: '🎭',
+      xpReward: 120
+    },
+    {
+      id: 'storyteller',
+      title: 'Master Storyteller',
+      description: 'Captivate audience with compelling stories',
+      category: 'speaking',
+      tier: 'gold',
+      status: 'locked',
+      icon: '📖',
+      xpReward: 300
+    },
+
+    // Confidence Badges
+    {
+      id: 'comfort-zone',
+      title: 'Comfort Zone Breaker',
+      description: 'Try 3 challenging social scenarios',
+      category: 'confidence',
+      tier: 'bronze',
+      status: 'unlocked',
+      icon: '🚀',
+      unlockedDate: '5 days ago',
+      xpReward: 80
+    },
+    {
+      id: 'fearless',
+      title: 'Fearless',
+      description: 'Complete 15 high-anxiety scenarios',
+      category: 'confidence',
+      tier: 'gold',
+      status: 'locked',
+      progress: 3,
+      maxProgress: 15,
+      icon: '🦁',
+      xpReward: 350
+    },
+    {
+      id: 'confidence-boost',
+      title: 'Confidence Booster',
+      description: 'Help 5 others build their confidence',
+      category: 'confidence',
+      tier: 'silver',
+      status: 'locked',
+      icon: '💪',
+      xpReward: 200
+    },
+
+    // Mindfulness Badges
+    {
+      id: 'present-moment',
+      title: 'Present Moment',
+      description: 'Complete 10 mindfulness exercises',
+      category: 'mindfulness',
+      tier: 'bronze',
+      status: 'unlocked',
+      icon: '🧘',
+      unlockedDate: '1 week ago',
+      xpReward: 60
+    },
+    {
+      id: 'stress-master',
+      title: 'Stress Master',
+      description: 'Handle pressure in 20 stressful scenarios',
+      category: 'mindfulness',
+      tier: 'silver',
+      status: 'in-progress',
+      progress: 12,
+      maxProgress: 20,
+      icon: '🌊',
+      xpReward: 180
     }
+  ];
+
+  const userStats = {
+    totalBadges: badges.filter(b => b.status === 'unlocked').length,
+    totalPossible: badges.length,
+    totalXP: badges.filter(b => b.status === 'unlocked').reduce((sum, b) => sum + b.xpReward, 0)
   };
-  
-  const getCategoryGlow = (category: string) => {
-    switch (category) {
-      case 'xp': return 'shadow-purple-500/50';
-      case 'social': return 'shadow-emerald-500/50';
-      case 'practice': return 'shadow-orange-500/50';
-      case 'community': return 'shadow-blue-500/50';
-      default: return 'shadow-gray-500/50';
-    }
-  };
-  
+
+  const filteredBadges = badges.filter(badge => {
+    const matchesFilter = filter === 'all' || badge.status === filter;
+    const matchesCategory = selectedCategory === 'all' || badge.category === selectedCategory;
+    const matchesSearch = badge.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         badge.description.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesFilter && matchesCategory && matchesSearch;
+  });
+
+  const groupedBadges = categories.reduce((acc, category) => {
+    if (category.id === 'all') return acc;
+    acc[category.id] = filteredBadges.filter(badge => badge.category === category.id);
+    return acc;
+  }, {} as Record<string, BadgeData[]>);
+
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <div className={`relative cursor-pointer transition-all duration-300 transform hover:scale-105 ${
-          isLocked 
-            ? 'opacity-60' 
-            : `hover:shadow-2xl ${getCategoryGlow(badge.category)}`
-        }`}>
-          {/* Main badge card with gradient background */}
-          <div className={`
-            relative p-6 rounded-2xl border-2 transition-all duration-300
-            ${isLocked 
-              ? 'bg-white/10 border-white/20 backdrop-blur-sm' 
-              : `bg-gradient-to-br ${getCategoryColor(badge.category)} border-white/40 backdrop-blur-sm shadow-xl`
-            }
-          `}>
+    <div className="min-h-screen pb-20 pt-24 px-4 max-w-6xl mx-auto">
+      {/* Header */}
+      <div className="flex items-center gap-4 mb-6">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => navigate(-1)}
+          className="shrink-0"
+        >
+          <ArrowLeft className="w-5 h-5" />
+        </Button>
+        <div className="flex-1">
+          <h1 className="heading-hero text-3xl mb-1">Your Badges</h1>
+          <p className="text-subtitle">Collect achievements as you master social skills</p>
+        </div>
+      </div>
+
+      {/* Stats Summary */}
+      <div className="card-primary mb-6 animate-slide-up">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <div className="w-14 h-14 rounded-full bg-gradient-primary flex items-center justify-center shadow-glow-primary">
+              <Trophy className="w-7 h-7 text-primary-foreground" />
+            </div>
+            <div>
+              <h3 className="heading-card text-xl">Achievement Progress</h3>
+              <p className="text-caption">Keep growing to unlock new rewards</p>
+            </div>
+          </div>
+          <Button variant="outline" size="sm" className="hover:scale-105 transition-transform">
+            <Share2 className="w-4 h-4 mr-2" />
+            Share Progress
+          </Button>
+        </div>
+        
+        <div className="grid grid-cols-3 gap-4 mb-4">
+          <div className="text-center p-4 rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20">
+            <div className="text-2xl font-bold text-primary mb-1">{userStats.totalBadges}</div>
+            <div className="text-sm text-muted-foreground">Badges Earned</div>
+          </div>
+          <div className="text-center p-4 rounded-xl bg-gradient-to-br from-secondary/10 to-secondary/5 border border-secondary/20">
+            <div className="text-2xl font-bold text-secondary mb-1">{userStats.totalXP}</div>
+            <div className="text-sm text-muted-foreground">XP Gained</div>
+          </div>
+          <div className="text-center p-4 rounded-xl bg-gradient-to-br from-success/10 to-success/5 border border-success/20">
+            <div className="text-2xl font-bold text-success mb-1">{Math.round((userStats.totalBadges / userStats.totalPossible) * 100)}%</div>
+            <div className="text-sm text-muted-foreground">Complete</div>
+          </div>
+        </div>
+
+        {/* Overall Progress Bar */}
+        <div className="progress-bar-primary">
+          <div 
+            className="progress-fill-primary" 
+            style={{ width: `${(userStats.totalBadges / userStats.totalPossible) * 100}%` }}
+          />
+        </div>
+        <p className="text-xs text-muted-foreground mt-2 text-center">
+          {userStats.totalBadges} of {userStats.totalPossible} badges collected
+        </p>
+      </div>
+
+      {/* Filters */}
+      <div className="space-y-4 mb-6">
+        {/* Search */}
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <Input
+            placeholder="Search badges..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-10 bg-card/50 border-border/50"
+          />
+        </div>
+
+        {/* Status Filter */}
+        <div className="flex gap-2 overflow-x-auto pb-2">
+          {(['all', 'unlocked', 'in-progress', 'locked'] as const).map((status) => (
+            <Button
+              key={status}
+              variant={filter === status ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setFilter(status)}
+              className="shrink-0 capitalize"
+            >
+              {status === 'all' ? 'All' : status.replace('-', ' ')}
+            </Button>
+          ))}
+        </div>
+
+        {/* Category Filter */}
+        <div className="flex gap-2 overflow-x-auto pb-2">
+          {categories.map((category) => {
+            const IconComponent = category.icon;
+            return (
+              <Button
+                key={category.id}
+                variant={selectedCategory === category.id ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setSelectedCategory(category.id)}
+                className="shrink-0 flex items-center gap-2"
+              >
+                <IconComponent className={cn("w-4 h-4", category.color)} />
+                <span className="hidden sm:inline">{category.name}</span>
+              </Button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Badge Grid */}
+      {selectedCategory === 'all' ? (
+        <div className="space-y-8">
+          {categories.slice(1).map((category) => {
+            const categoryBadges = groupedBadges[category.id];
+            if (!categoryBadges || categoryBadges.length === 0) return null;
             
-            {/* Glow effect for unlocked badges */}
-            {!isLocked && (
-              <div className={`absolute inset-0 bg-gradient-to-br ${getCategoryColor(badge.category)} rounded-2xl blur-xl opacity-30 -z-10`} />
-            )}
+            const IconComponent = category.icon;
+            const unlockedInCategory = categoryBadges.filter(b => b.status === 'unlocked').length;
             
-            {/* Lock overlay for locked badges */}
-            {isLocked && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black/20 rounded-2xl backdrop-blur-sm">
-                <div className="bg-white/20 p-3 rounded-full">
-                  <Lock size={24} className="text-white" />
+            return (
+              <div key={category.id} className="animate-slide-up">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className={cn("w-10 h-10 rounded-lg flex items-center justify-center", 
+                    `bg-gradient-to-br from-${category.color.split('-')[1]}/20 to-${category.color.split('-')[1]}/10 border border-${category.color.split('-')[1]}/30`)}>
+                    <IconComponent className={cn("w-6 h-6", category.color)} />
+                  </div>
+                  <div className="flex-1">
+                    <h2 className="heading-section text-xl">{category.name}</h2>
+                    <p className="text-sm text-muted-foreground">
+                      {unlockedInCategory} of {categoryBadges.length} badges earned
+                    </p>
+                  </div>
                 </div>
-              </div>
-            )}
-            
-            {/* Badge content */}
-            <div className="text-center relative z-10">
-              <div className={`text-4xl mb-3 ${isLocked ? 'grayscale' : 'drop-shadow-lg'}`}>
-                {badge.icon}
-              </div>
-              <h3 className="font-bold text-white text-sm mb-2 drop-shadow-md">{badge.name}</h3>
-              
-              {/* Tier indicators */}
-              {badge.tier && badge.maxTier && (
-                <div className="flex justify-center gap-1 mb-3">
-                  {Array.from({ length: badge.maxTier }, (_, i) => (
-                    <div
-                      key={i}
-                      className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-                        i < badge.tier 
-                          ? 'bg-white shadow-lg' 
-                          : 'bg-white/30'
-                      }`}
-                    />
+                
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                  {categoryBadges.map((badge) => (
+                    <BadgeCard key={badge.id} badge={badge} />
                   ))}
                 </div>
-              )}
-              
-              {/* Progress bar for badges with progress */}
-              {badge.progress !== undefined && badge.maxProgress && (
-                <div className="mt-3">
-                  <div className="bg-white/20 rounded-full h-2 mb-2 overflow-hidden">
-                    <div 
-                      className="h-full bg-white rounded-full transition-all duration-500 shadow-lg"
-                      style={{ width: `${(badge.progress / badge.maxProgress) * 100}%` }}
-                    />
-                  </div>
-                  <p className="text-xs text-white/90 font-medium">
-                    {badge.progress}/{badge.maxProgress}
-                  </p>
-                </div>
-              )}
-              
-              {/* Unlocked indicator with sparkle effect */}
-              {badge.unlocked && !isLocked && (
-                <div className="absolute -top-2 -right-2 w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-lg animate-bounce">
-                  <span className="text-amber-500 text-sm font-bold">✨</span>
-                </div>
-              )}
-            </div>
-          </div>
+              </div>
+            );
+          })}
         </div>
-      </DialogTrigger>
-      
-      <DialogContent className="max-w-sm mx-auto bg-gradient-to-br from-white to-gray-50 border-2 border-white/50 shadow-2xl">
-        <DialogHeader>
-          <DialogTitle className="text-center">
-            <div className="flex flex-col items-center gap-4">
-              <div className={`
-                text-5xl p-4 rounded-full transition-all duration-300
-                ${isLocked 
-                  ? 'grayscale bg-gray-100' 
-                  : `bg-gradient-to-br ${getCategoryColor(badge.category)} shadow-xl`
-                }
-              `}>
-                {badge.icon}
-              </div>
-              <div>
-                <h2 className="text-xl font-bold text-gray-800 mb-2">{badge.name}</h2>
-                <Badge 
-                  variant={isLocked ? 'outline' : 'default'} 
-                  className={`${!isLocked ? `bg-gradient-to-r ${getCategoryColor(badge.category)} text-white border-none shadow-lg` : ''}`}
-                >
-                  {isLocked ? 'Locked' : 'Unlocked'}
-                </Badge>
-              </div>
-            </div>
-          </DialogTitle>
-        </DialogHeader>
-        
-        <div className="space-y-6">
-          <div>
-            <h3 className="font-bold mb-2 text-gray-800">Description</h3>
-            <p className="text-gray-600">{badge.description}</p>
-          </div>
-          
-          {/* Tier progression */}
-          {badge.tier && badge.maxTier && (
-            <div>
-              <h3 className="font-bold mb-3 text-gray-800">Tier Progress</h3>
-              <div className="flex justify-center gap-3">
-                {Array.from({ length: badge.maxTier }, (_, i) => (
-                  <div
-                    key={i}
-                    className={`w-10 h-10 rounded-full border-3 flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                      i < badge.tier 
-                        ? `bg-gradient-to-br ${getCategoryColor(badge.category)} border-white text-white shadow-lg` 
-                        : 'border-gray-300 text-gray-400 bg-gray-50'
-                    }`}
-                  >
-                    {i + 1}
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-          
-          {/* Current progress */}
-          {badge.progress !== undefined && badge.maxProgress && (
-            <div>
-              <h3 className="font-bold mb-3 text-gray-800">Progress</h3>
-              <div className="bg-gray-200 rounded-full h-3 mb-3 overflow-hidden">
-                <div 
-                  className={`h-full bg-gradient-to-r ${getCategoryColor(badge.category)} rounded-full transition-all duration-500 shadow-inner`}
-                  style={{ width: `${(badge.progress / badge.maxProgress) * 100}%` }}
-                />
-              </div>
-              <p className="text-center text-sm text-gray-600 font-medium">
-                {badge.progress} / {badge.maxProgress}
-              </p>
-            </div>
-          )}
-          
-          {/* Reward */}
-          {badge.reward && (
-            <div>
-              <h3 className="font-bold mb-2 text-gray-800">Reward</h3>
-              <div className={`bg-gradient-to-r ${getCategoryColor(badge.category)} p-4 rounded-xl shadow-lg`}>
-                <p className="text-sm font-medium text-white">{badge.reward}</p>
-              </div>
-            </div>
-          )}
-        </div>
-      </DialogContent>
-    </Dialog>
-  );
-};
-
-const Badges = () => {
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  
-  const filteredBadges = selectedCategory === 'all' 
-    ? badges 
-    : badges.filter(badge => badge.category === selectedCategory);
-  
-  const unlockedCount = badges.filter(badge => badge.unlocked).length;
-  const totalCount = badges.length;
-
-  return (
-    <div 
-      className="min-h-screen pb-20 pt-24"
-      style={{ 
-        background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 25%, #eab308 50%, #f59e0b 75%, #fbbf24 100%)'
-      }}
-    >
-      <div className="section-mobile">
-        {/* Header */}
-        <div className="text-center mb-6">
-          <h1 className="text-4xl font-display font-bold mb-3 text-white drop-shadow-lg">
-            Badges
-          </h1>
-          <p className="text-white/90 mb-4 font-display font-medium">
-            Track your milestones and mastery 🏆
-          </p>
-          <div className="bg-white/20 backdrop-blur-sm p-3 inline-block rounded-lg border border-white/30">
-            <span className="text-sm font-semibold text-white">
-              {unlockedCount}/{totalCount} badges unlocked
-            </span>
-          </div>
-        </div>
-
-        {/* Category Filters */}
-        <div className="mb-6">
-          <div className="flex gap-2 overflow-x-auto pb-2">
-            {categories.map((category) => {
-              const Icon = category.icon;
-              const isSelected = selectedCategory === category.id;
-              
-              return (
-                <button
-                  key={category.id}
-                  onClick={() => setSelectedCategory(category.id)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap transition-all ${
-                    isSelected 
-                      ? 'bg-white text-amber-600 shadow-lg' 
-                      : 'bg-white/20 text-white hover:bg-white/30 border border-white/30'
-                  }`}
-                >
-                  <Icon size={16} />
-                  <span className="text-sm font-medium">{category.name}</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Badges Grid */}
-        <div className="grid grid-cols-2 gap-4">
+      ) : (
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {filteredBadges.map((badge) => (
             <BadgeCard key={badge.id} badge={badge} />
           ))}
         </div>
+      )}
 
-        {/* Motivational Footer */}
-        <div className="mt-8 text-center">
-          <div className="bg-white/20 backdrop-blur-sm p-6 rounded-lg border border-white/30">
-            <h3 className="font-bold mb-2 text-white">Keep Growing! 🌱</h3>
-            <p className="text-white/90 text-sm">
-              Each badge represents a step forward in your social confidence journey. 
-              What will you unlock next?
-            </p>
+      {filteredBadges.length === 0 && (
+        <div className="text-center py-12">
+          <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-muted/20 flex items-center justify-center">
+            <Search className="w-10 h-10 text-muted-foreground" />
+          </div>
+          <h3 className="heading-card mb-2">No badges found</h3>
+          <p className="text-muted-foreground">Try adjusting your filters or search terms</p>
+        </div>
+      )}
+
+      {/* Motivational Footer */}
+      <div className="mt-12 card-primary text-center animate-slide-up">
+        <div className="mb-4">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-success/20 to-primary/20 flex items-center justify-center">
+            <Zap className="w-8 h-8 text-success" />
+          </div>
+          <h3 className="heading-card text-xl mb-2 text-success">Keep Growing! 🌱</h3>
+          <p className="text-subtitle mb-4">
+            Each badge represents a milestone in your social confidence journey. 
+            Challenge yourself to unlock them all!
+          </p>
+          <div className="text-sm text-muted-foreground">
+            Next milestone: Earn {5 - (userStats.totalBadges % 5)} more badges to unlock a special reward
           </div>
         </div>
       </div>
+    </div>
+  );
+};
+
+interface BadgeCardProps {
+  badge: BadgeData;
+}
+
+const BadgeCard: React.FC<BadgeCardProps> = ({ badge }) => {
+  const [isFlipped, setIsFlipped] = useState(false);
+
+  const getTierColor = (tier: string) => {
+    switch (tier) {
+      case 'bronze': return 'text-xp-bronze border-xp-bronze/30 bg-gradient-to-br from-xp-bronze/10 to-xp-bronze/5';
+      case 'silver': return 'text-xp-silver border-xp-silver/30 bg-gradient-to-br from-xp-silver/10 to-xp-silver/5';
+      case 'gold': return 'text-xp-gold border-xp-gold/30 bg-gradient-to-br from-xp-gold/10 to-xp-gold/5';
+      case 'diamond': return 'text-xp-diamond border-xp-diamond/30 bg-gradient-to-br from-xp-diamond/10 to-xp-diamond/5';
+      default: return 'text-muted-foreground border-muted/30 bg-muted/5';
+    }
+  };
+
+  const getStatusAnimation = (status: string) => {
+    switch (status) {
+      case 'unlocked': return 'shadow-glow-primary animate-pulse-subtle';
+      case 'in-progress': return 'shadow-card border-primary/50';
+      default: return 'opacity-60';
+    }
+  };
+
+  return (
+    <div 
+      className={cn(
+        "relative aspect-square rounded-xl border-2 p-4 cursor-pointer transition-all duration-300 hover:scale-105",
+        getTierColor(badge.tier),
+        getStatusAnimation(badge.status)
+      )}
+      onClick={() => setIsFlipped(!isFlipped)}
+    >
+      {!isFlipped ? (
+        <div className="h-full flex flex-col items-center justify-center text-center relative">
+          {/* New Badge Indicator */}
+          {badge.status === 'unlocked' && badge.unlockedDate?.includes('day') && (
+            <div className="absolute -top-2 -right-2 w-6 h-6 bg-success rounded-full flex items-center justify-center shadow-lg animate-bounce">
+              <span className="text-white text-xs">✨</span>
+            </div>
+          )}
+
+          {/* Badge Icon */}
+          <div className="text-4xl mb-3 relative">
+            {badge.icon}
+            {badge.status === 'locked' && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black/60 rounded-full">
+                <Lock className="w-5 h-5 text-white" />
+              </div>
+            )}
+          </div>
+          
+          {/* Badge Title */}
+          <h3 className="font-semibold text-sm mb-2 line-clamp-2 leading-tight">{badge.title}</h3>
+          
+          {/* Progress Bar (if in progress) */}
+          {badge.status === 'in-progress' && badge.progress && badge.maxProgress && (
+            <div className="w-full mb-2">
+              <div className="w-full bg-muted/30 rounded-full h-2 mb-1">
+                <div 
+                  className="bg-primary h-2 rounded-full transition-all duration-500"
+                  style={{ width: `${(badge.progress / badge.maxProgress) * 100}%` }}
+                />
+              </div>
+              <p className="text-xs text-muted-foreground">
+                {badge.progress}/{badge.maxProgress}
+              </p>
+            </div>
+          )}
+          
+          {/* Status Indicator */}
+          <div className="flex items-center gap-1 mt-auto">
+            {badge.status === 'unlocked' && (
+              <>
+                <Star className="w-3 h-3 text-success fill-current" />
+                <span className="text-xs text-success font-medium">Earned</span>
+              </>
+            )}
+            {badge.status === 'in-progress' && (
+              <>
+                <Timer className="w-3 h-3 text-primary" />
+                <span className="text-xs text-primary font-medium">In Progress</span>
+              </>
+            )}
+            {badge.status === 'locked' && (
+              <>
+                <Lock className="w-3 h-3 text-muted-foreground" />
+                <span className="text-xs text-muted-foreground">Locked</span>
+              </>
+            )}
+          </div>
+
+          {/* Tier Indicator */}
+          <Badge 
+            variant="outline" 
+            className={cn("text-xs mt-2 capitalize", getTierColor(badge.tier))}
+          >
+            {badge.tier}
+          </Badge>
+        </div>
+      ) : (
+        <div className="h-full flex flex-col justify-between text-center p-2">
+          <div>
+            <h3 className="font-semibold text-sm mb-2">{badge.title}</h3>
+            <p className="text-xs text-muted-foreground mb-3 leading-relaxed">{badge.description}</p>
+          </div>
+          
+          <div className="space-y-2">
+            <div className="flex items-center justify-center gap-1">
+              <Trophy className="w-3 h-3 text-secondary" />
+              <span className="text-xs text-secondary font-medium">{badge.xpReward} XP</span>
+            </div>
+            
+            {badge.unlockedDate && (
+              <p className="text-xs text-success">Earned {badge.unlockedDate}</p>
+            )}
+            
+            <div className="text-xs text-muted-foreground">
+              Tap to flip back
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
