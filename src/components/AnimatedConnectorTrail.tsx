@@ -119,29 +119,7 @@ const AnimatedConnectorTrail: React.FC<AnimatedConnectorTrailProps> = ({
           </linearGradient>
         </defs>
         
-        {/* Completed trail */}
-        {hasCompleted && (
-          <>
-            {/* Main completed path */}
-            <path
-              d={completedPath}
-              stroke="url(#completedTrail)"
-              strokeWidth="6"
-              fill="none"
-              filter="url(#trailGlow)"
-              className="drop-shadow-lg"
-            />
-            
-            {/* Shimmer overlay on completed path */}
-            <path
-              d={completedPath}
-              stroke="url(#shimmer)"
-              strokeWidth="6"
-              fill="none"
-              opacity="0.6"
-            />
-          </>
-        )}
+        {/* Completed trail removed */}
         
         {/* Animated current progression indicator */}
         {missions.some(m => m.status === 'current') && (
