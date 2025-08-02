@@ -477,111 +477,138 @@ const BadgeCard: React.FC<BadgeCardProps> = ({ badge }) => {
 
   const getStatusAnimation = (status: string) => {
     switch (status) {
-      case 'unlocked': return 'shadow-glow-primary animate-pulse-subtle';
-      case 'in-progress': return 'shadow-card border-primary/50';
+      case 'unlocked': return 'shadow-glow-primary';
+      case 'in-progress': return 'shadow-card border-primary/50 animate-pulse-subtle';
       default: return 'opacity-60';
     }
   };
 
   return (
-    <div 
-      className={cn(
-        "relative aspect-square rounded-xl border-2 p-4 cursor-pointer transition-all duration-300 hover:scale-105",
-        getTierColor(badge.tier),
-        getStatusAnimation(badge.status)
-      )}
-      onClick={() => setIsFlipped(!isFlipped)}
-    >
-      {!isFlipped ? (
-        <div className="h-full flex flex-col items-center justify-center text-center relative">
-          {/* New Badge Indicator */}
-          {badge.status === 'unlocked' && badge.unlockedDate?.includes('day') && (
-            <div className="absolute -top-2 -right-2 w-6 h-6 bg-success rounded-full flex items-center justify-center shadow-lg animate-bounce">
-              <span className="text-white text-xs">✨</span>
-            </div>
+    <div className="relative aspect-square perspective-1000">
+      <div 
+        className={cn(
+          "relative w-full h-full cursor-pointer transition-all duration-700 transform-style-preserve-3d hover:scale-105",
+          isFlipped && "rotate-y-180"
+        )}
+        onClick={() => setIsFlipped(!isFlipped)}
+        style={{
+          transformStyle: 'preserve-3d'
+        }}
+      >
+        {/* Front Face */}
+        <div 
+          className={cn(
+            "absolute inset-0 w-full h-full rounded-xl border-2 p-4 backface-hidden",
+            getTierColor(badge.tier),
+            getStatusAnimation(badge.status)
           )}
-
-          {/* Badge Icon */}
-          <div className="text-4xl mb-3 relative">
-            {badge.icon}
-            {badge.status === 'locked' && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black/60 rounded-full">
-                <Lock className="w-5 h-5 text-white" />
+          style={{
+            backfaceVisibility: 'hidden'
+          }}
+        >
+          <div className="h-full flex flex-col items-center justify-center text-center relative">
+            {/* New Badge Indicator */}
+            {badge.status === 'unlocked' && badge.unlockedDate?.includes('day') && (
+              <div className="absolute -top-2 -right-2 w-6 h-6 bg-success rounded-full flex items-center justify-center shadow-lg animate-bounce">
+                <span className="text-white text-xs">✨</span>
               </div>
             )}
-          </div>
-          
-          {/* Badge Title */}
-          <h3 className="font-semibold text-sm mb-2 line-clamp-2 leading-tight">{badge.title}</h3>
-          
-          {/* Progress Bar (if in progress) */}
-          {badge.status === 'in-progress' && badge.progress && badge.maxProgress && (
-            <div className="w-full mb-2">
-              <div className="w-full bg-muted/30 rounded-full h-2 mb-1">
-                <div 
-                  className="bg-primary h-2 rounded-full transition-all duration-500"
-                  style={{ width: `${(badge.progress / badge.maxProgress) * 100}%` }}
-                />
-              </div>
-              <p className="text-xs text-muted-foreground">
-                {badge.progress}/{badge.maxProgress}
-              </p>
-            </div>
-          )}
-          
-          {/* Status Indicator */}
-          <div className="flex items-center gap-1 mt-auto">
-            {badge.status === 'unlocked' && (
-              <>
-                <Star className="w-3 h-3 text-success fill-current" />
-                <span className="text-xs text-success font-medium">Earned</span>
-              </>
-            )}
-            {badge.status === 'in-progress' && (
-              <>
-                <Timer className="w-3 h-3 text-primary" />
-                <span className="text-xs text-primary font-medium">In Progress</span>
-              </>
-            )}
-            {badge.status === 'locked' && (
-              <>
-                <Lock className="w-3 h-3 text-muted-foreground" />
-                <span className="text-xs text-muted-foreground">Locked</span>
-              </>
-            )}
-          </div>
 
-          {/* Tier Indicator */}
-          <Badge 
-            variant="outline" 
-            className={cn("text-xs mt-2 capitalize", getTierColor(badge.tier))}
-          >
-            {badge.tier}
-          </Badge>
-        </div>
-      ) : (
-        <div className="h-full flex flex-col justify-between text-center p-2">
-          <div>
-            <h3 className="font-semibold text-sm mb-2">{badge.title}</h3>
-            <p className="text-xs text-muted-foreground mb-3 leading-relaxed">{badge.description}</p>
-          </div>
-          
-          <div className="space-y-2">
-            <div className="flex items-center justify-center gap-1">
-              <Trophy className="w-3 h-3 text-secondary" />
-              <span className="text-xs text-secondary font-medium">{badge.xpReward} XP</span>
+            {/* Badge Icon */}
+            <div className="text-4xl mb-3 relative">
+              {badge.icon}
+              {badge.status === 'locked' && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black/60 rounded-full">
+                  <Lock className="w-5 h-5 text-white" />
+                </div>
+              )}
             </div>
             
-            {badge.unlockedDate && (
-              <p className="text-xs text-success">Earned {badge.unlockedDate}</p>
+            {/* Badge Title */}
+            <h3 className="font-semibold text-sm mb-2 line-clamp-2 leading-tight">{badge.title}</h3>
+            
+            {/* Progress Bar (if in progress) */}
+            {badge.status === 'in-progress' && badge.progress && badge.maxProgress && (
+              <div className="w-full mb-2">
+                <div className="w-full bg-muted/30 rounded-full h-2 mb-1">
+                  <div 
+                    className="bg-primary h-2 rounded-full transition-all duration-500"
+                    style={{ width: `${(badge.progress / badge.maxProgress) * 100}%` }}
+                  />
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  {badge.progress}/{badge.maxProgress}
+                </p>
+              </div>
             )}
             
-            <div className="text-xs text-muted-foreground">
-              Tap to flip back
+            {/* Status Indicator */}
+            <div className="flex items-center gap-1 mt-auto">
+              {badge.status === 'unlocked' && (
+                <>
+                  <Star className="w-3 h-3 text-success fill-current" />
+                  <span className="text-xs text-success font-medium">Earned</span>
+                </>
+              )}
+              {badge.status === 'in-progress' && (
+                <>
+                  <Timer className="w-3 h-3 text-primary" />
+                  <span className="text-xs text-primary font-medium">In Progress</span>
+                </>
+              )}
+              {badge.status === 'locked' && (
+                <>
+                  <Lock className="w-3 h-3 text-muted-foreground" />
+                  <span className="text-xs text-muted-foreground">Locked</span>
+                </>
+              )}
+            </div>
+
+            {/* Tier Indicator */}
+            <Badge 
+              variant="outline" 
+              className={cn("text-xs mt-2 capitalize", getTierColor(badge.tier))}
+            >
+              {badge.tier}
+            </Badge>
+          </div>
+        </div>
+
+        {/* Back Face */}
+        <div 
+          className={cn(
+            "absolute inset-0 w-full h-full rounded-xl border-2 p-4 backface-hidden rotate-y-180",
+            getTierColor(badge.tier),
+            "bg-card/95 backdrop-blur-sm"
+          )}
+          style={{
+            backfaceVisibility: 'hidden',
+            transform: 'rotateY(180deg)'
+          }}
+        >
+          <div className="h-full flex flex-col justify-between text-center">
+            <div>
+              <h3 className="font-semibold text-sm mb-2">{badge.title}</h3>
+              <p className="text-xs text-muted-foreground mb-3 leading-relaxed">{badge.description}</p>
+            </div>
+            
+            <div className="space-y-2">
+              <div className="flex items-center justify-center gap-1">
+                <Trophy className="w-3 h-3 text-secondary" />
+                <span className="text-xs text-secondary font-medium">{badge.xpReward} XP</span>
+              </div>
+              
+              {badge.unlockedDate && (
+                <p className="text-xs text-success">Earned {badge.unlockedDate}</p>
+              )}
+              
+              <div className="text-xs text-muted-foreground">
+                Tap to flip back
+              </div>
             </div>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 };
