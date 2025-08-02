@@ -1,22 +1,23 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { 
-  ArrowLeft, 
   Lock, 
   CheckCircle, 
   Play, 
   Flame, 
   Diamond,
   Star,
-  Trophy,
   Users,
   Heart,
   Briefcase,
   Sparkles
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
 import MissionPopup from '@/components/MissionPopup';
+import WavyRoadmapPath from '@/components/WavyRoadmapPath';
+import MissionBubble from '@/components/MissionBubble';
+import ProgressTopBar from '@/components/ProgressTopBar';
+import AnimatedConnectorTrail from '@/components/AnimatedConnectorTrail';
+import RewardPopup from '@/components/RewardPopup';
 
 interface Mission {
   id: number;
@@ -34,6 +35,8 @@ const PracticeRoad = () => {
   const navigate = useNavigate();
   const [selectedMission, setSelectedMission] = useState<Mission | null>(null);
   const [showMissionPopup, setShowMissionPopup] = useState(false);
+  const [showRewardPopup, setShowRewardPopup] = useState(false);
+  const [rewardData, setRewardData] = useState<{ xp: number; title: string } | null>(null);
 
   // Get mission data based on category
   const getMissionData = () => {
@@ -292,147 +295,102 @@ const PracticeRoad = () => {
     }, 150);
   };
 
-  const generatePath = () => {
-    const radius = 120;
-    const centerX = 200;
-    const centerY = 200;
-    const angleStep = (Math.PI * 2) / missions.length;
+  const generateWavyPositions = () => {
+    const centerX = 50; // Center percentage
+    const amplitude = 25; // Wave amplitude
+    const frequency = 0.7; // Wave frequency
+    const stepY = 140; // Vertical spacing
     
     return missions.map((_, index) => {
-      const angle = index * angleStep - Math.PI / 2; // Start from top
-      const x = centerX + radius * Math.cos(angle);
-      const y = centerY + radius * Math.sin(angle);
+      const y = index * stepY + 100;
+      const waveOffset = Math.sin(index * frequency) * amplitude;
+      const x = centerX + waveOffset;
       return { x, y };
     });
   };
 
-  const positions = generatePath();
+  const positions = generateWavyPositions();
+
+  const totalXP = missions.reduce((sum, m) => m.status === 'completed' ? sum + m.xpReward : sum, 0);
+  const totalHeight = positions[positions.length - 1]?.y + 200 || 600;
+
+  const handleMissionTap = (mission: Mission) => {
+    setSelectedMission(mission);
+    setShowMissionPopup(true);
+  };
+
+  const handleMissionComplete = (mission: Mission) => {
+    setRewardData({ xp: mission.xpReward, title: mission.title });
+    setShowRewardPopup(true);
+  };
 
   return (
-    <div 
-      className="min-h-screen pb-20 pt-16"
-      style={{ background: 'var(--gradient-background)' }}
-    >
-      {/* Header */}
-      <div className="fixed top-0 left-0 right-0 z-40 px-4 pt-4 pb-2" style={{ background: 'var(--gradient-background)' }}>
-        <div className="flex items-center justify-between mb-4">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => navigate('/practice')}
-            className="text-white hover:bg-white/10"
-          >
-            <ArrowLeft className="w-5 h-5 mr-2" />
-            Back
-          </Button>
-          <div className="text-center">
-            <div className="flex items-center justify-center gap-2 mb-1">
-              <CategoryIcon className="w-5 h-5 text-white" />
-              <h1 className="text-lg font-display font-bold text-white">{title}</h1>
-            </div>
-            <p className="text-sm text-slate-300">Chapter {chapterNumber}</p>
-          </div>
-          <div className="w-16" />
-        </div>
+    <div className="min-h-screen bg-background">
+      {/* Progress Top Bar */}
+      <ProgressTopBar
+        title={title}
+        chapterNumber={chapterNumber}
+        completedMissions={completedMissions}
+        totalMissions={totalMissions}
+        totalXP={totalXP}
+        icon={CategoryIcon}
+        onBack={() => navigate('/practice')}
+      />
 
-        {/* Progress Bar */}
-        <div className="space-y-2">
-          <div className="flex items-center justify-between text-sm">
-            <span className="text-slate-300">Progress</span>
-            <span className="text-white font-medium">{completedMissions}/{totalMissions} missions</span>
-          </div>
-          <Progress 
-            value={progressPercentage} 
-            className="h-2 bg-slate-800"
+      {/* Scrollable Mission Road */}
+      <div className="pt-40 pb-20">
+        <div 
+          className="relative w-full max-w-md mx-auto px-4"
+          style={{ height: `${totalHeight}px` }}
+        >
+          {/* Wavy Path Background */}
+          <WavyRoadmapPath 
+            missionCount={missions.length}
+            className="absolute inset-0"
           />
-          <div className="flex items-center justify-between text-xs text-slate-400">
-            <span>{Math.round(progressPercentage)}% Complete</span>
-            <div className="flex items-center gap-1">
-              <Trophy className="w-3 h-3" />
-              <span>{missions.reduce((sum, m) => m.status === 'completed' ? sum + m.xpReward : sum, 0)} XP earned</span>
-            </div>
-          </div>
-        </div>
-      </div>
+          
+          {/* Animated Connector Trails */}
+          <AnimatedConnectorTrail
+            missions={missions}
+            pathPoints={positions}
+            className="absolute inset-0"
+          />
 
-      {/* Mission Road */}
-      <div className="px-4 pt-32 pb-8">
-        <div className="relative w-full max-w-lg mx-auto" style={{ height: '500px' }}>
-          {/* Connection Paths */}
-          <svg className="absolute inset-0 w-full h-full pointer-events-none">
-            {missions.map((mission, index) => {
-              if (index === missions.length - 1) return null;
-              const startPos = positions[index];
-              const endPos = positions[index + 1];
-              
-              return (
-                <line
-                  key={`path-${index}`}
-                  x1={startPos.x}
-                  y1={startPos.y}
-                  x2={endPos.x}
-                  y2={endPos.y}
-                  stroke="currentColor"
-                  strokeWidth="3"
-                  className={getPathStyle(mission, missions[index + 1])}
-                  strokeDasharray={mission.status === 'locked' ? "8,8" : "none"}
-                />
-              );
-            })}
-          </svg>
-
-          {/* Mission Nodes */}
+          {/* Mission Bubbles */}
           {missions.map((mission, index) => {
-            const position = positions[index];
             const MissionIcon = getMissionIcon(mission);
+            const isNewlyUnlocked = mission.status === 'available' && index > 0 && missions[index - 1].status === 'completed';
+            const hasStreakBonus = completedMissions >= 3 && mission.status === 'current';
             
             return (
-              <div key={mission.id} className="absolute" style={{ 
-                left: position.x - 40, 
-                top: position.y - 40,
-                transform: 'translate(0, 0)'
-              }}>
-                {/* Mission Circle */}
-                <div 
-                  className={getMissionNodeStyle(mission)}
-                  onClick={() => handleMissionClick(mission)}
-                >
-                  <MissionIcon className="w-8 h-8 text-white" />
-                  
-                  {/* Special Effects */}
-                  {mission.type === 'boss' && mission.status !== 'locked' && (
-                    <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-orange-400 to-red-500 opacity-20 animate-pulse" />
-                  )}
-                  
-                  {mission.type === 'premium' && (
-                    <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-purple-400 to-pink-400 opacity-30 animate-pulse" />
-                  )}
-                </div>
-
-                {/* Mission Title */}
-                <div className="mt-3 text-center">
-                  <h3 className="text-sm font-medium text-white leading-tight max-w-[100px] mx-auto">
-                    {mission.title}
-                  </h3>
-                </div>
-              </div>
+              <MissionBubble
+                key={mission.id}
+                mission={mission}
+                icon={MissionIcon}
+                position={positions[index]}
+                onTap={handleMissionTap}
+                showNewTag={isNewlyUnlocked}
+                streakBonus={hasStreakBonus}
+              />
             );
           })}
         </div>
 
         {/* Chapter Complete Celebration */}
         {progressPercentage === 100 && (
-          <div className="mt-8 p-6 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30 rounded-xl text-center animate-scale-in">
-            <Trophy className="w-12 h-12 text-yellow-500 mx-auto mb-4" />
-            <h3 className="text-lg font-display font-bold text-gradient-xp mb-2">
+          <div className="mt-8 mx-4 p-6 bg-gradient-to-r from-emerald-500/10 to-emerald-600/10 border border-emerald-500/20 rounded-2xl text-center animate-scale-in">
+            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center">
+              <span className="text-2xl">🏆</span>
+            </div>
+            <h3 className="text-xl font-display font-bold text-foreground mb-2">
               Chapter Complete! 🎉
             </h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              You've mastered the basics of {title.toLowerCase()}. Ready for the next challenge?
+            <p className="text-sm text-muted-foreground mb-6">
+              You've mastered the fundamentals of {title.toLowerCase()}. Ready for the next adventure?
             </p>
-            <Button className="w-full">
+            <div className="px-6 py-3 bg-gradient-to-r from-primary to-primary/80 rounded-xl text-primary-foreground font-semibold cursor-pointer hover:scale-105 transition-transform">
               Continue to Chapter {chapterNumber + 1}
-            </Button>
+            </div>
           </div>
         )}
       </div>
@@ -443,6 +401,15 @@ const PracticeRoad = () => {
         onClose={() => setShowMissionPopup(false)}
         mission={selectedMission}
         onStartMission={handleStartMission}
+      />
+
+      {/* Reward Popup */}
+      <RewardPopup
+        isOpen={showRewardPopup}
+        onClose={() => setShowRewardPopup(false)}
+        xpGained={rewardData?.xp || 0}
+        missionTitle={rewardData?.title || ''}
+        streakBonus={completedMissions >= 3 ? 25 : 0}
       />
     </div>
   );
