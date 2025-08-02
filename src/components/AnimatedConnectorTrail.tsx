@@ -62,14 +62,14 @@ const AnimatedConnectorTrail: React.FC<AnimatedConnectorTrailProps> = ({
         <defs>
           {/* Completed trail gradient */}
           <linearGradient id="completedTrail" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="hsl(var(--primary))" />
-            <stop offset="50%" stopColor="hsl(var(--primary) / 0.9)" />
-            <stop offset="100%" stopColor="hsl(var(--primary) / 0.7)" />
+            <stop offset="0%" stopColor="hsl(var(--success))" />
+            <stop offset="50%" stopColor="hsl(var(--success) / 0.9)" />
+            <stop offset="100%" stopColor="hsl(var(--success) / 0.7)" />
           </linearGradient>
           
           {/* Animated gradient for active progression */}
           <linearGradient id="animatedTrail" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="hsl(var(--primary))">
+            <stop offset="0%" stopColor="hsl(var(--success))">
               <animate 
                 attributeName="stop-opacity" 
                 values="1;0.3;1" 
@@ -77,7 +77,7 @@ const AnimatedConnectorTrail: React.FC<AnimatedConnectorTrailProps> = ({
                 repeatCount="indefinite" 
               />
             </stop>
-            <stop offset="50%" stopColor="hsl(var(--primary) / 0.8)">
+            <stop offset="50%" stopColor="hsl(var(--success) / 0.8)">
               <animate 
                 attributeName="stop-opacity" 
                 values="0.8;0.4;0.8" 
@@ -85,7 +85,7 @@ const AnimatedConnectorTrail: React.FC<AnimatedConnectorTrailProps> = ({
                 repeatCount="indefinite" 
               />
             </stop>
-            <stop offset="100%" stopColor="hsl(var(--primary) / 0.5)">
+            <stop offset="100%" stopColor="hsl(var(--success) / 0.5)">
               <animate 
                 attributeName="stop-opacity" 
                 values="0.5;0.2;0.5" 
@@ -153,7 +153,7 @@ const AnimatedConnectorTrail: React.FC<AnimatedConnectorTrailProps> = ({
                 cx={point.x}
                 cy={point.y}
                 r="3"
-                fill="hsl(var(--primary))"
+                fill="hsl(var(--success))"
                 opacity="0.8"
               >
                 <animate
