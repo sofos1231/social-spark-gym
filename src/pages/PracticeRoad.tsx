@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { 
   ArrowLeft, 
@@ -8,13 +8,15 @@ import {
   Flame, 
   Diamond,
   Star,
-  Clock,
   Trophy,
-  Zap
+  Users,
+  Heart,
+  Briefcase,
+  Sparkles
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { Card } from '@/components/ui/card';
+import MissionPopup from '@/components/MissionPopup';
 
 interface Mission {
   id: number;
@@ -31,7 +33,7 @@ const PracticeRoad = () => {
   const { category } = useParams();
   const navigate = useNavigate();
   const [selectedMission, setSelectedMission] = useState<Mission | null>(null);
-  const [completedAnimations, setCompletedAnimations] = useState<Set<number>>(new Set());
+  const [showMissionPopup, setShowMissionPopup] = useState(false);
 
   // Get mission data based on category
   const getMissionData = () => {
@@ -40,6 +42,8 @@ const PracticeRoad = () => {
         return {
           title: 'Dating & Romance',
           chapterNumber: 1,
+          icon: Heart,
+          color: 'from-pink-500 to-red-500',
           missions: [
             {
               id: 1,
@@ -147,6 +151,8 @@ const PracticeRoad = () => {
         return {
           title: 'Job Interviews',
           chapterNumber: 2,
+          icon: Briefcase,
+          color: 'from-blue-500 to-indigo-500',
           missions: [
             {
               id: 11,
@@ -184,6 +190,8 @@ const PracticeRoad = () => {
         return {
           title: 'Charisma & Social Skills',
           chapterNumber: 3,
+          icon: Sparkles,
+          color: 'from-purple-500 to-pink-500',
           missions: [
             {
               id: 21,
@@ -211,69 +219,70 @@ const PracticeRoad = () => {
         return {
           title: 'Practice Road',
           chapterNumber: 1,
+          icon: Users,
+          color: 'from-slate-500 to-slate-600',
           missions: []
         };
     }
   };
 
-  const { title, chapterNumber, missions } = getMissionData();
+  const { title, chapterNumber, icon: CategoryIcon, color, missions } = getMissionData();
 
   const completedMissions = missions.filter(m => m.status === 'completed').length;
   const totalMissions = missions.length;
   const progressPercentage = (completedMissions / totalMissions) * 100;
 
   const getMissionIcon = (mission: Mission) => {
-    if (mission.status === 'completed') return <CheckCircle className="w-6 h-6 text-green-400" />;
-    if (mission.status === 'locked') return <Lock className="w-6 h-6 text-slate-500" />;
-    if (mission.type === 'boss') return <Flame className="w-6 h-6 text-orange-400" />;
-    if (mission.type === 'premium') return <Diamond className="w-6 h-6 text-purple-400" />;
-    if (mission.type === 'video') return <Play className="w-6 h-6 text-blue-400" />;
-    return <Star className="w-6 h-6 text-yellow-400" />;
+    if (mission.status === 'completed') return CheckCircle;
+    if (mission.status === 'locked') return Lock;
+    if (mission.type === 'boss') return Flame;
+    if (mission.type === 'premium') return Diamond;
+    if (mission.type === 'video') return Play;
+    return Star;
   };
 
   const getMissionNodeStyle = (mission: Mission) => {
-    const baseClasses = "relative w-16 h-16 rounded-full flex items-center justify-center transition-all duration-300 border-2 cursor-pointer";
+    const baseClasses = "relative w-20 h-20 rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer shadow-lg transform hover:scale-105";
     
     if (mission.status === 'completed') {
-      return `${baseClasses} bg-green-500/20 border-green-400 shadow-lg shadow-green-400/30`;
+      return `${baseClasses} bg-gradient-to-br from-green-400 to-green-600 shadow-green-400/30`;
     }
     if (mission.status === 'current') {
-      return `${baseClasses} bg-primary/20 border-primary shadow-lg shadow-primary/40 animate-pulse`;
+      return `${baseClasses} bg-gradient-to-br ${color} shadow-primary/40 animate-pulse`;
     }
     if (mission.status === 'available') {
-      return `${baseClasses} bg-slate-700/50 border-slate-600 hover:border-primary hover:bg-primary/10`;
+      return `${baseClasses} bg-gradient-to-br from-slate-600 to-slate-700 shadow-slate-500/30 hover:shadow-primary/30`;
     }
     if (mission.type === 'boss') {
-      return `${baseClasses} bg-gradient-to-r from-orange-500/20 to-red-500/20 border-orange-400 shadow-lg shadow-orange-400/30`;
+      return `${baseClasses} bg-gradient-to-br from-orange-400 to-red-500 shadow-orange-400/40`;
     }
     if (mission.type === 'premium') {
-      return `${baseClasses} bg-gradient-to-r from-purple-500/20 to-pink-500/20 border-purple-400 shadow-lg shadow-purple-400/30`;
+      return `${baseClasses} bg-gradient-to-br from-purple-400 to-pink-500 shadow-purple-400/40`;
     }
-    return `${baseClasses} bg-slate-800/50 border-slate-700`;
+    return `${baseClasses} bg-gradient-to-br from-slate-700 to-slate-800 shadow-slate-600/20`;
   };
 
-  const getPathStyle = (index: number) => {
-    const mission = missions[index];
-    if (mission.status === 'completed') {
-      return "bg-gradient-to-b from-green-400 to-green-600";
+  const getPathStyle = (fromMission: Mission, toMission: Mission) => {
+    if (fromMission.status === 'completed' && toMission.status === 'completed') {
+      return "bg-gradient-to-r from-green-400 to-green-400";
     }
-    if (mission.status === 'current' && index > 0) {
-      return "bg-gradient-to-b from-green-400 to-primary";
+    if (fromMission.status === 'completed' && toMission.status === 'current') {
+      return "bg-gradient-to-r from-green-400 to-primary";
     }
-    return "bg-slate-700";
+    if (fromMission.status === 'completed') {
+      return "bg-gradient-to-r from-green-400 to-slate-600";
+    }
+    return "bg-slate-600";
   };
 
   const handleMissionClick = (mission: Mission) => {
-    if (mission.status === 'locked') return;
-    
-    // Add haptic feedback simulation
-    if ('vibrate' in navigator) {
-      navigator.vibrate(50);
-    }
-    
     setSelectedMission(mission);
+    setShowMissionPopup(true);
+  };
+
+  const handleStartMission = (mission: Mission) => {
+    setShowMissionPopup(false);
     
-    // Navigate to mission after a brief delay for visual feedback
     setTimeout(() => {
       if (mission.type === 'premium') {
         navigate('/upgrade');
@@ -283,13 +292,29 @@ const PracticeRoad = () => {
     }, 150);
   };
 
+  const generatePath = () => {
+    const radius = 120;
+    const centerX = 200;
+    const centerY = 200;
+    const angleStep = (Math.PI * 2) / missions.length;
+    
+    return missions.map((_, index) => {
+      const angle = index * angleStep - Math.PI / 2; // Start from top
+      const x = centerX + radius * Math.cos(angle);
+      const y = centerY + radius * Math.sin(angle);
+      return { x, y };
+    });
+  };
+
+  const positions = generatePath();
+
   return (
     <div 
       className="min-h-screen pb-20 pt-16"
       style={{ background: 'var(--gradient-background)' }}
     >
       {/* Header */}
-      <div className="fixed top-0 left-0 right-0 z-50 px-4 pt-4 pb-2" style={{ background: 'var(--gradient-background)' }}>
+      <div className="fixed top-0 left-0 right-0 z-40 px-4 pt-4 pb-2" style={{ background: 'var(--gradient-background)' }}>
         <div className="flex items-center justify-between mb-4">
           <Button
             variant="ghost"
@@ -301,10 +326,13 @@ const PracticeRoad = () => {
             Back
           </Button>
           <div className="text-center">
-            <h1 className="text-lg font-display font-bold text-white">{title}</h1>
+            <div className="flex items-center justify-center gap-2 mb-1">
+              <CategoryIcon className="w-5 h-5 text-white" />
+              <h1 className="text-lg font-display font-bold text-white">{title}</h1>
+            </div>
             <p className="text-sm text-slate-300">Chapter {chapterNumber}</p>
           </div>
-          <div className="w-16" /> {/* Spacer */}
+          <div className="w-16" />
         </div>
 
         {/* Progress Bar */}
@@ -328,118 +356,94 @@ const PracticeRoad = () => {
       </div>
 
       {/* Mission Road */}
-      <div className="px-8 pt-32">
-        <div className="relative max-w-md mx-auto">
-          {missions.map((mission, index) => (
-            <div key={mission.id} className="relative">
-              {/* Mission Node */}
-              <div 
-                className={`flex items-center ${index % 2 === 0 ? 'justify-start' : 'justify-end'} mb-8`}
-              >
-                <div className="flex items-center gap-4">
-                  {index % 2 === 1 && (
-                    <Card 
-                      className={`p-3 max-w-[200px] card-warm cursor-pointer transform transition-all duration-200 ${
-                        selectedMission?.id === mission.id ? 'scale-105' : 'hover:scale-102'
-                      } ${mission.status === 'locked' ? 'opacity-50' : ''}`}
-                      onClick={() => handleMissionClick(mission)}
-                    >
-                      <div className="text-right">
-                        <div className="flex items-center justify-end gap-2 mb-1">
-                          {mission.type === 'boss' && <Flame className="w-3 h-3 text-orange-400" />}
-                          {mission.type === 'premium' && <Diamond className="w-3 h-3 text-purple-400" />}
-                          <h3 className="text-sm font-semibold text-white">{mission.title}</h3>
-                        </div>
-                        <p className="text-xs text-slate-300 mb-2">{mission.description}</p>
-                        <div className="flex items-center justify-end gap-3 text-xs text-slate-400">
-                          <div className="flex items-center gap-1">
-                            <Clock className="w-3 h-3" />
-                            {mission.duration}
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Zap className="w-3 h-3 text-yellow-400" />
-                            {mission.xpReward} XP
-                          </div>
-                        </div>
-                      </div>
-                    </Card>
-                  )}
+      <div className="px-4 pt-32 pb-8">
+        <div className="relative w-full max-w-lg mx-auto" style={{ height: '500px' }}>
+          {/* Connection Paths */}
+          <svg className="absolute inset-0 w-full h-full pointer-events-none">
+            {missions.map((mission, index) => {
+              if (index === missions.length - 1) return null;
+              const startPos = positions[index];
+              const endPos = positions[index + 1];
+              
+              return (
+                <line
+                  key={`path-${index}`}
+                  x1={startPos.x}
+                  y1={startPos.y}
+                  x2={endPos.x}
+                  y2={endPos.y}
+                  stroke="currentColor"
+                  strokeWidth="3"
+                  className={getPathStyle(mission, missions[index + 1])}
+                  strokeDasharray={mission.status === 'locked' ? "8,8" : "none"}
+                />
+              );
+            })}
+          </svg>
 
-                  {/* Mission Node Circle */}
-                  <div 
-                    className={getMissionNodeStyle(mission)}
-                    onClick={() => handleMissionClick(mission)}
-                  >
-                    {getMissionIcon(mission)}
-                    
-                    {/* Boss Mission Fire Effect */}
-                    {mission.type === 'boss' && mission.status !== 'locked' && (
-                      <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-orange-400 to-red-500 opacity-20 animate-pulse" />
-                    )}
-                    
-                    {/* Premium Mission Glow */}
-                    {mission.type === 'premium' && (
-                      <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-purple-400 to-pink-400 opacity-30 animate-pulse" />
-                    )}
-                  </div>
-
-                  {index % 2 === 0 && (
-                    <Card 
-                      className={`p-3 max-w-[200px] card-warm cursor-pointer transform transition-all duration-200 ${
-                        selectedMission?.id === mission.id ? 'scale-105' : 'hover:scale-102'
-                      } ${mission.status === 'locked' ? 'opacity-50' : ''}`}
-                      onClick={() => handleMissionClick(mission)}
-                    >
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3 className="text-sm font-semibold text-white">{mission.title}</h3>
-                        {mission.type === 'boss' && <Flame className="w-3 h-3 text-orange-400" />}
-                        {mission.type === 'premium' && <Diamond className="w-3 h-3 text-purple-400" />}
-                      </div>
-                      <p className="text-xs text-slate-300 mb-2">{mission.description}</p>
-                      <div className="flex items-center gap-3 text-xs text-slate-400">
-                        <div className="flex items-center gap-1">
-                          <Clock className="w-3 h-3" />
-                          {mission.duration}
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Zap className="w-3 h-3 text-yellow-400" />
-                          {mission.xpReward} XP
-                        </div>
-                      </div>
-                    </Card>
+          {/* Mission Nodes */}
+          {missions.map((mission, index) => {
+            const position = positions[index];
+            const MissionIcon = getMissionIcon(mission);
+            
+            return (
+              <div key={mission.id} className="absolute" style={{ 
+                left: position.x - 40, 
+                top: position.y - 40,
+                transform: 'translate(0, 0)'
+              }}>
+                {/* Mission Circle */}
+                <div 
+                  className={getMissionNodeStyle(mission)}
+                  onClick={() => handleMissionClick(mission)}
+                >
+                  <MissionIcon className="w-8 h-8 text-white" />
+                  
+                  {/* Special Effects */}
+                  {mission.type === 'boss' && mission.status !== 'locked' && (
+                    <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-orange-400 to-red-500 opacity-20 animate-pulse" />
                   )}
+                  
+                  {mission.type === 'premium' && (
+                    <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-purple-400 to-pink-400 opacity-30 animate-pulse" />
+                  )}
+                </div>
+
+                {/* Mission Title */}
+                <div className="mt-3 text-center">
+                  <h3 className="text-sm font-medium text-white leading-tight max-w-[100px] mx-auto">
+                    {mission.title}
+                  </h3>
                 </div>
               </div>
-
-              {/* Connection Path */}
-              {index < missions.length - 1 && (
-                <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-8 -mt-4 mb-4">
-                  <div className={`w-full h-full ${getPathStyle(index)} transition-all duration-500`} />
-                </div>
-              )}
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Chapter Complete Celebration */}
         {progressPercentage === 100 && (
-          <Card className="mt-8 p-6 card-warm text-center animate-scale-in">
+          <div className="mt-8 p-6 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30 rounded-xl text-center animate-scale-in">
             <Trophy className="w-12 h-12 text-yellow-500 mx-auto mb-4" />
             <h3 className="text-lg font-display font-bold text-gradient-xp mb-2">
               Chapter Complete! 🎉
             </h3>
             <p className="text-sm text-muted-foreground mb-4">
-              You've mastered the basics of dating communication. Ready for the next challenge?
+              You've mastered the basics of {title.toLowerCase()}. Ready for the next challenge?
             </p>
             <Button className="w-full">
-              Continue to Chapter 2
+              Continue to Chapter {chapterNumber + 1}
             </Button>
-          </Card>
+          </div>
         )}
       </div>
 
-      {/* Bottom Spacing */}
-      <div className="h-20" />
+      {/* Mission Popup */}
+      <MissionPopup
+        isOpen={showMissionPopup}
+        onClose={() => setShowMissionPopup(false)}
+        mission={selectedMission}
+        onStartMission={handleStartMission}
+      />
     </div>
   );
 };
