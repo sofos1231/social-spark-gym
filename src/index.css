@@ -57,12 +57,6 @@
     --xp-gold: 45 93% 58%;
     --xp-diamond: 262 83% 68%;
 
-    /* Mission Road Gamification Colors */
-    --gold: 45 93% 58%;                 /* Premium gold for completed missions */
-    --orange-400: 25 95% 58%;           /* Boss mission orange */
-    --purple-400: 262 83% 58%;          /* Premium mission purple */
-    --emerald-400: 142 76% 47%;         /* Success green variant */
-
     /* Category themes - distinct color palettes */
     --dating-primary: 300 76% 62%;
     --dating-secondary: 320 85% 75%;
@@ -120,15 +114,6 @@
     --shadow-glow-success: 0 8px 24px hsl(var(--success) / 0.4), 0 0 0 1px hsl(var(--success) / 0.1);
     --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15);
     --shadow-glow-blue: 0 0 20px hsl(var(--card-glow) / 0.6), 0 0 40px hsl(var(--card-glow) / 0.3);
-    
-    /* Mission Road Shadow System */
-    --shadow-glow-gold: 0 8px 24px hsl(var(--gold) / 0.4), 0 0 0 1px hsl(var(--gold) / 0.2);
-    --shadow-glow-orange: 0 8px 24px hsl(var(--orange-400) / 0.4), 0 0 0 1px hsl(var(--orange-400) / 0.2);
-    --shadow-glow-purple: 0 8px 24px hsl(var(--purple-400) / 0.4), 0 0 0 1px hsl(var(--purple-400) / 0.2);
-    --shadow-glow-orange-intense: 0 12px 32px hsl(var(--orange-400) / 0.6), 0 0 0 1px hsl(var(--orange-400) / 0.3);
-    --shadow-glow-purple-intense: 0 12px 32px hsl(var(--purple-400) / 0.6), 0 0 0 1px hsl(var(--purple-400) / 0.3);
-    --shadow-glow-primary-intense: 0 12px 32px hsl(var(--primary) / 0.6), 0 0 0 1px hsl(var(--primary) / 0.3);
-    --shadow-subtle: 0 2px 8px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.1);
 
     /* High-contrast text tokens - optimized for navy */
     --text-primary: 0 0% 100%;          /* #FFFFFF - titles, metrics */
