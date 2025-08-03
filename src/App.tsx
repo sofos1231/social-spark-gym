@@ -1,9 +1,10 @@
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import PageTransition from "./components/PageTransition";
+import { StatusBar } from 'expo-status-bar';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import PracticeHub from "./pages/PracticeHub";
 import PracticeRoad from "./pages/PracticeRoad";
 import QuickDrill from "./pages/QuickDrill";
@@ -16,38 +17,48 @@ import Badges from "./pages/Badges";
 import LevelMilestones from "./pages/LevelMilestones";
 import Navigation from "./components/Navigation";
 import TopStatusBar from "./components/TopStatusBar";
-import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
+const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
+
+function MainTabs() {
+  return (
+    <>
+      <TopStatusBar />
+      <Tab.Navigator
+        screenOptions={{
+          headerShown: false,
+          tabBarStyle: { display: 'none' } // Hide default tab bar, we'll use custom Navigation
+        }}
+      >
+        <Tab.Screen name="PracticeHub" component={PracticeHub} />
+        <Tab.Screen name="QuickDrill" component={QuickDrill} />
+        <Tab.Screen name="Stats" component={Stats} />
+        <Tab.Screen name="Profile" component={Profile} />
+        <Tab.Screen name="Shop" component={Shop} />
+      </Tab.Navigator>
+      <Navigation />
+    </>
+  );
+}
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <div className="relative overflow-hidden">
-          <TopStatusBar />
-          <Routes>
-            <Route path="/" element={<PageTransition currentPath="/"><PracticeHub /></PageTransition>} />
-            <Route path="/practice-road/:category" element={<PageTransition currentPath="/practice-road"><PracticeRoad /></PageTransition>} />
-            <Route path="/practice" element={<PageTransition currentPath="/practice"><PracticeHub /></PageTransition>} />
-            <Route path="/quick-drill" element={<PageTransition currentPath="/quick-drill"><QuickDrill /></PageTransition>} />
-            <Route path="/shadow-practice" element={<PageTransition currentPath="/shadow-practice"><ShadowPractice /></PageTransition>} />
-            <Route path="/stats" element={<PageTransition currentPath="/stats"><Stats /></PageTransition>} />
-            <Route path="/profile" element={<PageTransition currentPath="/profile"><Profile /></PageTransition>} />
-            <Route path="/upgrade" element={<PageTransition currentPath="/upgrade"><Upgrade /></PageTransition>} />
-            <Route path="/shop" element={<PageTransition currentPath="/shop"><Shop /></PageTransition>} />
-            <Route path="/badges" element={<PageTransition currentPath="/badges"><Badges /></PageTransition>} />
-            <Route path="/level-milestones" element={<PageTransition currentPath="/level-milestones"><LevelMilestones /></PageTransition>} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<PageTransition currentPath="*"><NotFound /></PageTransition>} />
-          </Routes>
-          <Navigation />
-        </div>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
+  <SafeAreaProvider>
+    <QueryClientProvider client={queryClient}>
+      <NavigationContainer>
+        <StatusBar style="auto" />
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Main" component={MainTabs} />
+          <Stack.Screen name="PracticeRoad" component={PracticeRoad} />
+          <Stack.Screen name="ShadowPractice" component={ShadowPractice} />
+          <Stack.Screen name="Upgrade" component={Upgrade} />
+          <Stack.Screen name="Badges" component={Badges} />
+          <Stack.Screen name="LevelMilestones" component={LevelMilestones} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </QueryClientProvider>
+  </SafeAreaProvider>
 );
 
 export default App;
