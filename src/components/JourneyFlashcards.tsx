@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import StreakFireButton from '@/components/StreakFireButton';
+// import StreakFireButton from '@/components/StreakFireButton';
 
 interface InfoCardData {
   id: string;
@@ -133,15 +133,12 @@ const JourneyFlashcards = () => {
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
-        {/* Special handling for progress card to show StreakFireButton */}
+        {/* Progress card placeholder */}
         {currentCard.id === 'progress' ? (
           <div className="w-full h-full animate-scale-in">
-            <StreakFireButton
-              streak={7}
-              weeklyXP={2890}
-              currentLevel={3}
-              levelTitle="Rising Charmer"
-            />
+            <div className="w-full h-full rounded-xl bg-gradient-to-r from-orange-500/20 to-red-500/20 border border-orange-400 p-6 flex items-center justify-center">
+              <span className="text-2xl">🔥</span>
+            </div>
           </div>
         ) : (
           <div 
