@@ -1,6 +1,4 @@
-import 'react-native-gesture-handler/jestSetup';
-import { registerRootComponent } from 'expo';
-import App from './App';
+import { createRoot } from 'react-dom/client'
+import App from './App.tsx'
 
-// Register the main component with Expo
-registerRootComponent(App);
+createRoot(document.getElementById("root")!).render(<App />);
