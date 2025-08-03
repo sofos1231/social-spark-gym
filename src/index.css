@@ -1,0 +1,107 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* React Native inspired design system for web */
+@layer base {
+  :root {
+    /* Colors from React Native themes */
+    --background: #10131C;
+    --background-deep: #0D0F1A;
+    --background-elevated: #141519;
+    --foreground: #FFFFFF;
+    
+    --card: #1C2137;
+    --card-foreground: #FFFFFF;
+    --card-surface: #252A3F;
+    
+    --primary: #8B5CF6;
+    --primary-foreground: #FFFFFF;
+    --primary-glow: #A78BFA;
+    
+    --secondary: #F97316;
+    --secondary-foreground: #FFFFFF;
+    --secondary-glow: #FB923C;
+    
+    --success: #10B981;
+    --success-foreground: #FFFFFF;
+    --success-glow: #34D399;
+    
+    --destructive: #EF4444;
+    --destructive-foreground: #FFFFFF;
+    --destructive-glow: #F87171;
+    
+    --muted: #475569;
+    --muted-foreground: #B6B6B6;
+    
+    --border: #334155;
+    --input: #1E293B;
+    --ring: #8B5CF6;
+    
+    --radius: 0.75rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    background: linear-gradient(135deg, #0D0F1A 0%, #141519 100%);
+    min-height: 100vh;
+  }
+}
+
+@layer components {
+  /* React Native inspired components */
+  .rn-container {
+    @apply flex-1 px-4;
+    background-color: var(--background);
+  }
+  
+  .rn-card {
+    @apply rounded-xl p-6 mb-4 border;
+    background-color: var(--card);
+    border-color: var(--border);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  }
+  
+  .rn-button-primary {
+    @apply px-6 py-3 rounded-lg font-semibold text-white transition-all duration-200 active:scale-95;
+    background-color: var(--primary);
+  }
+  
+  .rn-button-secondary {
+    @apply px-5 py-3 rounded-lg font-semibold text-white transition-all duration-200 active:scale-95;
+    background-color: var(--secondary);
+  }
+  
+  .rn-button-outline {
+    @apply px-5 py-3 rounded-lg font-semibold text-white border transition-all duration-200 active:scale-95;
+    background-color: transparent;
+    border-color: var(--border);
+  }
+  
+  .rn-text-hero {
+    @apply text-4xl font-bold mb-2;
+    color: var(--foreground);
+  }
+  
+  .rn-text-large {
+    @apply text-xl font-semibold mb-2;
+    color: var(--foreground);
+  }
+  
+  .rn-text-subtitle {
+    @apply text-base;
+    color: var(--muted-foreground);
+  }
+  
+  /* Navigation bar styling */
+  .rn-nav {
+    background-color: var(--card);
+    border-top: 1px solid var(--border);
+  }
+}

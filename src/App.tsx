@@ -1,74 +1,74 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import { colors } from './styles/themes';
+import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
+import { Home, BarChart3, ShoppingBag, User } from 'lucide-react';
 
-export default function App() {
+// Import the new React Native-inspired components
+import PracticeScreen from './screens/PracticeScreen';
+import StatsScreen from './screens/StatsScreen';
+import ShopScreen from './screens/ShopScreen';
+import ProfileScreen from './screens/ProfileScreen';
+
+// React Native-inspired Bottom Navigation
+const BottomNavigation = () => {
+  const location = useLocation();
+  
+  const navItems = [
+    { path: '/', icon: Home, label: 'Practice' },
+    { path: '/stats', icon: BarChart3, label: 'Stats' },
+    { path: '/shop', icon: ShoppingBag, label: 'Shop' },
+    { path: '/profile', icon: User, label: 'Profile' },
+  ];
+
   return (
-    <SafeAreaProvider>
-      <StatusBar style="light" backgroundColor={colors.background} />
-      <SafeAreaView style={styles.container}>
-        <View style={styles.content}>
-          <Text style={styles.title}>Practice App</Text>
-          <Text style={styles.subtitle}>React Native Conversion Complete</Text>
-          
-          <View style={styles.card}>
-            <Text style={styles.cardTitle}>Ready for Development</Text>
-            <Text style={styles.cardText}>
-              Your app has been successfully converted to React Native with Expo.
-              The foundation is now in place for further development.
-            </Text>
-          </View>
-        </View>
-      </SafeAreaView>
-    </SafeAreaProvider>
+    <div className="fixed bottom-0 left-0 right-0 h-20 rn-nav flex justify-around items-center px-4 z-50">
+      {navItems.map((item) => {
+        const isActive = location.pathname === item.path;
+        const IconComponent = item.icon;
+        
+        return (
+          <Link
+            key={item.path}
+            to={item.path}
+            className="flex flex-col items-center justify-center flex-1 py-2"
+          >
+            <IconComponent 
+              size={24} 
+              color={isActive ? '#8B5CF6' : '#B6B6B6'} 
+            />
+            <span 
+              className={`text-xs font-semibold mt-1 ${
+                isActive ? 'text-[#8B5CF6]' : 'text-[#B6B6B6]'
+              }`}
+            >
+              {item.label}
+            </span>
+          </Link>
+        );
+      })}
+    </div>
+  );
+};
+
+function AppContent() {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-[#0D0F1A] to-[#141519] text-white">
+      <Routes>
+        <Route path="/" element={<PracticeScreen />} />
+        <Route path="/stats" element={<StatsScreen />} />
+        <Route path="/shop" element={<ShopScreen />} />
+        <Route path="/profile" element={<ProfileScreen />} />
+      </Routes>
+      <BottomNavigation />
+    </div>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  content: {
-    flex: 1,
-    padding: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: colors.foreground,
-    marginBottom: 8,
-    textAlign: 'center',
-  },
-  subtitle: {
-    fontSize: 16,
-    color: colors.mutedForeground,
-    marginBottom: 32,
-    textAlign: 'center',
-  },
-  card: {
-    backgroundColor: colors.card,
-    padding: 24,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: colors.border,
-    maxWidth: 300,
-  },
-  cardTitle: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: colors.foreground,
-    marginBottom: 12,
-    textAlign: 'center',
-  },
-  cardText: {
-    fontSize: 14,
-    color: colors.mutedForeground,
-    lineHeight: 20,
-    textAlign: 'center',
-  },
-});
+function App() {
+  return (
+    <Router>
+      <AppContent />
+    </Router>
+  );
+}
+
+export default App;
