@@ -55,12 +55,10 @@ npm run dev
 This project is built with:
 
 - Vite
-- TypeScript 
+- TypeScript
 - React
-- React Router DOM
+- shadcn-ui
 - Tailwind CSS
-- Lucide React Icons
-- React Native-inspired Design System
 
 ## How can I deploy this project?
 

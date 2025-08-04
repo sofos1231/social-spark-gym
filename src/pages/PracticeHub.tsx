@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Heart, Users, Briefcase, Mic, Smile, Crown, Star, LucideIcon, Flame, Zap, Brain, Lock, ChevronDown, ChevronUp, CheckCircle, Play, Diamond, Clock, Trophy } from 'lucide-react';
-// import CategorySection from '@/components/CategorySection';
+import CategorySection from '@/components/CategorySection';
 import JourneyFlashcards from '@/components/JourneyFlashcards';
 import ProfileCard from '@/components/ProfileCard';
 import WeeklyStreakChart from '@/components/WeeklyStreakChart';
@@ -541,12 +541,19 @@ const PracticeHub = () => {
       <WeeklyStreakChart />
 
 
-      {/* Category Sections placeholder */}
+      {/* Category Sections with Horizontal Carousels */}
       <div className="space-y-8">
-        <div className="text-center p-8 bg-card rounded-xl mx-4">
-          <h3 className="text-xl font-semibold text-foreground mb-2">Categories Coming Soon</h3>
-          <p className="text-muted-foreground">Practice categories will be available after full conversion</p>
-        </div>
+        {categories.map((category, index) => (
+          <CategorySection
+            key={category.id}
+            title={category.title}
+            description={category.description}
+            icon={category.icon}
+            missions={category.missions}
+            onMissionClick={handleMissionClick}
+            animationDelay={index * 200}
+          />
+        ))}
       </div>
 
       {/* Stats Section */}

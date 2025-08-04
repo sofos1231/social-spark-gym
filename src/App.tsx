@@ -1,74 +1,53 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { Home, BarChart3, ShoppingBag, User } from 'lucide-react';
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import PageTransition from "./components/PageTransition";
+import PracticeHub from "./pages/PracticeHub";
+import PracticeRoad from "./pages/PracticeRoad";
+import QuickDrill from "./pages/QuickDrill";
+import ShadowPractice from "./pages/ShadowPractice";
+import Stats from "./pages/Stats";
+import Profile from "./pages/Profile";
+import Upgrade from "./pages/Upgrade";
+import Shop from "./pages/Shop";
+import Badges from "./pages/Badges";
+import LevelMilestones from "./pages/LevelMilestones";
+import Navigation from "./components/Navigation";
+import TopStatusBar from "./components/TopStatusBar";
+import NotFound from "./pages/NotFound";
 
-// Import the new React Native-inspired components
-import PracticeScreen from './screens/PracticeScreen';
-import StatsScreen from './screens/StatsScreen';
-import ShopScreen from './screens/ShopScreen';
-import ProfileScreen from './screens/ProfileScreen';
+const queryClient = new QueryClient();
 
-// React Native-inspired Bottom Navigation
-const BottomNavigation = () => {
-  const location = useLocation();
-  
-  const navItems = [
-    { path: '/', icon: Home, label: 'Practice' },
-    { path: '/stats', icon: BarChart3, label: 'Stats' },
-    { path: '/shop', icon: ShoppingBag, label: 'Shop' },
-    { path: '/profile', icon: User, label: 'Profile' },
-  ];
-
-  return (
-    <div className="fixed bottom-0 left-0 right-0 h-20 rn-nav flex justify-around items-center px-4 z-50">
-      {navItems.map((item) => {
-        const isActive = location.pathname === item.path;
-        const IconComponent = item.icon;
-        
-        return (
-          <Link
-            key={item.path}
-            to={item.path}
-            className="flex flex-col items-center justify-center flex-1 py-2"
-          >
-            <IconComponent 
-              size={24} 
-              color={isActive ? '#8B5CF6' : '#B6B6B6'} 
-            />
-            <span 
-              className={`text-xs font-semibold mt-1 ${
-                isActive ? 'text-[#8B5CF6]' : 'text-[#B6B6B6]'
-              }`}
-            >
-              {item.label}
-            </span>
-          </Link>
-        );
-      })}
-    </div>
-  );
-};
-
-function AppContent() {
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0D0F1A] to-[#141519] text-white">
-      <Routes>
-        <Route path="/" element={<PracticeScreen />} />
-        <Route path="/stats" element={<StatsScreen />} />
-        <Route path="/shop" element={<ShopScreen />} />
-        <Route path="/profile" element={<ProfileScreen />} />
-      </Routes>
-      <BottomNavigation />
-    </div>
-  );
-}
-
-function App() {
-  return (
-    <Router>
-      <AppContent />
-    </Router>
-  );
-}
+const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <TooltipProvider>
+      <Toaster />
+      <Sonner />
+      <BrowserRouter>
+        <div className="relative overflow-hidden">
+          <TopStatusBar />
+          <Routes>
+            <Route path="/" element={<PageTransition currentPath="/"><PracticeHub /></PageTransition>} />
+            <Route path="/practice-road/:category" element={<PageTransition currentPath="/practice-road"><PracticeRoad /></PageTransition>} />
+            <Route path="/practice" element={<PageTransition currentPath="/practice"><PracticeHub /></PageTransition>} />
+            <Route path="/quick-drill" element={<PageTransition currentPath="/quick-drill"><QuickDrill /></PageTransition>} />
+            <Route path="/shadow-practice" element={<PageTransition currentPath="/shadow-practice"><ShadowPractice /></PageTransition>} />
+            <Route path="/stats" element={<PageTransition currentPath="/stats"><Stats /></PageTransition>} />
+            <Route path="/profile" element={<PageTransition currentPath="/profile"><Profile /></PageTransition>} />
+            <Route path="/upgrade" element={<PageTransition currentPath="/upgrade"><Upgrade /></PageTransition>} />
+            <Route path="/shop" element={<PageTransition currentPath="/shop"><Shop /></PageTransition>} />
+            <Route path="/badges" element={<PageTransition currentPath="/badges"><Badges /></PageTransition>} />
+            <Route path="/level-milestones" element={<PageTransition currentPath="/level-milestones"><LevelMilestones /></PageTransition>} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<PageTransition currentPath="*"><NotFound /></PageTransition>} />
+          </Routes>
+          <Navigation />
+        </div>
+      </BrowserRouter>
+    </TooltipProvider>
+  </QueryClientProvider>
+);
 
 export default App;
