@@ -22,6 +22,9 @@ const buttonVariants = cva(
         success: "btn-success",
         destructive: "btn-destructive",
         
+        // SocialGym metallic brand buttons
+        brand: "sg-btn-metallic",
+        
         // Utility variants
         ghost: "px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200 hover:bg-muted hover:text-foreground",
         link: "text-primary underline-offset-4 hover:underline font-medium transition-all duration-200",

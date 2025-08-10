@@ -391,6 +391,60 @@
     border: 1px solid hsl(var(--foreground) / 0.12);
   }
 
+  /* SocialGym specific branding */
+  .brand-emblem--sg {
+    width: 64px;
+    height: 64px;
+    background: var(--card-metallic);
+    border: 1px solid hsl(var(--foreground) / 0.12);
+    box-shadow: 0 8px 24px hsl(var(--card-glow) / 0.45), inset 0 1px 0 hsl(var(--foreground) / 0.12);
+  }
+
+  /* Metallic dark-blue action button */
+  .sg-btn-metallic {
+    background: var(--card-metallic);
+    color: hsl(var(--foreground));
+    border: 1px solid hsl(var(--foreground) / 0.12);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 30px -10px hsl(var(--card-glow) / 0.35), inset 0 1px 0 hsl(var(--foreground) / 0.12);
+  }
+
+  .sg-btn-metallic::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, hsla(0,0%,100%,0.12), transparent 60%);
+    pointer-events: none;
+  }
+
+  .sg-btn-metallic::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 20px;
+    height: 20px;
+    background: radial-gradient(circle, hsla(0,0%,100%,0.45) 0%, transparent 60%);
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    transition: transform 300ms var(--animation-smooth), opacity 300ms var(--animation-smooth);
+  }
+
+  .sg-btn-metallic:hover {
+    box-shadow: 0 12px 36px -12px hsl(var(--card-glow) / 0.45), inset 0 1px 0 hsl(var(--foreground) / 0.15);
+  }
+
+  .sg-btn-metallic:active {
+    transform: scale(0.98);
+  }
+
+  .sg-btn-metallic:active::after {
+    transform: translate(-50%, -50%) scale(12);
+    opacity: 0.25;
+    transition: transform 300ms var(--animation-smooth), opacity 380ms var(--animation-smooth);
+  }
+
   /* Gamification Components */
   .xp-badge {
     @apply inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-semibold;

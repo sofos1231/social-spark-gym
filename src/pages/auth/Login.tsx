@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { Checkbox } from "@/components/ui/checkbox";
 import { X, Apple, Mail } from "lucide-react";
-import authBg from "@/assets/auth-bg.jpg";
+
 
 const schema = z.object({
   email: z.string().email(),
@@ -38,8 +38,8 @@ export default function Login() {
 
   // Page SEO
   useEffect(() => {
-    document.title = "Sign in – PetCare Social Login";
-    const desc = "Sign in to PetCare with Google, Apple, or Email. Fast, secure, and premium UX.";
+    document.title = "Sign in – SocialGym";
+    const desc = "Start your social training. Sign in to SocialGym via Google, Apple, or Email.";
     let meta = document.querySelector('meta[name="description"]');
     if (!meta) {
       meta = document.createElement('meta');
@@ -98,21 +98,13 @@ export default function Login() {
       className="relative min-h-[100dvh] grid place-items-center"
       style={{ paddingTop: 'env(safe-area-inset-top)', paddingBottom: 'env(safe-area-inset-bottom)' }}
     >
-      {/* Background image */}
-      <img
-        src={authBg}
-        alt="Happy person with their dog, soft light"
-        className="absolute inset-0 h-full w-full object-cover"
-      />
-      {/* Overlay gradient & subtle vignette */}
-      <div
-        className="absolute inset-0"
-        aria-hidden
-        style={{
-          background:
-            'linear-gradient(to bottom, hsl(0 0% 0% / 0.45), hsl(0 0% 0% / 0.6)), radial-gradient(60% 40% at 50% 30%, hsl(var(--primary) / 0.10), transparent 60%)',
-        }}
-      />
+      {/* Immersive SocialGym background */}
+      <div className="absolute inset-0" aria-hidden>
+        <div className="absolute inset-0 bg-gradient-to-b from-[hsl(var(--background-deep))] to-[hsl(var(--background-elevated))]" />
+        <div className="absolute inset-0" style={{ background: 'radial-gradient(60% 40% at 50% 30%, hsl(var(--card-glow) / 0.20), transparent 60%)' }} />
+        <div className="absolute inset-0" style={{ background: 'radial-gradient(1200px 600px at 80% 90%, hsl(var(--foreground) / 0.04), transparent 60%)' }} />
+        <div className="absolute inset-0" style={{ boxShadow: 'inset 0 0 180px hsl(0 0% 0% / 0.45)' }} />
+      </div>
 
       {/* Content */}
       <section className="relative z-10 w-full px-6">
@@ -128,40 +120,36 @@ export default function Login() {
           </button>
 
           {/* Brand emblem */}
-          <div className="brand-emblem mx-auto mb-4 animate-scale-in" style={{ animationDelay: '120ms' }}>
-            {/* Paw glyph */}
+          <div className="brand-emblem brand-emblem--sg mx-auto mb-4 animate-scale-in" style={{ animationDelay: '120ms' }}>
+            {/* Shield glyph */}
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden>
-              <path d="M12 13c-3 0-6 1.5-6 4 0 1.657 1.79 3 4 3h4c2.21 0 4-1.343 4-3 0-2.5-3-4-6-4z" fill="white"/>
-              <circle cx="6.5" cy="8" r="2" fill="white"/>
-              <circle cx="12" cy="6.5" r="2.2" fill="white"/>
-              <circle cx="17.5" cy="8" r="2" fill="white"/>
-              <circle cx="9.5" cy="10.5" r="1.6" fill="white"/>
-              <circle cx="14.5" cy="10.5" r="1.6" fill="white"/>
+              <path d="M12 2l7 3v5c0 5-3.5 9.2-7 10-3.5-.8-7-5-7-10V5l7-3z" fill="white" opacity="0.95"/>
+              <path d="M8.5 12.2c0-2.1 1.8-3.7 3.9-3.7 1 0 1.9.3 2.6.9l-1.1 1.5c-.4-.3-.9-.5-1.5-.5-1.1 0-2 .8-2 1.8 0 1.1.9 1.9 2 1.9.7 0 1.4-.3 1.8-.8V12h-2v-1.6h3.8v2.8c-.8 1.5-2.3 2.4-3.9 2.4-2.1 0-3.9-1.6-3.9-3.8z" fill="hsl(var(--background))"/>
             </svg>
           </div>
 
           {/* Heading & legal */}
           <header className="text-center space-y-2">
             <h1 id="signin-title" className="text-2xl font-semibold leading-tight text-[hsl(var(--text-primary))]">
-              Take care of your beloved
-              <br />
-              Pet
+              Start Your Social Training
             </h1>
             <p className="text-sm text-[hsl(var(--text-muted))]">
-              By continuing, you agree to our{' '}
-              <Link to="#" className="story-link">User Agreement</Link> and{' '}
-              <Link to="#" className="story-link">Privacy Policy</Link>.
+              Level up your confidence, charisma, and communication skills.
+            </p>
+            <p className="text-sm text-[hsl(var(--text-muted))]">
+              By continuing, you agree to our <Link to="/terms" className="story-link">Terms</Link> and <Link to="/privacy" className="story-link">Privacy Policy</Link>.
             </p>
           </header>
 
           {/* Social buttons */}
           <div className="mt-5 space-y-3" aria-label="Sign in options">
-            {/* Google */}
             <Button
               type="button"
-              className="w-full h-14 rounded-2xl justify-start px-4 active:scale-95"
+              variant="brand"
+              className="w-full h-14 rounded-2xl justify-start px-4 active:scale-95 animate-slide-up"
               onClick={() => handleProvider('google')}
               disabled={!!loading}
+              style={{ animationDelay: '180ms' }}
             >
               <span className="mr-3 grid place-items-center rounded-lg bg-white/10 p-2" aria-hidden>
                 {/* Google G */}
@@ -181,12 +169,13 @@ export default function Login() {
               <p className="text-xs text-destructive">Google sign-in failed. Please try again.</p>
             )}
 
-            {/* Apple */}
             <Button
               type="button"
-              className="w-full h-14 rounded-2xl justify-start px-4 active:scale-95"
+              variant="brand"
+              className="w-full h-14 rounded-2xl justify-start px-4 active:scale-95 animate-slide-up"
               onClick={() => handleProvider('apple')}
               disabled={!!loading}
+              style={{ animationDelay: '240ms' }}
             >
               <span className="mr-3 grid place-items-center rounded-lg bg-white/10 p-2" aria-hidden>
                 <Apple className="h-5 w-5" />
@@ -200,12 +189,13 @@ export default function Login() {
               <p className="text-xs text-destructive">Apple sign-in failed. Please try again.</p>
             )}
 
-            {/* Email */}
             <Button
               type="button"
-              className="w-full h-14 rounded-2xl justify-start px-4 active:scale-95"
+              variant="brand"
+              className="w-full h-14 rounded-2xl justify-start px-4 active:scale-95 animate-slide-up"
               onClick={handleEmailContinue}
               disabled={!!loading}
+              style={{ animationDelay: '300ms' }}
             >
               <span className="mr-3 grid place-items-center rounded-lg bg-white/10 p-2" aria-hidden>
                 <Mail className="h-5 w-5" />
@@ -221,7 +211,7 @@ export default function Login() {
           <div className="mt-4">
             <label htmlFor="consent" className="flex items-center gap-3 text-[hsl(var(--text-secondary))] cursor-pointer select-none">
               <Checkbox id="consent" checked={consent} onCheckedChange={(v) => setConsent(Boolean(v))} aria-label="I agree to the terms" />
-              <span className="text-sm">I agree to the Terms and acknowledge the Privacy Policy.</span>
+              <span className="text-sm">I agree to SocialGym's <Link to="/terms" className="story-link">Terms</Link> and acknowledge the <Link to="/privacy" className="story-link">Privacy Policy</Link>.</span>
             </label>
           </div>
 
@@ -244,8 +234,8 @@ export default function Login() {
 
           {/* Footer */}
           <p className="mt-6 text-center text-sm text-[hsl(var(--text-muted))]">
-            New to PetCare?{' '}
-            <Link to="/auth/signup" className="story-link">Create an account</Link>
+            Already have an account?{' '}
+            <Link to="/auth/login" className="story-link">Sign in</Link>
           </p>
 
           {import.meta.env.DEV && (
