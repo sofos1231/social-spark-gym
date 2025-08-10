@@ -130,6 +130,42 @@
     --animation-bounce-subtle: cubic-bezier(0.68, -0.55, 0.265, 1.55);
     --animation-smooth: cubic-bezier(0.4, 0, 0.2, 1);
     --animation-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    /* Panoramic background segment tokens */
+    --panorama-1-a: 265 70% 14%;
+    --panorama-1-b: 275 65% 18%;
+
+    --panorama-2-a: 270 70% 15%;
+    --panorama-2-b: 280 65% 20%;
+
+    --panorama-3-a: 275 72% 16%;
+    --panorama-3-b: 285 65% 21%;
+
+    --panorama-4-a: 280 72% 17%;
+    --panorama-4-b: 290 65% 22%;
+
+    --panorama-5-a: 285 70% 17%;
+    --panorama-5-b: 300 60% 23%;
+
+    --panorama-6-a: 290 68% 18%;
+    --panorama-6-b: 305 60% 24%;
+
+    --panorama-7-a: 295 66% 18%;
+    --panorama-7-b: 310 58% 25%;
+
+    --panorama-8-a: 300 64% 19%;
+    --panorama-8-b: 315 56% 26%;
+
+    --panorama-9-a: 305 62% 19%;
+    --panorama-9-b: 320 54% 27%;
+
+    --panorama-10-a: 260 70% 13%;
+    --panorama-10-b: 270 65% 18%;
+
+    --panorama-11-a: 255 75% 12%;
+    --panorama-11-b: 265 70% 16%;
+
+    --panorama-12-a: 250 75% 12%;
+    --panorama-12-b: 260 70% 16%;
   }
 
   .dark {

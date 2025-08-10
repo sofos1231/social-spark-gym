@@ -24,6 +24,7 @@ import DevBypass from "./pages/dev/DevBypass";
 import ProtectedRoute from "./components/routing/ProtectedRoute";
 import PublicOnlyRoute from "./components/routing/PublicOnlyRoute";
 import AuthProvider from "./contexts/AuthContext";
+import PanoramicBackground from "./components/PanoramicBackground";
 
 const queryClient = new QueryClient();
 
@@ -32,6 +33,7 @@ const AppShell = () => {
   const hideChrome = /^\/(auth|onboarding)(\/|$)/.test(location.pathname);
   return (
     <div className="relative overflow-hidden">
+      <PanoramicBackground />
       {!hideChrome && <TopStatusBar />}
       <Routes>
         <Route path="/auth/login" element={<PageTransition currentPath="/auth/login"><PublicOnlyRoute><Login /></PublicOnlyRoute></PageTransition>} />
