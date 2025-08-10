@@ -364,6 +364,33 @@
     transform: translateY(-2px) scale(1.01);
   }
 
+  /* Glass surfaces for auth */
+  .glass-card {
+    background: hsl(var(--background-deep) / 0.55);
+    border: 1px solid hsl(var(--foreground) / 0.12);
+    box-shadow: var(--shadow-glass);
+    backdrop-filter: blur(18px);
+  }
+
+  .glass-chip {
+    @apply inline-flex items-center justify-center rounded-full;
+    width: 44px;
+    height: 44px;
+    background: hsl(var(--background-deep) / 0.55);
+    border: 1px solid hsl(var(--foreground) / 0.12);
+    backdrop-filter: blur(12px);
+    box-shadow: var(--shadow-card);
+  }
+
+  .brand-emblem {
+    @apply flex items-center justify-center rounded-full shadow-lg;
+    width: 60px;
+    height: 60px;
+    background: var(--gradient-primary);
+    box-shadow: var(--shadow-glow-primary);
+    border: 1px solid hsl(var(--foreground) / 0.12);
+  }
+
   /* Gamification Components */
   .xp-badge {
     @apply inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-semibold;
