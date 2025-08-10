@@ -173,7 +173,7 @@ const Shop = () => {
   };
 
   return (
-    <div className="min-h-screen pb-20 pt-24 text-[#E0E0E0]">
+    <div className="min-h-screen pb-20 pt-24 bg-[#121212] text-[#E0E0E0]">
       {/* Header */}
       <div className="section-mobile">
         <div className="text-center mb-8">

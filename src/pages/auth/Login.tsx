@@ -98,6 +98,13 @@ export default function Login() {
       className="relative min-h-[100dvh] grid place-items-center"
       style={{ paddingTop: 'env(safe-area-inset-top)', paddingBottom: 'env(safe-area-inset-bottom)' }}
     >
+      {/* Immersive SocialGym background */}
+      <div className="absolute inset-0" aria-hidden>
+        <div className="absolute inset-0 bg-gradient-to-b from-[hsl(var(--background-deep))] to-[hsl(var(--background-elevated))]" />
+        <div className="absolute inset-0" style={{ background: 'radial-gradient(60% 40% at 50% 30%, hsl(var(--card-glow) / 0.20), transparent 60%)' }} />
+        <div className="absolute inset-0" style={{ background: 'radial-gradient(1200px 600px at 80% 90%, hsl(var(--foreground) / 0.04), transparent 60%)' }} />
+        <div className="absolute inset-0" style={{ boxShadow: 'inset 0 0 180px hsl(0 0% 0% / 0.45)' }} />
+      </div>
 
       {/* Content */}
       <section className="relative z-10 w-full px-6">
