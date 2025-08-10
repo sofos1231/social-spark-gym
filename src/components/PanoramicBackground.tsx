@@ -41,7 +41,7 @@ const PanoramicBackground: React.FC = () => {
   });
 
   return (
-    <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none select-none">
+    <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none select-none" aria-hidden>
       <div className="h-full will-change-transform" style={containerStyle}>
         {Array.from({ length: segments }).map((_, idx) => {
           const i = idx + 1; // tokens are 1-indexed
@@ -50,7 +50,6 @@ const PanoramicBackground: React.FC = () => {
               key={idx}
               className="inline-block align-top w-screen h-full"
               style={buildSegmentStyle(i)}
-              aria-hidden
             />
           );
         })}

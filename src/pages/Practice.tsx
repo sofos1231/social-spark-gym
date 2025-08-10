@@ -114,7 +114,7 @@ const Practice = () => {
   };
 
   return (
-    <div className="min-h-screen pb-20" style={{ background: 'var(--gradient-background)' }}>
+    <div className="min-h-screen pb-20">
       {/* Header */}
       <div className="section-mobile">
         <div className="text-center mb-8">

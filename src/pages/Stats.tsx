@@ -126,9 +126,6 @@ const Stats = () => {
   return (
     <div 
       className="min-h-screen pb-20 pt-24 px-4"
-      style={{ 
-        background: 'linear-gradient(135deg, hsl(222, 84%, 5%) 0%, hsl(220, 30%, 8%) 50%, hsl(222, 84%, 5%) 100%)'
-      }}
     >
       {/* Header */}
       <div className="text-center mb-12">
