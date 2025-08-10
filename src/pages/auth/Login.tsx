@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { Checkbox } from "@/components/ui/checkbox";
 import { X, Apple, Mail } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog";
 
 
 const schema = z.object({
@@ -38,8 +39,8 @@ export default function Login() {
 
   // Page SEO
   useEffect(() => {
-    document.title = "Sign in – SocialGym";
-    const desc = "Start your social training. Sign in to SocialGym via Google, Apple, or Email.";
+    document.title = "Level Up – Sign in | SocialGym";
+    const desc = "Sign in to SocialGym. Level up fast with Google, Apple, or Email.";
     let meta = document.querySelector('meta[name="description"]');
     if (!meta) {
       meta = document.createElement('meta');
@@ -98,12 +99,12 @@ export default function Login() {
       className="relative min-h-[100dvh] grid place-items-center"
       style={{ paddingTop: 'env(safe-area-inset-top)', paddingBottom: 'env(safe-area-inset-bottom)' }}
     >
-      {/* Immersive SocialGym background */}
-      <div className="absolute inset-0" aria-hidden>
-        <div className="absolute inset-0 bg-gradient-to-b from-[hsl(var(--background-deep))] to-[hsl(var(--background-elevated))]" />
-        <div className="absolute inset-0" style={{ background: 'radial-gradient(60% 40% at 50% 30%, hsl(var(--card-glow) / 0.20), transparent 60%)' }} />
-        <div className="absolute inset-0" style={{ background: 'radial-gradient(1200px 600px at 80% 90%, hsl(var(--foreground) / 0.04), transparent 60%)' }} />
-        <div className="absolute inset-0" style={{ boxShadow: 'inset 0 0 180px hsl(0 0% 0% / 0.45)' }} />
+      {/* Cinematic background */}
+      <div className="absolute inset-0 overflow-hidden" aria-hidden>
+        <div className="hero-bg" />
+        <div className="hero-spotlight" />
+        <div className="hero-noise" />
+        <div className="hero-particles" />
       </div>
 
       {/* Content */}
@@ -128,17 +129,12 @@ export default function Login() {
             </svg>
           </div>
 
-          {/* Heading & legal */}
-          <header className="text-center space-y-2">
+          {/* Heading */}
+          <header className="text-center space-y-1">
             <h1 id="signin-title" className="text-2xl font-semibold leading-tight text-[hsl(var(--text-primary))]">
-              Start Your Social Training
+              Level Up
             </h1>
-            <p className="text-sm text-[hsl(var(--text-muted))]">
-              Level up your confidence, charisma, and communication skills.
-            </p>
-            <p className="text-sm text-[hsl(var(--text-muted))]">
-              By continuing, you agree to our <Link to="/terms" className="story-link">Terms</Link> and <Link to="/privacy" className="story-link">Privacy Policy</Link>.
-            </p>
+            <p className="text-sm text-[hsl(var(--text-muted))]">Enter SocialGym</p>
           </header>
 
           {/* Social buttons */}
@@ -146,10 +142,11 @@ export default function Login() {
             <Button
               type="button"
               variant="brand"
-              className="w-full h-14 rounded-2xl justify-start px-4 active:scale-95 animate-slide-up"
+              className="btn-hero-metal press-96 group w-full h-14 rounded-[18px] justify-start px-4 animate-slide-up"
               onClick={() => handleProvider('google')}
               disabled={!!loading}
               style={{ animationDelay: '180ms' }}
+              aria-label="Continue with Google"
             >
               <span className="mr-3 grid place-items-center rounded-lg bg-white/10 p-2" aria-hidden>
                 {/* Google G */}
@@ -160,7 +157,7 @@ export default function Login() {
                   <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-1.2 3.5-4.3 6.2-8.3 6.2-5.2 0-9.6-3.4-11.2-8.1l-6.6 5.1C9.1 39.7 16 44 24 44c8 0 14.8-5.1 17.2-12.3 0-1.2.4-2.3.4-3.7 0-1.2-.1-2.3-.4-3.5z"/>
                 </svg>
               </span>
-              <span className="flex-1 text-left">Continue with Google</span>
+              <span className="flex-1 text-left font-semibold">Continue with Google</span>
               {loading === 'google' && (
                 <span className="ml-auto inline-flex h-5 w-5 animate-spin rounded-full border-2 border-white/40 border-t-white" aria-hidden />
               )}
@@ -172,15 +169,16 @@ export default function Login() {
             <Button
               type="button"
               variant="brand"
-              className="w-full h-14 rounded-2xl justify-start px-4 active:scale-95 animate-slide-up"
+              className="btn-hero-metal press-96 group w-full h-14 rounded-[18px] justify-start px-4 animate-slide-up"
               onClick={() => handleProvider('apple')}
               disabled={!!loading}
               style={{ animationDelay: '240ms' }}
+              aria-label="Continue with Apple"
             >
               <span className="mr-3 grid place-items-center rounded-lg bg-white/10 p-2" aria-hidden>
                 <Apple className="h-5 w-5" />
               </span>
-              <span className="flex-1 text-left">Continue with Apple</span>
+              <span className="flex-1 text-left font-semibold">Continue with Apple</span>
               {loading === 'apple' && (
                 <span className="ml-auto inline-flex h-5 w-5 animate-spin rounded-full border-2 border-white/40 border-t-white" aria-hidden />
               )}
@@ -192,15 +190,16 @@ export default function Login() {
             <Button
               type="button"
               variant="brand"
-              className="w-full h-14 rounded-2xl justify-start px-4 active:scale-95 animate-slide-up"
+              className="btn-hero-metal press-96 group w-full h-14 rounded-[18px] justify-start px-4 animate-slide-up"
               onClick={handleEmailContinue}
               disabled={!!loading}
               style={{ animationDelay: '300ms' }}
+              aria-label="Continue with Email"
             >
               <span className="mr-3 grid place-items-center rounded-lg bg-white/10 p-2" aria-hidden>
                 <Mail className="h-5 w-5" />
               </span>
-              <span className="flex-1 text-left">Continue with Email</span>
+              <span className="flex-1 text-left font-semibold">Continue with Email</span>
               {loading === 'email' && (
                 <span className="ml-auto inline-flex h-5 w-5 animate-spin rounded-full border-2 border-white/40 border-t-white" aria-hidden />
               )}
