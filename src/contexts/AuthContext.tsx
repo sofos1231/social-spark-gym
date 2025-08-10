@@ -31,34 +31,31 @@ const removeLS = (key: string) => {
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
-    const dev = import.meta.env.DEV && getLS("DEV_AUTH") === "1";
-    const prod = getLS("AUTH") === "1";
-    return dev || prod;
+    if (import.meta.env.DEV) return false;
+    return getLS("AUTH") === "1";
   });
   const [onboardingDone, setOnboardingDone] = useState<boolean>(() => {
-    const dev = import.meta.env.DEV && getLS("DEV_ONBOARDING_DONE") === "1";
-    const prod = getLS("ONBOARDING_DONE") === "1";
-    return dev || prod;
+    if (import.meta.env.DEV) return false;
+    return getLS("ONBOARDING_DONE") === "1";
   });
 
   useEffect(() => {
-    // keep flags in sync for convenience
+    // persist only in production; in dev, session is memory-only
+    if (import.meta.env.DEV) return;
     if (isAuthenticated) {
       setLS("AUTH", "1");
-      if (import.meta.env.DEV) setLS("DEV_AUTH", "1");
     } else {
       removeLS("AUTH");
-      if (import.meta.env.DEV) removeLS("DEV_AUTH");
     }
   }, [isAuthenticated]);
 
   useEffect(() => {
+    // persist only in production; in dev, session is memory-only
+    if (import.meta.env.DEV) return;
     if (onboardingDone) {
       setLS("ONBOARDING_DONE", "1");
-      if (import.meta.env.DEV) setLS("DEV_ONBOARDING_DONE", "1");
     } else {
       removeLS("ONBOARDING_DONE");
-      if (import.meta.env.DEV) removeLS("DEV_ONBOARDING_DONE");
     }
   }, [onboardingDone]);
 

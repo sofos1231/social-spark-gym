@@ -35,7 +35,6 @@ export default function Login() {
 
   const devSkip = () => {
     if (import.meta.env.DEV) {
-      localStorage.setItem("DEV_AUTH", "1");
       login();
       navigate("/", { replace: true });
     }

@@ -1,19 +1,19 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function DevBypass() {
   const navigate = useNavigate();
+  const { login, completeOnboarding } = useAuth();
+
   useEffect(() => {
     if (import.meta.env.DEV) {
-      localStorage.setItem("DEV_AUTH", "1");
-      localStorage.setItem("DEV_ONBOARDING_DONE", "1");
-      // keep non-dev flags in sync too
-      localStorage.setItem("AUTH", "1");
-      localStorage.setItem("ONBOARDING_DONE", "1");
-      navigate("/", { replace: true });
-    } else {
-      navigate("/", { replace: true });
+      // Memory-only auth in dev: no persistence
+      login();
+      completeOnboarding();
     }
-  }, [navigate]);
+    navigate("/", { replace: true });
+  }, [navigate, login, completeOnboarding]);
+
   return null;
 }

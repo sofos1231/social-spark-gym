@@ -16,7 +16,6 @@ export default function Onboarding() {
 
   const skip = () => {
     if (import.meta.env.DEV) {
-      localStorage.setItem("DEV_ONBOARDING_DONE", "1");
       finish();
     }
   };
