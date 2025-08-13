@@ -109,7 +109,7 @@ export default function Login() {
 
       {/* Content */}
       <section className="relative z-10 w-full px-6">
-        <div className="relative mx-auto w-full max-w-[340px] glass-card rounded-3xl p-7 sm:p-8 animate-slide-up overflow-visible" role="dialog" aria-labelledby="signin-title">
+        <div className="relative mx-auto w-full max-w-none px-6 sm:px-8 py-8 animate-slide-up" role="dialog" aria-labelledby="signin-title">
           <div aria-hidden className="pointer-events-none absolute -inset-x-12 -top-24 h-48 rounded-full bg-[radial-gradient(closest-side,_hsl(var(--primary))/0.25,_transparent_70%)] blur-3xl opacity-30 -z-10" />
           {/* Close */}
           <button
