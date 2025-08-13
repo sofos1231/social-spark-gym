@@ -46,16 +46,15 @@ const slidesData: Slide[] = [
 type Props = { onIndexChange?: (i: number) => void }
 export default function OnboardingHeroCarousel({ onIndexChange }: Props) {
   const [api, setApi] = useState<CarouselApi | null>(null)
-  const [selectedIndex, setSelectedIndex] = useState(0)
+  
   const [pausedUntil, setPausedUntil] = useState<number | null>(null)
   const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-  // Sync dots with carousel selection
+  // Sync carousel selection with parent
   useEffect(() => {
     if (!api) return
     const onSelect = () => {
       const i = api.selectedScrollSnap()
-      setSelectedIndex(i)
       onIndexChange?.(i)
     }
     onSelect()
@@ -118,28 +117,6 @@ export default function OnboardingHeroCarousel({ onIndexChange }: Props) {
           ))}
         </CarouselContent>
 
-        {/* Dots */}
-        <div className="mt-3 flex justify-center gap-2" role="tablist" aria-label="Carousel pagination">
-          {slides.map((_, i) => {
-            const active = i === selectedIndex
-            return (
-              <button
-                key={i}
-                role="tab"
-                aria-selected={active}
-                aria-label={`Go to slide ${i + 1}`}
-                onClick={() => {
-                  handleUserInteraction()
-                  api?.scrollTo(i)
-                }}
-                  className={
-                    "h-2.5 w-2.5 rounded-full transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring " +
-                    (active ? "bg-primary scale-110" : "bg-muted/60 hover:bg-muted/80")
-                  }
-              />
-            )
-          })}
-        </div>
       </Carousel>
     </section>
   )
