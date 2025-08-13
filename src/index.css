@@ -6,36 +6,36 @@
 
 @layer base {
   :root {
-    /* Duolingo-Inspired Light System */
-    --background: 0 0% 100%;            /* #FFFFFF - clean white base */
-    --background-deep: 0 0% 98%;        /* #FAFAFA - subtle variation */
-    --background-elevated: 0 0% 96%;    /* #F5F5F5 - elevated surfaces */
-    --background-warm: 45 20% 98%;      /* Slightly warm variant */
-    --foreground: 220 9% 15%;           /* #252525 - dark text */
+    /* Premium Navy × Blue-Gray Background System */
+    --background: 216 28% 7%;           /* #10131C - primary base */
+    --background-deep: 220 30% 5%;      /* #0D0F1A - gradient start */
+    --background-elevated: 217 25% 9%;  /* #141519 - gradient end */
+    --background-warm: 216 28% 8%;      /* Slightly warmer variant */
+    --foreground: 0 0% 100%;            /* #FFFFFF - high contrast text */
 
-    /* Card system - Light & Clean */
-    --card: 0 0% 100%;                  /* Pure white cards */
-    --card-foreground: 220 9% 15%;      /* Dark text on cards */
-    --card-warm: 45 20% 98%;            /* Slightly warm card variant */
-    --card-metallic: linear-gradient(135deg, hsl(0, 0%, 98%) 0%, hsl(45, 20%, 96%) 100%);
-    --card-border: 220 9% 85%;          /* Light gray borders */
-    --card-glow: 142 76% 56%;           /* Green glow for active states */
+    /* Card system - Apple Vision Pro Inspired Metallic Blue */
+    --card: 218 45% 12%;                /* Deep navy-blue metallic base */
+    --card-foreground: 0 0% 100%;       /* High contrast card text */
+    --card-warm: 215 40% 15%;           /* Slightly warmer metallic blue */
+    --card-metallic: linear-gradient(135deg, hsl(218, 50%, 10%) 0%, hsl(215, 45%, 18%) 100%);
+    --card-border: 210 35% 35%;         /* Light bluish steel border */
+    --card-glow: 218 60% 25%;           /* Soft blue glow for active states */
 
-    /* DUOLINGO COLOR STRATEGY */
-    /* Bright Green = Primary (Duolingo's Mask Green) */
-    --primary: 142 76% 56%;             /* #7CFB8A - Duolingo green */
+    /* UNIFIED COLOR STRATEGY */
+    /* Purple = Level/Progress (Primary Actions) */
+    --primary: 262 83% 58%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 142 76% 66%;
+    --primary-glow: 262 83% 68%;
 
-    /* Golden Yellow = XP/Rewards (Completion) */
-    --secondary: 45 93% 58%;            /* #FFD700 - Golden rewards */
-    --secondary-foreground: 220 9% 15%;
-    --secondary-glow: 45 93% 68%;
+    /* Orange = XP/Streak (Gamification) */
+    --secondary: 25 95% 53%;
+    --secondary-foreground: 0 0% 100%;
+    --secondary-glow: 25 95% 63%;
 
-    /* Emerald Green = Success/Completed */
-    --success: 142 76% 56%;             /* Match primary for consistency */
+    /* Green = Success/Unlocked */
+    --success: 142 76% 47%;
     --success-foreground: 0 0% 100%;
-    --success-glow: 142 76% 66%;
+    --success-glow: 142 76% 57%;
 
     /* Red = Danger/Exit */
     --destructive: 0 84% 55%;
@@ -47,9 +47,9 @@
     --accent-foreground: 0 0% 100%;
     --accent-glow: 220 15% 35%;
 
-    /* Supporting neutrals - optimized for light */
-    --muted: 220 9% 90%;                /* Light gray backgrounds */
-    --muted-foreground: 220 9% 46%;     /* #757575 - muted text */
+    /* Supporting neutrals - high contrast on navy */
+    --muted: 220 20% 25%;               /* Elevated muted backgrounds */
+    --muted-foreground: 0 0% 71%;       /* #B6B6B6 - muted text */
 
     /* XP tier colors - consistent with orange theme */
     --xp-bronze: 25 85% 45%;
@@ -115,11 +115,11 @@
     --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15);
     --shadow-glow-blue: 0 0 20px hsl(var(--card-glow) / 0.6), 0 0 40px hsl(var(--card-glow) / 0.3);
 
-    /* High-contrast text tokens - optimized for light */
-    --text-primary: 220 9% 15%;         /* #252525 - titles, metrics */
-    --text-secondary: 220 9% 25%;       /* #404040 - subtitles */
-    --text-muted: 220 9% 46%;           /* #757575 - disabled text */
-    --text-accent: 142 76% 56%;         /* Green accent text */
+    /* High-contrast text tokens - optimized for navy */
+    --text-primary: 0 0% 100%;          /* #FFFFFF - titles, metrics */
+    --text-secondary: 0 0% 92%;         /* #EAEAEA - subtitles */
+    --text-muted: 0 0% 71%;             /* #B6B6B6 - disabled text */
+    --text-accent: 262 83% 68%;         /* Accent colored text */
     
     /* Dark mode optimization (already optimized for navy) */
     --text-dark-primary: 0 0% 100%;
@@ -176,7 +176,7 @@
 
   body {
     @apply font-sans antialiased;
-    background: hsl(var(--background));
+    background: var(--gradient-background);
     color: hsl(var(--foreground));
   }
 

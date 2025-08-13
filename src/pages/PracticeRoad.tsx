@@ -418,19 +418,19 @@ const PracticeRoad = () => {
 
         {/* Chapter Complete Celebration */}
         {progressPercentage === 100 && (
-          <div className="mt-8 mx-4 p-6 bg-gradient-to-r from-green-50 to-green-100 border-2 border-green-200 rounded-2xl text-center animate-scale-in shadow-lg">
-            <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-500 flex items-center justify-center shadow-lg animate-gentle-bounce">
-              <span className="text-3xl">🏆</span>
+          <div className="mt-8 mx-4 p-6 bg-gradient-to-r from-emerald-500/10 to-emerald-600/10 border border-emerald-500/20 rounded-2xl text-center animate-scale-in">
+            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center">
+              <span className="text-2xl">🏆</span>
             </div>
-            <h3 className="text-2xl font-bold text-gray-800 mb-2">
-              Chapter Complete!
+            <h3 className="text-xl font-display font-bold text-foreground mb-2">
+              Chapter Complete! 🎉
             </h3>
-            <p className="text-lg text-gray-600 mb-6 font-medium">
-              Amazing progress! You've mastered {title.toLowerCase()}.
+            <p className="text-sm text-muted-foreground mb-6">
+              You've mastered the fundamentals of {title.toLowerCase()}. Ready for the next adventure?
             </p>
-            <button className="px-8 py-4 bg-gradient-to-r from-green-500 to-green-600 rounded-2xl text-white font-bold text-lg hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl active:scale-95">
+            <div className="px-6 py-3 bg-gradient-to-r from-primary to-primary/80 rounded-xl text-primary-foreground font-semibold cursor-pointer hover:scale-105 transition-transform">
               Continue to Chapter {chapterNumber + 1}
-            </button>
+            </div>
           </div>
         )}
       </div>
