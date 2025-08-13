@@ -15,8 +15,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 
 
 const schema = z.object({
-  email: z.string().email(),
+  username: z.string().min(3, "Min 3 characters").optional(),
+  email: z.string().email().optional(),
   password: z.string().min(6, "Min 6 characters"),
+}).refine((data) => data.username || data.email, {
+  message: "Username or email is required",
+  path: ["username"],
 });
 
 type FormValues = z.infer<typeof schema>;
@@ -32,7 +36,7 @@ export default function Login() {
   } = useForm<FormValues>({ resolver: zodResolver(schema) });
 
   const onSubmit = async (data: FormValues) => {
-    login(data.email);
+    login(data.username || data.email);
     toast({ title: "Welcome back!", description: "Signed in successfully" });
     navigate(onboardingDone ? "/" : "/onboarding", { replace: true });
   };
@@ -96,7 +100,7 @@ export default function Login() {
 
   return (
     <main
-      className="relative min-h-[100dvh] grid place-items-center"
+      className="relative min-h-[100dvh] flex items-end"
       style={{ paddingTop: 'env(safe-area-inset-top)', paddingBottom: 'env(safe-area-inset-bottom)' }}
     >
       {/* Cinematic background */}
@@ -108,7 +112,7 @@ export default function Login() {
       </div>
 
       {/* Content */}
-      <section className="relative z-10 w-full px-6">
+      <section className="relative z-10 w-full px-6 pb-8 sm:pb-10">
         <div className="relative mx-auto w-full max-w-none px-6 sm:px-8 py-8 animate-slide-up" role="dialog" aria-labelledby="signin-title">
           <div aria-hidden className="pointer-events-none absolute -inset-x-12 -top-24 h-48 rounded-full bg-[radial-gradient(closest-side,_hsl(var(--primary))/0.25,_transparent_70%)] blur-3xl opacity-30 -z-10" />
           {/* Close */}
@@ -132,14 +136,14 @@ export default function Login() {
 
           {/* Heading */}
           <header className="text-center space-y-1">
-            <h1 id="signin-title" className="text-2xl font-semibold leading-tight text-[hsl(var(--text-primary))]">
+            <h1 id="signin-title" className="text-2xl font-bold leading-tight text-[hsl(var(--text-primary))]">
               Level Up
             </h1>
-            <p className="text-sm text-[hsl(var(--text-muted))]">Enter SocialGym</p>
+            <p className="text-sm italic text-[hsl(var(--text-muted))]">Enter SocialGym</p>
           </header>
 
           {/* Social buttons */}
-          <div className="mt-5 space-y-3" aria-label="Sign in options">
+          <div className="mt-6 space-y-4" aria-label="Sign in options">
             <Button
               type="button"
               variant="brand"
@@ -207,6 +211,20 @@ export default function Login() {
             </Button>
           </div>
 
+          {/* Username/Password form */}
+          <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-4" aria-label="Username and password sign in">
+            <div className="space-y-2">
+              <Label htmlFor="username">Username</Label>
+              <Input id="username" type="text" placeholder="yourname" {...register("username")} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="password-inline">Password</Label>
+              <Input id="password-inline" type="password" placeholder="••••••••" {...register("password")} aria-invalid={!!errors.password} />
+              {errors.password && <p className="text-sm text-destructive">{errors.password.message}</p>}
+            </div>
+            <Button type="submit" className="w-full h-12 rounded-xl">Sign in</Button>
+          </form>
+
           {/* Consent */}
           <div className="mt-4">
             <label htmlFor="consent" className="flex items-center gap-3 text-[hsl(var(--text-secondary))] cursor-pointer select-none">
@@ -215,22 +233,6 @@ export default function Login() {
             </label>
           </div>
 
-          {/* Email form (revealed) */}
-          {showEmailForm && (
-            <form onSubmit={handleSubmit(onSubmit)} className="mt-5 space-y-4" aria-label="Email sign in form">
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" placeholder="you@example.com" {...register("email")} aria-invalid={!!errors.email} />
-                {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
-                <Input id="password" type="password" placeholder="••••••••" {...register("password")} aria-invalid={!!errors.password} />
-                {errors.password && <p className="text-sm text-destructive">{errors.password.message}</p>}
-              </div>
-              <Button type="submit" className="w-full">Sign in</Button>
-            </form>
-          )}
 
           {/* Footer */}
           <p className="mt-6 text-center text-sm text-[hsl(var(--text-muted))]">
@@ -239,7 +241,7 @@ export default function Login() {
           </p>
 
           {import.meta.env.DEV && (
-            <Button type="button" variant="ghost" className="w-full mt-3" onClick={devSkip}>
+            <Button type="button" variant="ghost" className="w-full mt-6" onClick={devSkip}>
               Skip for now (dev)
             </Button>
           )}
