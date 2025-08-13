@@ -35,7 +35,7 @@ export default function Signup() {
   };
 
   return (
-    <main className="min-h-[100dvh] grid place-items-center px-4">
+    <main className="relative min-h-[100dvh] flex items-end px-6 pb-8 sm:pb-10" style={{ paddingTop: 'env(safe-area-inset-top)', paddingBottom: 'env(safe-area-inset-bottom)' }}>
       <Card className="w-full max-w-sm">
         <CardHeader>
           <h1 className="sr-only">Create account</h1>
