@@ -39,7 +39,7 @@ const AppShell = () => {
         <Route path="/auth/email" element={<PageTransition currentPath="/auth/email"><PublicOnlyRoute><EmailLogin /></PublicOnlyRoute></PageTransition>} />
         <Route path="/auth/signup" element={<PageTransition currentPath="/auth/signup"><PublicOnlyRoute><Signup /></PublicOnlyRoute></PageTransition>} />
         <Route path="/dev-bypass" element={<DevBypass />} />
-        <Route path="/onboarding" element={<PageTransition currentPath="/onboarding"><ProtectedRoute><Onboarding /></ProtectedRoute></PageTransition>} />
+        <Route path="/onboarding" element={<PageTransition currentPath="/onboarding"><Onboarding /></PageTransition>} />
 
         <Route path="/" element={<PageTransition currentPath="/"><ProtectedRoute><PracticeHub /></ProtectedRoute></PageTransition>} />
         <Route path="/practice-road/:category" element={<PageTransition currentPath="/practice-road"><ProtectedRoute><PracticeRoad /></ProtectedRoute></PageTransition>} />
