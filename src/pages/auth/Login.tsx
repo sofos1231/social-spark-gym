@@ -13,7 +13,10 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { X, Apple, Mail } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog";
 import OnboardingHeroCarousel from "@/components/auth/OnboardingHeroCarousel";
-
+import ImmersiveBackground from "@/components/auth/ImmersiveBackground";
+import eyeIllustration from "@/assets/eye-contact-illustration.jpg";
+import speakingIllustration from "@/assets/public-speaking-illustration.jpg";
+import groupIllustration from "@/assets/group-conversation-illustration.jpg";
 
 const schema = z.object({
   username: z.string().min(3, "Min 3 characters").optional(),
@@ -66,6 +69,7 @@ export default function Login() {
   const [loading, setLoading] = useState<null | 'google' | 'apple' | 'email'>(null);
   const [errorProvider, setErrorProvider] = useState<null | 'google' | 'apple'>(null);
   const [showEmailForm, setShowEmailForm] = useState(false);
+  const [activeSlide, setActiveSlide] = useState(0);
 
   const handleProvider = async (provider: 'google' | 'apple') => {
     if (!consent) {
@@ -106,10 +110,10 @@ export default function Login() {
     >
       {/* Cinematic background */}
       <div className="absolute inset-0 overflow-hidden" aria-hidden>
-        <div className="hero-bg" />
-        <div className="hero-spotlight" />
-        <div className="hero-noise" />
-        <div className="hero-particles" />
+        <ImmersiveBackground
+          images={[eyeIllustration, speakingIllustration, groupIllustration]}
+          activeIndex={activeSlide}
+        />
       </div>
 
       {/* Content */}
@@ -144,7 +148,7 @@ export default function Login() {
           </header>
 
           {/* Onboarding carousel */}
-          <OnboardingHeroCarousel />
+          <OnboardingHeroCarousel onIndexChange={setActiveSlide} />
 
           {/* Social buttons */}
           <div className="mt-6 space-y-4" aria-label="Sign in options">

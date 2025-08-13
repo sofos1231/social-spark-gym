@@ -43,7 +43,8 @@ const slidesData: Slide[] = [
   },
 ]
 
-export default function OnboardingHeroCarousel() {
+type Props = { onIndexChange?: (i: number) => void }
+export default function OnboardingHeroCarousel({ onIndexChange }: Props) {
   const [api, setApi] = useState<CarouselApi | null>(null)
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [interacted, setInteracted] = useState(false)
@@ -51,7 +52,11 @@ export default function OnboardingHeroCarousel() {
   // Sync dots with carousel selection
   useEffect(() => {
     if (!api) return
-    const onSelect = () => setSelectedIndex(api.selectedScrollSnap())
+    const onSelect = () => {
+      const i = api.selectedScrollSnap()
+      setSelectedIndex(i)
+      onIndexChange?.(i)
+    }
     onSelect()
     api.on("select", onSelect)
     api.on("reInit", onSelect)
@@ -59,7 +64,7 @@ export default function OnboardingHeroCarousel() {
       api.off("select", onSelect)
       api.off("reInit", onSelect)
     }
-  }, [api])
+  }, [api, onIndexChange])
 
   // Autoplay that pauses forever after first interaction
   useEffect(() => {
