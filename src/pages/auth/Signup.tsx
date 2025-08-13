@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const schema = z.object({
   email: z.string().email(),
@@ -34,10 +35,23 @@ export default function Signup() {
     navigate("/onboarding", { replace: true });
   };
 
+  // Page SEO
+  useEffect(() => {
+    document.title = "Create account – SocialGym";
+    const desc = "Create your SocialGym account. Fast signup with email.";
+    let meta = document.querySelector('meta[name="description"]');
+    if (!meta) { meta = document.createElement('meta'); meta.setAttribute('name', 'description'); document.head.appendChild(meta); }
+    meta.setAttribute('content', desc);
+    let link = document.querySelector('link[rel="canonical"]');
+    if (!link) { link = document.createElement('link'); link.setAttribute('rel', 'canonical'); document.head.appendChild(link); }
+    link.setAttribute('href', window.location.href);
+  }, []);
+
   return (
     <main className="relative min-h-[100dvh] grid place-items-center px-6 py-8 sm:py-10" style={{ paddingTop: 'env(safe-area-inset-top)', paddingBottom: 'env(safe-area-inset-bottom)' }}>
       <section className="relative z-10 w-full">
         <div className="relative mx-auto w-full max-w-[420px] animate-slide-up">
+          <div aria-hidden className="pointer-events-none absolute -inset-x-12 -top-24 h-48 rounded-full bg-[radial-gradient(closest-side,_hsl(var(--primary))/0.25,_transparent_70%)] blur-3xl opacity-30 -z-10" />
           {/* Brand emblem for consistency with Login */}
           <div className="brand-emblem brand-emblem--sg mx-auto mb-4 animate-scale-in" style={{ animationDelay: '120ms' }} aria-hidden>
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
@@ -56,16 +70,22 @@ export default function Signup() {
           <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" placeholder="you@example.com" {...register("email")} aria-invalid={!!errors.email} />
+              <Input id="email" type="email" placeholder="you@example.com" className="h-12 rounded-xl" {...register("email")} aria-invalid={!!errors.email} />
               {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
-              <Input id="password" type="password" placeholder="••••••••" {...register("password")} aria-invalid={!!errors.password} />
+              <Input id="password" type="password" placeholder="••••••••" className="h-12 rounded-xl" {...register("password")} aria-invalid={!!errors.password} />
               {errors.password && <p className="text-sm text-destructive">{errors.password.message}</p>}
             </div>
-            <Button type="submit" variant="brand" className="w-full h-14 rounded-[18px]" disabled={isSubmitting}>Create account</Button>
-            <p className="text-sm text-[hsl(var(--text-muted))] text-center">
+            <Button type="submit" variant="brand" className="btn-hero-metal press-96 group w-full h-14 rounded-[18px]" disabled={isSubmitting}>Create account</Button>
+            <div className="mt-3">
+              <label htmlFor="consent" className="flex items-center gap-3 text-[hsl(var(--text-secondary))] cursor-pointer select-none">
+                <Checkbox id="consent" aria-label="I agree to the terms" />
+                <span className="text-sm">I agree to SocialGym's <Link to="/terms" className="story-link">Terms</Link> and acknowledge the <Link to="/privacy" className="story-link">Privacy Policy</Link>.</span>
+              </label>
+            </div>
+            <p className="mt-4 text-sm text-[hsl(var(--text-muted))] text-center">
               Already have an account? <Link to="/auth/login" className="story-link">Sign in</Link>
             </p>
           </form>
