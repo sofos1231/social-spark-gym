@@ -12,6 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Checkbox } from "@/components/ui/checkbox";
 import { X, Apple, Mail } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog";
+import OnboardingHeroCarousel from "@/components/auth/OnboardingHeroCarousel";
 
 
 const schema = z.object({
@@ -141,6 +142,9 @@ export default function Login() {
             </h1>
             <p className="text-sm italic text-[hsl(var(--text-muted))]">Enter SocialGym</p>
           </header>
+
+          {/* Onboarding carousel */}
+          <OnboardingHeroCarousel />
 
           {/* Social buttons */}
           <div className="mt-6 space-y-4" aria-label="Sign in options">
