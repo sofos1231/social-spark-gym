@@ -20,7 +20,8 @@ import {
   Mic,
   Handshake,
   Sparkles,
-  Target
+  Target,
+  ChevronRight
 } from "lucide-react";
 
 export default function Onboarding() {
@@ -32,16 +33,22 @@ export default function Onboarding() {
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [feedbackVisible, setFeedbackVisible] = useState(false);
   const [cardSwiped, setCardSwiped] = useState(false);
+  const [confetti, setConfetti] = useState(false);
+  const [buttonPressed, setButtonPressed] = useState(false);
   const { completeOnboarding } = useAuth();
   const navigate = useNavigate();
 
   const finish = () => {
-    completeOnboarding();
-    navigate("/", { replace: true });
+    setConfetti(true);
+    setTimeout(() => {
+      completeOnboarding();
+      navigate("/", { replace: true });
+    }, 1500);
   };
 
   const skip = () => {
-    finish();
+    completeOnboarding();
+    navigate("/", { replace: true });
   };
 
   const goals = [
@@ -87,32 +94,63 @@ export default function Onboarding() {
     return "🏆";
   };
 
+  // Helper text for experience level
+  const getHelperText = (level: number) => {
+    if (level < 25) return "We'll start gently";
+    if (level < 50) return "Perfect confidence building zone";
+    if (level < 75) return "Ready for real challenges";
+    return "We'll push your edge";
+  };
+
+  const handleNext = () => {
+    if (step === 8) {
+      finish();
+    } else {
+      setStep(step + 1);
+    }
+  };
+
+  const isNextDisabled = () => {
+    return step === 6 && !selectedGoal;
+  };
+
   const renderStep = () => {
     switch (step) {
       // Step 1: Welcome Screen
       case 1:
         return (
-          <div className="space-y-6 text-center animate-fade-in">
-            <div className="space-y-4">
-              <div className="mx-auto w-20 h-20 bg-gradient-to-br from-primary via-purple-500 to-pink-500 rounded-3xl flex items-center justify-center animate-scale-in shadow-2xl">
-                <Sparkles className="h-10 w-10 text-white animate-pulse" />
+          <div className="max-w-sm mx-auto space-y-8 text-center animate-fade-in">
+            {/* Radial spotlight behind hero */}
+            <div className="relative">
+              <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 w-48 h-48 bg-gradient-radial from-purple-500/25 to-transparent rounded-full blur-3xl"></div>
+              <div className="relative space-y-6">
+                {/* Brand conversation spotlight illustration */}
+                <div className="mx-auto w-24 h-24 bg-gradient-to-br from-purple-500 via-purple-600 to-pink-500 rounded-3xl flex items-center justify-center shadow-[0_20px_40px_-15px_rgba(138,92,246,0.4)] animate-scale-in relative">
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-3xl"></div>
+                  <Sparkles className="h-12 w-12 text-white relative z-10" />
+                </div>
+                
+                {/* Tightened typography with proper letter spacing */}
+                <div className="space-y-4">
+                  <h1 className="text-[32px] font-semibold leading-tight tracking-[-0.5px] bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                    Train to Succeed Socially
+                  </h1>
+                  <p className="text-gray-400 text-base leading-relaxed max-w-[28ch] mx-auto">
+                    Practice real conversations. Build confidence where it matters most.
+                  </p>
+                </div>
               </div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
-                Train to Succeed Socially
-              </h1>
-              <p className="text-muted-foreground text-lg leading-relaxed">
-                Practice real conversations. Build confidence where it matters most.
-              </p>
             </div>
             
-            <div className="relative mt-8">
-              <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-purple-500/20 rounded-2xl blur-xl"></div>
-              <div className="relative bg-background/80 backdrop-blur-sm border border-border/50 rounded-2xl p-6 shadow-xl">
+            {/* Glass panel with backdrop blur */}
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-2xl blur-lg"></div>
+              <div className="relative bg-[rgba(8,12,24,0.55)] backdrop-blur-[20px] border border-white/6 rounded-2xl p-6 shadow-[0_18px_40px_-10px_rgba(0,0,0,0.35)]">
                 <div className="text-center space-y-4">
-                  <div className="text-6xl animate-bounce">🚀</div>
-                  <p className="font-medium text-foreground">Ready to level up your social game?</p>
-                  <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-                    <Flame className="h-4 w-4 text-orange-500" />
+                  <div className="text-5xl animate-bounce">🚀</div>
+                  <p className="font-medium text-white">Ready to level up your social game?</p>
+                  <div className="flex items-center justify-center gap-2 text-sm text-gray-400">
+                    <Flame className="h-4 w-4 text-orange-400 animate-pulse" />
                     <span>Build streaks, earn XP, unlock confidence</span>
                   </div>
                 </div>
@@ -124,169 +162,255 @@ export default function Onboarding() {
       // Step 2: Practice Preview - Interactive Demo
       case 2:
         return (
-          <div className="space-y-6 text-center animate-fade-in">
-            <div className="space-y-3">
-              <div className="mx-auto w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center">
-                <MessageSquare className="h-8 w-8 text-white" />
+          <div className="max-w-sm mx-auto space-y-8 text-center animate-fade-in">
+            <div className="space-y-4">
+              <div className="mx-auto w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center shadow-[0_18px_40px_-10px_rgba(34,197,94,0.3)]">
+                <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-2xl"></div>
+                <MessageSquare className="h-10 w-10 text-white relative z-10" />
               </div>
-              <h1 className="text-2xl font-bold text-foreground">Practice Preview</h1>
-              <p className="text-muted-foreground">Try this interactive conversation demo</p>
+              <h2 className="text-[24px] font-semibold text-white tracking-[-0.3px]">Practice Preview</h2>
+              <p className="text-gray-400 text-base">Try this interactive conversation demo</p>
             </div>
             
+            {/* Glass panel conversation card */}
             <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-green-500/20 to-emerald-500/20 rounded-xl blur-lg"></div>
-              <div className="relative bg-background/90 backdrop-blur-sm border border-border/50 rounded-xl p-5 shadow-lg">
+              <div className="absolute inset-0 bg-gradient-to-r from-green-500/15 to-emerald-500/15 rounded-2xl blur-lg"></div>
+              <div className="relative bg-[rgba(8,12,24,0.55)] backdrop-blur-[20px] border border-white/6 rounded-2xl p-6 shadow-[0_18px_40px_-10px_rgba(0,0,0,0.35)]">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-8 h-8 bg-green-500/20 rounded-full flex items-center justify-center">
-                    <MessageSquare className="h-4 w-4 text-green-600" />
+                    <MessageSquare className="h-4 w-4 text-green-400" />
                   </div>
-                  <span className="font-medium text-sm">Practice Scenario</span>
+                  <span className="font-medium text-sm text-white">Practice Scenario</span>
                 </div>
-                <p className="text-sm text-muted-foreground mb-4 p-3 bg-muted/50 rounded-lg italic">
+                <p className="text-sm text-gray-300 mb-6 p-4 bg-white/5 rounded-xl italic border border-white/10">
                   "You're at a party where you don't know anyone. How would you start a conversation?"
                 </p>
-                <div className="space-y-2">
-                  <Button 
-                    size="sm" 
-                    variant={selectedAnswer === "hi" ? "default" : "outline"} 
-                    className="w-full transition-all duration-300"
+                <div className="space-y-3">
+                  <button 
+                    className={`w-full h-12 text-sm font-medium rounded-xl transition-all duration-300 flex items-center justify-center gap-2 ${
+                      selectedAnswer === "hi" 
+                        ? "bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-lg transform scale-[1.02]" 
+                        : "bg-white/10 text-gray-300 hover:bg-white/15 hover:text-white border border-white/20"
+                    }`}
                     onClick={() => handleAnswerSelect("hi")}
                   >
                     👋 "Hi there!"
-                  </Button>
-                  <Button 
-                    size="sm" 
-                    variant={selectedAnswer === "party" ? "default" : "outline"} 
-                    className="w-full transition-all duration-300"
+                  </button>
+                  <button 
+                    className={`w-full h-12 text-sm font-medium rounded-xl transition-all duration-300 flex items-center justify-center gap-2 ${
+                      selectedAnswer === "party" 
+                        ? "bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-lg transform scale-[1.02]" 
+                        : "bg-white/10 text-gray-300 hover:bg-white/15 hover:text-white border border-white/20"
+                    }`}
                     onClick={() => handleAnswerSelect("party")}
                   >
                     🎉 "Great party, isn't it?"
-                  </Button>
+                  </button>
                 </div>
                 
                 {feedbackVisible && (
-                  <div className="mt-4 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg animate-fade-in">
-                    <div className="text-sm font-medium text-green-700 dark:text-green-300 mb-1">Nice choice! +10 XP</div>
-                    <div className="text-xs text-green-600 dark:text-green-400">Great conversation starter - friendly and approachable!</div>
+                  <div className="mt-4 p-4 bg-green-500/10 border border-green-400/20 rounded-xl animate-fade-in relative overflow-hidden">
+                    {/* XP token animation */}
+                    <div className="absolute top-2 right-2 bg-green-400 text-black text-xs font-bold px-2 py-1 rounded-full animate-bounce">
+                      +10
+                    </div>
+                    <div className="text-sm font-medium text-green-300 mb-1">Nice choice!</div>
+                    <div className="text-xs text-green-400">Great conversation starter - friendly and approachable!</div>
                   </div>
                 )}
               </div>
             </div>
+            
+            <p className="text-sm text-purple-400 underline">Try interactive demo →</p>
           </div>
         );
 
       // Step 3: Stats Screen Preview
       case 3:
         return (
-          <div className="space-y-6 text-center animate-fade-in">
-            <div className="space-y-3">
-              <div className="mx-auto w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-2xl flex items-center justify-center">
-                <BarChart3 className="h-8 w-8 text-white" />
+          <div className="max-w-sm mx-auto space-y-8 text-center animate-fade-in">
+            <div className="space-y-4">
+              <div className="mx-auto w-20 h-20 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-2xl flex items-center justify-center shadow-[0_18px_40px_-10px_rgba(59,130,246,0.3)]">
+                <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-2xl"></div>
+                <BarChart3 className="h-10 w-10 text-white relative z-10" />
               </div>
-              <h1 className="text-2xl font-bold text-foreground">Track Your Social Growth</h1>
-              <p className="text-muted-foreground">See your confidence build with personalized stats</p>
+              <h2 className="text-[24px] font-semibold text-white tracking-[-0.3px]">Track Your Social Growth</h2>
+              <p className="text-gray-400 text-base">See your confidence build with personalized stats</p>
             </div>
             
+            {/* Compact dashboard with real product feel */}
             <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-xl blur-lg"></div>
-              <div className="relative bg-background/90 backdrop-blur-sm border border-border/50 rounded-xl p-5 shadow-lg">
-                <div className="grid grid-cols-2 gap-4 mb-4">
-                  <div className="text-center p-3 bg-muted/50 rounded-lg">
-                    <div className="flex items-center justify-center gap-1 mb-1">
-                      <Flame className="h-4 w-4 text-orange-500" />
-                      <div className="text-lg font-bold text-foreground transition-all duration-1000">
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/15 to-cyan-500/15 rounded-2xl blur-lg"></div>
+              <div className="relative bg-[rgba(8,12,24,0.55)] backdrop-blur-[20px] border border-white/6 rounded-2xl p-6 shadow-[0_18px_40px_-10px_rgba(0,0,0,0.35)] space-y-6">
+                
+                {/* Progress to next level overline */}
+                <div className="text-center">
+                  <p className="text-xs uppercase tracking-wide text-gray-500 font-medium">Progress to next level</p>
+                </div>
+                
+                {/* Four stat tiles */}
+                <div className="grid grid-cols-2 gap-4">
+                  {/* Streak with flickering flame */}
+                  <div className="text-center p-4 bg-white/5 rounded-xl border border-white/10">
+                    <div className="flex items-center justify-center gap-2 mb-1">
+                      <Flame className={`h-5 w-5 text-orange-400 ${animatedStats.streak > 0 ? 'animate-pulse' : ''}`} />
+                      <div className="text-xl font-bold text-white transition-all duration-1000">
                         {animatedStats.streak}
                       </div>
                     </div>
-                    <div className="text-xs text-muted-foreground">Day Streak</div>
+                    <div className="text-xs text-gray-400">Day Streak</div>
                   </div>
-                  <div className="text-center p-3 bg-muted/50 rounded-lg">
-                    <div className="flex items-center justify-center gap-1 mb-1">
-                      <Star className="h-4 w-4 text-yellow-500" />
-                      <div className="text-lg font-bold text-foreground transition-all duration-1000">
+                  
+                  {/* XP with gradient meter and spark particles */}
+                  <div className="text-center p-4 bg-white/5 rounded-xl border border-white/10">
+                    <div className="flex items-center justify-center gap-2 mb-1">
+                      <Star className="h-5 w-5 text-yellow-400" />
+                      <div className="text-xl font-bold text-white transition-all duration-1000">
                         {animatedStats.xp}
                       </div>
                     </div>
-                    <div className="text-xs text-muted-foreground">XP Earned</div>
+                    <div className="text-xs text-gray-400">XP Earned</div>
+                    {/* Tiny spark particles */}
+                    {animatedStats.xp > 0 && (
+                      <div className="relative overflow-hidden h-1 mt-2">
+                        <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full">
+                          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-pulse"></div>
+                        </div>
+                      </div>
+                    )}
                   </div>
-                  <div className="text-center p-3 bg-muted/50 rounded-lg">
-                    <div className="flex items-center justify-center gap-1 mb-1">
-                      <Trophy className="h-4 w-4 text-purple-500" />
-                      <div className="text-lg font-bold text-foreground transition-all duration-1000">
-                        {animatedStats.confidence}%
+                  
+                  {/* Confidence as animated donut ring */}
+                  <div className="text-center p-4 bg-white/5 rounded-xl border border-white/10">
+                    <div className="relative w-12 h-12 mx-auto mb-2">
+                      <svg className="w-12 h-12 transform -rotate-90" viewBox="0 0 36 36">
+                        <path
+                          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                          fill="none"
+                          stroke="rgba(255,255,255,0.1)"
+                          strokeWidth="2"
+                        />
+                        <path
+                          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                          fill="none"
+                          stroke="rgb(168, 85, 247)"
+                          strokeWidth="2"
+                          strokeDasharray={`${animatedStats.confidence}, 100`}
+                          className="transition-all duration-[850ms] ease-out"
+                        />
+                      </svg>
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <span className="text-sm font-bold text-white">{animatedStats.confidence}%</span>
                       </div>
                     </div>
-                    <div className="text-xs text-muted-foreground">Confidence</div>
+                    <div className="text-xs text-gray-400">Confidence</div>
                   </div>
-                  <div className="text-center p-3 bg-muted/50 rounded-lg">
-                    <div className="flex items-center justify-center gap-1 mb-1">
-                      <Zap className="h-4 w-4 text-blue-500" />
-                      <div className="text-lg font-bold text-foreground transition-all duration-1000">
-                        Lvl {animatedStats.boldness}
+                  
+                  {/* Boldness with starburst highlight */}
+                  <div className="text-center p-4 bg-white/5 rounded-xl border border-white/10 relative overflow-hidden">
+                    {animatedStats.boldness > 0 && (
+                      <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 animate-pulse"></div>
+                    )}
+                    <div className="relative">
+                      <div className="flex items-center justify-center gap-2 mb-1">
+                        <Zap className="h-5 w-5 text-blue-400" />
+                        <div className="text-xl font-bold text-white transition-all duration-1000">
+                          Lvl {animatedStats.boldness}
+                        </div>
                       </div>
+                      <div className="text-xs text-gray-400">Boldness</div>
                     </div>
-                    <div className="text-xs text-muted-foreground">Boldness</div>
                   </div>
                 </div>
-                <div className="h-3 bg-muted rounded-full overflow-hidden">
-                  <div 
-                    className="h-3 bg-gradient-to-r from-primary to-purple-500 rounded-full transition-all duration-1000"
-                    style={{ width: `${animatedStats.confidence}%` }}
-                  ></div>
+                
+                {/* XP progress bar with tick marks */}
+                <div className="space-y-2">
+                  <div className="flex justify-between text-xs text-gray-400">
+                    <span>Level 1</span>
+                    <span>0/50 XP</span>
+                  </div>
+                  <div className="h-2 bg-white/10 rounded-full overflow-hidden relative">
+                    {/* Tick marks */}
+                    <div className="absolute inset-0 flex justify-between items-center px-1">
+                      {[...Array(5)].map((_, i) => (
+                        <div key={i} className="w-px h-1 bg-white/20"></div>
+                      ))}
+                    </div>
+                    <div 
+                      className="h-2 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full transition-all duration-1000 relative"
+                      style={{ width: `${(animatedStats.confidence / 100) * 50}%` }}
+                    >
+                      {/* Shimmer effect */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-pulse"></div>
+                    </div>
+                  </div>
                 </div>
-                <p className="text-xs text-muted-foreground mt-2">Progress to next level</p>
               </div>
             </div>
           </div>
         );
 
-      // Step 4: Swipe Demo
+      // Step 4: Swipe Scenario Demo - Tinder Style
       case 4:
         return (
-          <div className="space-y-6 text-center animate-fade-in">
-            <div className="space-y-3">
-              <div className="mx-auto w-16 h-16 bg-gradient-to-br from-pink-500 to-rose-600 rounded-2xl flex items-center justify-center">
-                <Heart className="h-8 w-8 text-white" />
+          <div className="max-w-sm mx-auto space-y-8 text-center animate-fade-in">
+            <div className="space-y-4">
+              <div className="mx-auto w-20 h-20 bg-gradient-to-br from-pink-500 to-rose-600 rounded-2xl flex items-center justify-center shadow-[0_18px_40px_-10px_rgba(236,72,153,0.3)]">
+                <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-2xl"></div>
+                <Heart className="h-10 w-10 text-white relative z-10" />
               </div>
-              <h1 className="text-2xl font-bold text-foreground">Missions Start Like This...</h1>
-              <p className="text-muted-foreground">Swipe right to begin a chat</p>
+              <h2 className="text-[24px] font-semibold text-white tracking-[-0.3px]">Missions start like this...</h2>
+              <p className="text-gray-400 text-base">Swipe right to begin a chat</p>
             </div>
             
+            {/* Swipeable card */}
             <div className="relative h-64 flex items-center justify-center">
               <div 
-                className={`relative w-64 h-48 transition-all duration-500 ${
+                className={`relative w-72 h-48 transition-all duration-500 ${
                   cardSwiped ? 'translate-x-full rotate-12 opacity-0' : 'translate-x-0 rotate-0 opacity-100'
                 }`}
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-pink-500/20 to-rose-500/20 rounded-xl blur-lg"></div>
-                <div className="relative bg-background/90 backdrop-blur-sm border border-border/50 rounded-xl p-6 shadow-xl h-full flex flex-col justify-center">
-                  <div className="text-center space-y-3">
+                <div className="absolute inset-0 bg-gradient-to-r from-pink-500/15 to-rose-500/15 rounded-2xl blur-lg"></div>
+                <div className="relative bg-[rgba(8,12,24,0.55)] backdrop-blur-[20px] border border-white/6 rounded-2xl p-6 shadow-[0_18px_40px_-10px_rgba(0,0,0,0.35)] h-full flex flex-col justify-center">
+                  <div className="text-center space-y-4">
                     <div className="w-16 h-16 mx-auto bg-gradient-to-br from-pink-500 to-rose-600 rounded-full flex items-center justify-center">
                       <span className="text-2xl">👋</span>
                     </div>
-                    <h3 className="font-bold text-foreground">Match with Rotem</h3>
-                    <p className="text-sm text-muted-foreground">🤝 Rotem will be your practice partner</p>
+                    <h3 className="font-bold text-white text-lg">Match with Rotem</h3>
+                    <p className="text-sm text-gray-400">🤝 Rotem will be your practice partner</p>
                   </div>
-                  <div className="flex justify-center gap-4 mt-4">
-                    <button className="w-12 h-12 bg-red-500/20 rounded-full flex items-center justify-center">
-                      <X className="h-6 w-6 text-red-500" />
+                  
+                  {/* Like/Nope buttons */}
+                  <div className="flex justify-center gap-6 mt-6">
+                    <button className="w-14 h-14 bg-red-500/20 rounded-full flex items-center justify-center border border-red-500/30 hover:bg-red-500/30 transition-all">
+                      <X className="h-7 w-7 text-red-400" />
                     </button>
-                    <button className="w-12 h-12 bg-green-500/20 rounded-full flex items-center justify-center">
-                      <Heart className="h-6 w-6 text-green-500" />
+                    <button className="w-14 h-14 bg-green-500/20 rounded-full flex items-center justify-center border border-green-500/30 hover:bg-green-500/30 transition-all">
+                      <Heart className="h-7 w-7 text-green-400" />
                     </button>
                   </div>
                 </div>
               </div>
               
+              {/* Match stamp when swiped */}
+              {cardSwiped && (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="bg-green-500/90 text-white font-bold text-2xl px-6 py-3 rounded-xl border-4 border-green-400 rotate-12 animate-scale-in">
+                    MATCHED!
+                  </div>
+                </div>
+              )}
+              
+              {/* Swipe instruction */}
               {!cardSwiped && (
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className="absolute bottom-0 text-primary hover:text-primary/80"
-                  onClick={handleSwipeDemo}
-                >
-                  Try swiping right →
-                </Button>
+                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
+                  <button 
+                    onClick={handleSwipeDemo}
+                    className="text-sm text-purple-400 underline hover:text-purple-300 transition-colors"
+                  >
+                    Try swiping right →
+                  </button>
+                </div>
               )}
             </div>
           </div>
@@ -295,43 +419,54 @@ export default function Onboarding() {
       // Step 5: AI Feedback Preview
       case 5:
         return (
-          <div className="space-y-6 text-center animate-fade-in">
-            <div className="space-y-3">
-              <div className="mx-auto w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center">
-                <Sparkles className="h-8 w-8 text-white" />
+          <div className="max-w-sm mx-auto space-y-8 text-center animate-fade-in">
+            <div className="space-y-4">
+              <div className="mx-auto w-20 h-20 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-[0_18px_40px_-10px_rgba(99,102,241,0.3)]">
+                <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-2xl"></div>
+                <Sparkles className="h-10 w-10 text-white relative z-10" />
               </div>
-              <h1 className="text-2xl font-bold text-foreground">Your Personal Feedback</h1>
-              <p className="text-muted-foreground">AI Coach insights after each conversation</p>
+              <h2 className="text-[24px] font-semibold text-white tracking-[-0.3px]">Your Personal Feedback</h2>
+              <p className="text-gray-400 text-base">AI Coach insights after each conversation</p>
             </div>
             
+            {/* Feedback pills */}
             <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/20 to-purple-500/20 rounded-xl blur-lg"></div>
-              <div className="relative bg-background/90 backdrop-blur-sm border border-border/50 rounded-xl p-5 shadow-lg space-y-4">
-                <div className="text-left space-y-3">
-                  <div className="flex items-center gap-2 p-2 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                    <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                      <span className="text-white text-xs">+10</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/15 to-purple-500/15 rounded-2xl blur-lg"></div>
+              <div className="relative bg-[rgba(8,12,24,0.55)] backdrop-blur-[20px] border border-white/6 rounded-2xl p-6 shadow-[0_18px_40px_-10px_rgba(0,0,0,0.35)] space-y-4">
+                
+                {/* Three feedback pills */}
+                <div className="space-y-3">
+                  {/* Green pill with sparkles icon */}
+                  <div className="flex items-center gap-3 p-3 bg-green-500/10 border border-green-400/20 rounded-xl">
+                    <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                      <Sparkles className="h-4 w-4 text-white" />
                     </div>
-                    <span className="text-sm font-medium">XP for Humor</span>
+                    <span className="text-sm font-medium text-green-300">+10 XP for Humor</span>
                   </div>
-                  <div className="flex items-center gap-2 p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                    <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
-                      <span className="text-white text-xs">+5</span>
+                  
+                  {/* Blue pill */}
+                  <div className="flex items-center gap-3 p-3 bg-blue-500/10 border border-blue-400/20 rounded-xl">
+                    <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                      <span className="text-white text-xs font-bold">+5</span>
                     </div>
-                    <span className="text-sm font-medium">Good Listening</span>
+                    <span className="text-sm font-medium text-blue-300">Good Listening</span>
                   </div>
-                  <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
-                    <div className="flex items-start gap-2">
-                      <Target className="h-4 w-4 text-yellow-600 mt-0.5" />
+                  
+                  {/* Tip card that gently pulses */}
+                  <div className="p-4 bg-yellow-500/10 border border-yellow-400/20 rounded-xl animate-pulse">
+                    <div className="flex items-start gap-3">
+                      <Target className="h-5 w-5 text-yellow-400 mt-0.5" />
                       <div className="text-sm">
-                        <div className="font-medium text-yellow-700 dark:text-yellow-300">Tip for next time:</div>
-                        <div className="text-yellow-600 dark:text-yellow-400">Try asking more open-ended questions</div>
+                        <div className="font-medium text-yellow-300 mb-1">Tip for next time:</div>
+                        <div className="text-yellow-400">Try asking more open-ended questions</div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div className="text-center">
-                  <p className="text-sm text-muted-foreground italic">
+                
+                {/* Footer message */}
+                <div className="text-center pt-2 border-t border-white/10">
+                  <p className="text-sm text-gray-400 italic">
                     "Your first rep earns XP, even if you fail!"
                   </p>
                 </div>
@@ -343,116 +478,139 @@ export default function Onboarding() {
       // Step 6: Goal Selection
       case 6:
         return (
-          <div className="space-y-6 text-center animate-fade-in">
-            <div className="space-y-3">
-              <h1 className="text-2xl font-bold text-foreground">What's Your Main Goal?</h1>
-              <p className="text-muted-foreground">Choose what you want to focus on first</p>
+          <div className="max-w-sm mx-auto space-y-8 text-center animate-fade-in">
+            <div className="space-y-4">
+              <h2 className="text-[24px] font-semibold text-white tracking-[-0.3px]">What's Your Main Goal?</h2>
+              <p className="text-gray-400 text-base max-w-[30ch] mx-auto">Choose what you want to focus on first</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wide">so we tailor missions</p>
             </div>
             
+            {/* Illustrated goal cards */}
             <div className="space-y-3">
               {goals.map((goal) => {
-                const Icon = goal.icon;
                 const isSelected = selectedGoal === goal.id;
                 return (
                   <button
                     key={goal.id}
                     onClick={() => setSelectedGoal(goal.id)}
-                    className={`w-full p-4 rounded-xl border transition-all duration-300 text-left hover:scale-[1.02] ${
+                    className={`w-full p-4 rounded-2xl border transition-all duration-300 text-left hover:scale-[1.02] ${
                       isSelected 
-                        ? 'border-primary bg-primary/10 shadow-lg scale-[1.02]' 
-                        : 'border-border hover:border-primary/50 bg-background'
+                        ? 'border-purple-400/50 bg-purple-500/10 shadow-[0_0_20px_rgba(168,85,247,0.35)] scale-[1.02]' 
+                        : 'border-white/20 bg-[rgba(8,12,24,0.55)] backdrop-blur-[20px] hover:border-purple-400/30'
                     }`}
                   >
-                    <div className="flex items-center gap-3">
-                      <div className="text-2xl">{goal.title.split(' ')[0]}</div>
-                      <div className="flex-1">
-                        <div className="font-medium text-sm">{goal.title}</div>
-                        <div className="text-xs text-muted-foreground">{goal.desc}</div>
+                    <div className="flex items-center gap-4">
+                      {/* Mini illustration */}
+                      <div className={`text-2xl transition-transform duration-300 ${isSelected ? 'scale-110' : ''}`}>
+                        {goal.title.split(' ')[0]}
                       </div>
-                      {isSelected && <CheckCircle2 className="h-5 w-5 text-primary" />}
+                      <div className="flex-1">
+                        <div className="font-medium text-sm text-white">{goal.title}</div>
+                        <div className="text-xs text-gray-400 mt-1">{goal.desc}</div>
+                      </div>
+                      {isSelected && (
+                        <CheckCircle2 className="h-5 w-5 text-purple-400 animate-scale-in" />
+                      )}
                     </div>
                   </button>
                 );
               })}
             </div>
+            
+            {selectedGoal && (
+              <p className="text-sm text-purple-400 animate-fade-in">Continue with this goal</p>
+            )}
           </div>
         );
 
-      // Step 7: Experience Level
+      // Step 7: Experience Slider
       case 7:
         return (
-          <div className="space-y-6 text-center animate-fade-in">
-            <div className="space-y-3">
-              <h1 className="text-2xl font-bold text-foreground">How Socially Experienced Are You?</h1>
-              <p className="text-muted-foreground">Help us personalize your training</p>
+          <div className="max-w-sm mx-auto space-y-8 text-center animate-fade-in">
+            <div className="space-y-4">
+              <h2 className="text-[24px] font-semibold text-white tracking-[-0.3px]">How Socially Experienced Are You?</h2>
+              <p className="text-gray-400 text-base">Help us personalize your training</p>
             </div>
             
+            {/* Emoji slider */}
             <div className="space-y-6">
-              <div className="text-6xl transition-all duration-300">
+              <div className="text-7xl transition-all duration-300">
                 {getExperienceEmoji(experienceLevel[0])}
               </div>
               
-              <div className="px-4">
-                <Slider
-                  value={experienceLevel}
-                  onValueChange={setExperienceLevel}
-                  max={100}
-                  step={1}
-                  className="w-full"
-                />
-                <div className="flex justify-between text-xs text-muted-foreground mt-2">
-                  <span>😅 Shy</span>
-                  <span>😎 Pro</span>
+              {/* Two-tone slider track */}
+              <div className="px-6">
+                <div className="relative">
+                  <Slider
+                    value={experienceLevel}
+                    onValueChange={setExperienceLevel}
+                    max={100}
+                    step={1}
+                    className="w-full"
+                  />
+                  <div className="flex justify-between text-sm text-gray-400 mt-3">
+                    <span>😅 Shy</span>
+                    <span>😎 Pro</span>
+                  </div>
                 </div>
               </div>
               
-              <div className="p-4 bg-muted/50 rounded-xl">
-                <p className="text-sm text-muted-foreground">
-                  {experienceLevel[0] < 20 && "We'll start with gentle, supportive scenarios"}
-                  {experienceLevel[0] >= 20 && experienceLevel[0] < 40 && "Perfect! We'll build your confidence step by step"}
-                  {experienceLevel[0] >= 40 && experienceLevel[0] < 60 && "Great! We'll focus on intermediate challenges"}
-                  {experienceLevel[0] >= 60 && experienceLevel[0] < 80 && "Awesome! We'll help you refine your skills"}
-                  {experienceLevel[0] >= 80 && "Excellent! We'll provide advanced scenarios to master"}
+              {/* Dynamic helper text */}
+              <div className="p-4 bg-[rgba(8,12,24,0.55)] backdrop-blur-[20px] border border-white/6 rounded-2xl">
+                <p className="text-sm text-gray-300 font-medium">
+                  {getHelperText(experienceLevel[0])}
                 </p>
               </div>
             </div>
           </div>
         );
 
-      // Step 8: Motivation & Streak
+      // Step 8: Commitment & Streak Start
       case 8:
         return (
-          <div className="space-y-6 text-center animate-fade-in">
+          <div className="max-w-sm mx-auto space-y-8 text-center animate-fade-in">
             <div className="space-y-4">
-              <div className="mx-auto w-20 h-20 bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 rounded-3xl flex items-center justify-center animate-pulse shadow-2xl">
-                <Flame className="h-10 w-10 text-white" />
-              </div>
-              <h1 className="text-2xl font-bold text-foreground">You're Ready. Start Your Journey!</h1>
-              <p className="text-muted-foreground">Can you practice every day?</p>
+              <h2 className="text-[24px] font-semibold text-white tracking-[-0.3px]">You're ready. Start your journey!</h2>
+              <p className="text-gray-400 text-base">Can you practice every day?</p>
             </div>
             
+            {/* Glass coin with Day 1 */}
             <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-pink-500/20 rounded-2xl blur-xl"></div>
-              <div className="relative bg-background/90 backdrop-blur-sm border border-border/50 rounded-2xl p-6 shadow-xl space-y-4">
-                <div className="flex items-center justify-center gap-3">
-                  <Flame className="h-8 w-8 text-orange-500 animate-pulse" />
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-foreground">Day 1</div>
-                    <div className="text-sm text-muted-foreground">Your streak starts now</div>
+              <div className="absolute inset-0 bg-gradient-to-r from-orange-500/15 to-pink-500/15 rounded-2xl blur-lg"></div>
+              <div className="relative bg-[rgba(8,12,24,0.55)] backdrop-blur-[20px] border border-white/6 rounded-2xl p-8 shadow-[0_18px_40px_-10px_rgba(0,0,0,0.35)]">
+                
+                {/* Glass coin with flame */}
+                <div className="relative mx-auto w-24 h-24 mb-6">
+                  <div className="absolute inset-0 bg-gradient-to-br from-orange-400/20 to-pink-500/20 rounded-full backdrop-blur-sm border border-orange-400/30 transform rotate-8 animate-[spin_8s_ease-in-out_infinite]"></div>
+                  <div className="relative w-full h-full flex items-center justify-center">
+                    <Flame className="h-12 w-12 text-orange-400 animate-pulse" />
+                  </div>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="text-2xl font-bold text-white">Day 1</div>
                   </div>
                 </div>
                 
-                <div className="p-3 bg-muted/50 rounded-lg">
-                  <div className="text-sm font-medium mb-1">Level 1</div>
-                  <div className="h-2 bg-muted rounded-full">
-                    <div className="h-2 bg-gradient-to-r from-primary to-purple-500 rounded-full w-0 animate-pulse"></div>
+                {/* Level progress with tick marks */}
+                <div className="space-y-3 mb-6">
+                  <div className="flex justify-between text-sm text-gray-400">
+                    <span>Level 1</span>
+                    <span>0/50 XP</span>
                   </div>
-                  <div className="text-xs text-muted-foreground mt-1">0 XP → 50 XP</div>
+                  <div className="h-3 bg-white/10 rounded-full overflow-hidden relative">
+                    {/* Gamey tick marks */}
+                    <div className="absolute inset-0 flex justify-between items-center px-1">
+                      {[...Array(6)].map((_, i) => (
+                        <div key={i} className="w-px h-2 bg-white/30"></div>
+                      ))}
+                    </div>
+                    <div className="h-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full w-0 animate-pulse"></div>
+                  </div>
                 </div>
                 
-                <div className="text-center space-y-2">
-                  <p className="font-medium text-green-600">Your first rep earns XP... even if you fail!</p>
-                  <p className="text-sm text-muted-foreground">Consistency is key – come back daily to build your streak!</p>
+                {/* Motivational text */}
+                <div className="space-y-3">
+                  <p className="font-medium text-green-400">Your first rep earns XP... even if you fail!</p>
+                  <p className="text-sm text-gray-400">Consistency is key – come back daily to build your streak!</p>
                 </div>
               </div>
             </div>
@@ -465,68 +623,100 @@ export default function Onboarding() {
   };
 
   return (
-    <main className="min-h-[100dvh] flex items-center justify-center px-4 bg-gradient-to-br from-background via-background to-muted/20">
-      <div className="w-full max-w-md">
-        {/* Progress */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex gap-1">
-            {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-              <div
-                key={i}
-                className={`h-1.5 w-6 rounded-full transition-all duration-500 ${
-                  i <= step ? 'bg-gradient-to-r from-primary to-purple-500' : 'bg-muted'
-                }`}
-              />
-            ))}
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-muted-foreground">{step}/8</span>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={skip}
-              className="text-muted-foreground hover:text-foreground"
+    <div className="min-h-screen bg-gradient-to-br from-[#0A0F1F] to-[#11162B] flex flex-col relative overflow-hidden">
+      {/* Subtle grain/noise overlay */}
+      <div className="absolute inset-0 opacity-[0.03] bg-gradient-to-br from-gray-900/50 to-transparent pointer-events-none"></div>
+      
+      {/* Progress rail with shimmer */}
+      <div className="sticky top-0 z-50 p-6 bg-[rgba(8,12,24,0.8)] backdrop-blur-[18px] border-b border-white/6">
+        <div className="max-w-sm mx-auto">
+          <div className="flex items-center justify-between text-sm text-gray-400 mb-3">
+            <span className="text-xs uppercase tracking-wide font-medium">{step}/8</span>
+            <button 
+              onClick={skip} 
+              className="text-purple-400 hover:text-purple-300 transition-colors text-sm font-medium"
             >
-              <X className="h-4 w-4" />
-            </Button>
+              Skip
+            </button>
+          </div>
+          <div className="w-full h-[2px] bg-white/10 rounded-full overflow-hidden relative">
+            <div 
+              className="h-[2px] bg-gradient-to-r from-purple-500 via-purple-400 to-pink-400 rounded-full transition-all duration-500 relative"
+              style={{ width: `${(step / 8) * 100}%` }}
+            >
+              {/* Shimmer sweep */}
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent animate-pulse"></div>
+            </div>
+            {/* Progress dots */}
+            <div className="absolute inset-0 flex justify-between items-center">
+              {[...Array(8)].map((_, i) => (
+                <div 
+                  key={i} 
+                  className={`w-1 h-1 rounded-full transition-all duration-300 ${
+                    i < step ? 'bg-purple-400' : 'bg-white/20'
+                  }`}
+                ></div>
+              ))}
+            </div>
           </div>
         </div>
-
-        {/* Content */}
-        <Card className="border-border/50 shadow-lg">
-          <CardContent className="p-6">
-            {renderStep()}
-            
-            {/* Navigation */}
-            <div className="flex gap-3 pt-6">
-              {step > 1 && (
-                <Button
-                  variant="outline"
-                  onClick={() => setStep(step - 1)}
-                  className="flex-1"
-                >
-                  Back
-                </Button>
-              )}
-              
-              <Button
-                onClick={step === 8 ? finish : () => setStep(step + 1)}
-                disabled={(step === 6 && !selectedGoal)}
-                className="flex-1 bg-gradient-to-r from-primary to-purple-500 hover:from-primary/90 hover:to-purple-500/90"
-              >
-                {step === 8 ? (
-                  <>
-                    <Flame className="h-4 w-4 mr-1" />
-                    Begin First Mission!
-                  </>
-                ) : (
-                  <>Next <ArrowRight className="h-4 w-4 ml-1" /></>
-                )}
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
       </div>
-    </main>
+
+      {/* Content with proper spacing */}
+      <div className="flex-1 flex items-center justify-center p-6 pb-32">
+        <div className="w-full">
+          {renderStep()}
+        </div>
+      </div>
+
+      {/* Navigation with gradient pill buttons */}
+      <div className="fixed bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-[#0A0F1F] via-[#0A0F1F]/95 to-transparent">
+        <div className="max-w-sm mx-auto flex gap-4">
+          {step > 1 && (
+            <button
+              onClick={() => setStep(step - 1)}
+              className="flex-1 h-14 bg-white/10 text-gray-300 rounded-xl font-medium transition-all duration-200 hover:bg-white/15 hover:text-white border border-white/20"
+            >
+              Back
+            </button>
+          )}
+          <button 
+            onClick={handleNext}
+            disabled={isNextDisabled()}
+            className={`flex-1 h-14 rounded-xl font-medium transition-all duration-200 flex items-center justify-center gap-2 ${
+              isNextDisabled() 
+                ? 'bg-gray-600 text-gray-400 cursor-not-allowed' 
+                : `bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-lg hover:shadow-xl active:scale-[0.98] ${
+                    buttonPressed ? 'scale-[0.98]' : ''
+                  }`
+            }`}
+            onMouseDown={() => setButtonPressed(true)}
+            onMouseUp={() => setButtonPressed(false)}
+            onMouseLeave={() => setButtonPressed(false)}
+          >
+            {step === 8 ? "Begin First Mission" : "Continue"}
+            <ChevronRight className={`h-5 w-5 transition-transform duration-200 ${buttonPressed ? 'translate-x-1' : ''}`} />
+          </button>
+        </div>
+      </div>
+      
+      {/* Confetti for final step */}
+      {confetti && step === 8 && (
+        <div className="fixed inset-0 pointer-events-none z-40">
+          {[...Array(20)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute w-2 h-2 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full animate-bounce"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 2}s`,
+                animationDuration: `${2 + Math.random() * 2}s`
+              }}
+            ></div>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
