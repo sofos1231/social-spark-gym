@@ -21,6 +21,7 @@ import Login from "./pages/auth/Login";
 import EmailLogin from "./pages/auth/EmailLogin";
 import Signup from "./pages/auth/Signup";
 import DevBypass from "./pages/dev/DevBypass";
+import Onboarding from "./pages/onboarding/Onboarding";
 import ProtectedRoute from "./components/routing/ProtectedRoute";
 import PublicOnlyRoute from "./components/routing/PublicOnlyRoute";
 import AuthProvider from "./contexts/AuthContext";
@@ -38,18 +39,19 @@ const AppShell = () => {
         <Route path="/auth/email" element={<PageTransition currentPath="/auth/email"><PublicOnlyRoute><EmailLogin /></PublicOnlyRoute></PageTransition>} />
         <Route path="/auth/signup" element={<PageTransition currentPath="/auth/signup"><PublicOnlyRoute><Signup /></PublicOnlyRoute></PageTransition>} />
         <Route path="/dev-bypass" element={<DevBypass />} />
+        <Route path="/onboarding" element={<PageTransition currentPath="/onboarding"><ProtectedRoute><Onboarding /></ProtectedRoute></PageTransition>} />
 
-        <Route path="/" element={<PageTransition currentPath="/"><PracticeHub /></PageTransition>} />
-        <Route path="/practice-road/:category" element={<PageTransition currentPath="/practice-road"><PracticeRoad /></PageTransition>} />
-        <Route path="/practice" element={<PageTransition currentPath="/practice"><PracticeHub /></PageTransition>} />
-        <Route path="/quick-drill" element={<PageTransition currentPath="/quick-drill"><QuickDrill /></PageTransition>} />
-        <Route path="/shadow-practice" element={<PageTransition currentPath="/shadow-practice"><ShadowPractice /></PageTransition>} />
-        <Route path="/stats" element={<PageTransition currentPath="/stats"><Stats /></PageTransition>} />
-        <Route path="/profile" element={<PageTransition currentPath="/profile"><Profile /></PageTransition>} />
-        <Route path="/upgrade" element={<PageTransition currentPath="/upgrade"><Upgrade /></PageTransition>} />
-        <Route path="/shop" element={<PageTransition currentPath="/shop"><Shop /></PageTransition>} />
-        <Route path="/badges" element={<PageTransition currentPath="/badges"><Badges /></PageTransition>} />
-        <Route path="/level-milestones" element={<PageTransition currentPath="/level-milestones"><LevelMilestones /></PageTransition>} />
+        <Route path="/" element={<PageTransition currentPath="/"><ProtectedRoute><PracticeHub /></ProtectedRoute></PageTransition>} />
+        <Route path="/practice-road/:category" element={<PageTransition currentPath="/practice-road"><ProtectedRoute><PracticeRoad /></ProtectedRoute></PageTransition>} />
+        <Route path="/practice" element={<PageTransition currentPath="/practice"><ProtectedRoute><PracticeHub /></ProtectedRoute></PageTransition>} />
+        <Route path="/quick-drill" element={<PageTransition currentPath="/quick-drill"><ProtectedRoute><QuickDrill /></ProtectedRoute></PageTransition>} />
+        <Route path="/shadow-practice" element={<PageTransition currentPath="/shadow-practice"><ProtectedRoute><ShadowPractice /></ProtectedRoute></PageTransition>} />
+        <Route path="/stats" element={<PageTransition currentPath="/stats"><ProtectedRoute><Stats /></ProtectedRoute></PageTransition>} />
+        <Route path="/profile" element={<PageTransition currentPath="/profile"><ProtectedRoute><Profile /></ProtectedRoute></PageTransition>} />
+        <Route path="/upgrade" element={<PageTransition currentPath="/upgrade"><ProtectedRoute><Upgrade /></ProtectedRoute></PageTransition>} />
+        <Route path="/shop" element={<PageTransition currentPath="/shop"><ProtectedRoute><Shop /></ProtectedRoute></PageTransition>} />
+        <Route path="/badges" element={<PageTransition currentPath="/badges"><ProtectedRoute><Badges /></ProtectedRoute></PageTransition>} />
+        <Route path="/level-milestones" element={<PageTransition currentPath="/level-milestones"><ProtectedRoute><LevelMilestones /></ProtectedRoute></PageTransition>} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<PageTransition currentPath="*"><NotFound /></PageTransition>} />
       </Routes>
