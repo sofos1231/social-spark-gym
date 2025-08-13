@@ -14,10 +14,13 @@ import {
 } from 'lucide-react';
 import MissionPopup from '@/components/MissionPopup';
 import WavyRoadmapPath from '@/components/WavyRoadmapPath';
-import MissionBubble from '@/components/MissionBubble';
+import EnhancedMissionBubble from '@/components/EnhancedMissionBubble';
 import ProgressTopBar from '@/components/ProgressTopBar';
-import AnimatedConnectorTrail from '@/components/AnimatedConnectorTrail';
+import EnhancedRoadmapPath from '@/components/EnhancedRoadmapPath';
 import RewardPopup from '@/components/RewardPopup';
+import CelebrationOverlay from '@/components/CelebrationOverlay';
+import CoachCharacter from '@/components/CoachCharacter';
+import TreasureChest from '@/components/TreasureChest';
 
 interface Mission {
   id: number;
@@ -37,6 +40,8 @@ const PracticeRoad = () => {
   const [showMissionPopup, setShowMissionPopup] = useState(false);
   const [showRewardPopup, setShowRewardPopup] = useState(false);
   const [rewardData, setRewardData] = useState<{ xp: number; title: string } | null>(null);
+  const [showCelebration, setShowCelebration] = useState(false);
+  const [celebrationType, setCelebrationType] = useState<'mission' | 'chapter' | 'milestone'>('mission');
 
   // Get mission data based on category
   const getMissionData = () => {
@@ -343,14 +348,8 @@ const PracticeRoad = () => {
           className="relative w-full max-w-md mx-auto px-4"
           style={{ height: `${totalHeight}px` }}
         >
-          {/* Wavy Path Background */}
-          <WavyRoadmapPath 
-            missionCount={missions.length}
-            className="absolute inset-0"
-          />
-          
-          {/* Animated Connector Trails */}
-          <AnimatedConnectorTrail
+          {/* Enhanced Roadmap Path */}
+          <EnhancedRoadmapPath 
             missions={missions}
             pathPoints={positions}
             className="absolute inset-0"
@@ -363,7 +362,7 @@ const PracticeRoad = () => {
             const hasStreakBonus = completedMissions >= 3 && mission.status === 'current';
             
             return (
-              <MissionBubble
+              <EnhancedMissionBubble
                 key={mission.id}
                 mission={mission}
                 icon={MissionIcon}
@@ -374,7 +373,48 @@ const PracticeRoad = () => {
               />
             );
           })}
+
+          {/* Treasure Chests at Milestones */}
+          {missions.map((_, index) => {
+            if ((index + 1) % 4 === 0 && index < missions.length - 1) {
+              const chestPosition = { 
+                x: positions[index].x + 15, 
+                y: positions[index].y + 30 
+              };
+              return (
+                <div
+                  key={`chest-${index}`}
+                  className="absolute pointer-events-auto"
+                  style={{
+                    left: `${chestPosition.x}%`,
+                    top: `${chestPosition.y}px`,
+                    transform: 'translate(-50%, -50%)'
+                  }}
+                >
+                  <TreasureChest
+                    isUnlocked={index < completedMissions}
+                    rewardType="xp"
+                  />
+                </div>
+              );
+            }
+            return null;
+          })}
         </div>
+
+        {/* Coach Character */}
+        <CoachCharacter
+          message={
+            progressPercentage === 100 ? "Amazing! Chapter complete!" :
+            progressPercentage > 50 ? "You're crushing it!" :
+            "Ready for your next mission?"
+          }
+          mood={
+            progressPercentage === 100 ? "celebrating" :
+            progressPercentage > 50 ? "excited" : "encouraging"
+          }
+          position="corner"
+        />
 
         {/* Chapter Complete Celebration */}
         {progressPercentage === 100 && (

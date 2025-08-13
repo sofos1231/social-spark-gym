@@ -174,6 +174,61 @@ export default {
 				'slide-out-right': {
 					'0%': { transform: 'translateX(0)', opacity: '1' },
 					'100%': { transform: 'translateX(100%)', opacity: '0' }
+				},
+				'spin-slow': {
+					from: { transform: 'rotate(0deg)' },
+					to: { transform: 'rotate(360deg)' }
+				},
+				'fade-in': {
+					'0%': { opacity: '0', transform: 'translateY(10px)' },
+					'100%': { opacity: '1', transform: 'translateY(0)' }
+				},
+				'shimmer-horizontal': {
+					'0%': { transform: 'translateX(-100%)' },
+					'100%': { transform: 'translateX(300%)' }
+				},
+				'shimmer-vertical': {
+					'0%': { transform: 'translateY(-100%)' },
+					'100%': { transform: 'translateY(300%)' }
+				},
+				'shimmer-glow': {
+					'0%': { transform: 'translateX(-100%)' },
+					'100%': { transform: 'translateX(200%)' }
+				},
+				'shimmer-particles': {
+					'0%': { transform: 'translateX(-20px) scale(0)', opacity: '0' },
+					'50%': { transform: 'translateX(10px) scale(1)', opacity: '1' },
+					'100%': { transform: 'translateX(40px) scale(0)', opacity: '0' }
+				},
+				'confetti-fall': {
+					'0%': { 
+						transform: 'translateY(-100vh) rotate(0deg)',
+						opacity: '1'
+					},
+					'100%': { 
+						transform: 'translateY(100vh) rotate(360deg)',
+						opacity: '0'
+					}
+				},
+				'float': {
+					'0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+					'33%': { transform: 'translateY(-8px) rotate(2deg)' },
+					'66%': { transform: 'translateY(4px) rotate(-1deg)' }
+				},
+				'coin-flip': {
+					'0%': { transform: 'rotateY(0deg)' },
+					'50%': { transform: 'rotateY(90deg)' },
+					'100%': { transform: 'rotateY(0deg)' }
+				},
+				'treasure-unlock': {
+					'0%': { transform: 'scale(1) rotate(0deg)' },
+					'25%': { transform: 'scale(1.1) rotate(5deg)' },
+					'75%': { transform: 'scale(1.05) rotate(-2deg)' },
+					'100%': { transform: 'scale(1) rotate(0deg)' }
+				},
+				'path-progress': {
+					'0%': { strokeDashoffset: '100%' },
+					'100%': { strokeDashoffset: '0%' }
 				}
 			},
 			animation: {
@@ -190,7 +245,18 @@ export default {
 				'slide-in-right': 'slide-in-right 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
 				'slide-in-left': 'slide-in-left 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
 				'slide-out-left': 'slide-out-left 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-				'slide-out-right': 'slide-out-right 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+				'slide-out-right': 'slide-out-right 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+				'spin-slow': 'spin-slow 8s linear infinite',
+				'fade-in': 'fade-in 0.5s ease-out',
+				'shimmer-horizontal': 'shimmer-horizontal 2s ease-in-out infinite',
+				'shimmer-vertical': 'shimmer-vertical 2s ease-in-out infinite',
+				'shimmer-glow': 'shimmer-glow 1.5s ease-in-out infinite',
+				'shimmer-particles': 'shimmer-particles 1s ease-out infinite',
+				'confetti-fall': 'confetti-fall 3s ease-out forwards',
+				'float': 'float 3s ease-in-out infinite',
+				'coin-flip': 'coin-flip 0.8s ease-in-out',
+				'treasure-unlock': 'treasure-unlock 0.6s ease-out',
+				'path-progress': 'path-progress 1.2s ease-out forwards'
 			}
 		}
 	},
