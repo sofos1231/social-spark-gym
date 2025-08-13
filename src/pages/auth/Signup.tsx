@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
@@ -36,14 +36,24 @@ export default function Signup() {
 
   return (
     <main className="relative min-h-[100dvh] flex items-end px-6 pb-8 sm:pb-10" style={{ paddingTop: 'env(safe-area-inset-top)', paddingBottom: 'env(safe-area-inset-bottom)' }}>
-      <Card className="w-full max-w-sm">
-        <CardHeader>
-          <h1 className="sr-only">Create account</h1>
-          <CardTitle>Create account</CardTitle>
-          <CardDescription>Start your journey</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <section className="relative z-10 w-full">
+        <div className="relative mx-auto w-full max-w-[420px] animate-slide-up">
+          {/* Brand emblem for consistency with Login */}
+          <div className="brand-emblem brand-emblem--sg mx-auto mb-4 animate-scale-in" style={{ animationDelay: '120ms' }} aria-hidden>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+              <path d="M12 2l7 3v5c0 5-3.5 9.2-7 10-3.5-.8-7-5-7-10V5l7-3z" fill="white" opacity="0.95"/>
+              <path d="M8.5 12.2c0-2.1 1.8-3.7 3.9-3.7 1 0 1.9.3 2.6.9l-1.1 1.5c-.4-.3-.9-.5-1.5-.5-1.1 0-2 .8-2 1.8 0 1.1.9 1.9 2 1.9.7 0 1.4-.3 1.8-.8V12h-2v-1.6h3.8v2.8c-.8 1.5-2.3 2.4-3.9 2.4-2.1 0-3.9-1.6-3.9-3.8z" fill="hsl(var(--background))"/>
+            </svg>
+          </div>
+
+          {/* Heading */}
+          <header className="text-center space-y-1">
+            <h1 className="text-2xl font-bold leading-tight text-[hsl(var(--text-primary))]">Create account</h1>
+            <p className="text-sm italic text-[hsl(var(--text-muted))]">Start your journey</p>
+          </header>
+
+          {/* Form */}
+          <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input id="email" type="email" placeholder="you@example.com" {...register("email")} aria-invalid={!!errors.email} />
@@ -54,13 +64,13 @@ export default function Signup() {
               <Input id="password" type="password" placeholder="••••••••" {...register("password")} aria-invalid={!!errors.password} />
               {errors.password && <p className="text-sm text-destructive">{errors.password.message}</p>}
             </div>
-            <Button type="submit" className="w-full" disabled={isSubmitting}>Create account</Button>
-            <p className="text-sm text-muted-foreground text-center">
+            <Button type="submit" variant="brand" className="w-full h-14 rounded-[18px]" disabled={isSubmitting}>Create account</Button>
+            <p className="text-sm text-[hsl(var(--text-muted))] text-center">
               Already have an account? <Link to="/auth/login" className="story-link">Sign in</Link>
             </p>
           </form>
-        </CardContent>
-      </Card>
+        </div>
+      </section>
     </main>
   );
 }
