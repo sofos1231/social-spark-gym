@@ -18,8 +18,8 @@ import Navigation from "./components/Navigation";
 import TopStatusBar from "./components/TopStatusBar";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/auth/Login";
+import EmailLogin from "./pages/auth/EmailLogin";
 import Signup from "./pages/auth/Signup";
-import Onboarding from "./pages/onboarding/Onboarding";
 import DevBypass from "./pages/dev/DevBypass";
 import ProtectedRoute from "./components/routing/ProtectedRoute";
 import PublicOnlyRoute from "./components/routing/PublicOnlyRoute";
@@ -35,8 +35,8 @@ const AppShell = () => {
       {!hideChrome && <TopStatusBar />}
       <Routes>
         <Route path="/auth/login" element={<PageTransition currentPath="/auth/login"><PublicOnlyRoute><Login /></PublicOnlyRoute></PageTransition>} />
+        <Route path="/auth/email" element={<PageTransition currentPath="/auth/email"><PublicOnlyRoute><EmailLogin /></PublicOnlyRoute></PageTransition>} />
         <Route path="/auth/signup" element={<PageTransition currentPath="/auth/signup"><PublicOnlyRoute><Signup /></PublicOnlyRoute></PageTransition>} />
-        <Route path="/onboarding" element={<PageTransition currentPath="/onboarding"><ProtectedRoute><Onboarding /></ProtectedRoute></PageTransition>} />
         <Route path="/dev-bypass" element={<DevBypass />} />
 
         <Route path="/" element={<PageTransition currentPath="/"><PracticeHub /></PageTransition>} />

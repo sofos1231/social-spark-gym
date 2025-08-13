@@ -1,49 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
-
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Checkbox } from "@/components/ui/checkbox";
 import { X, Apple, Mail } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog";
 import OnboardingHeroCarousel from "@/components/auth/OnboardingHeroCarousel";
 import ImmersiveBackground from "@/components/auth/ImmersiveBackground";
 import eyeIllustration from "@/assets/eye-contact-illustration.jpg";
 import speakingIllustration from "@/assets/public-speaking-illustration.jpg";
 import groupIllustration from "@/assets/group-conversation-illustration.jpg";
 
-const schema = z.object({
-  username: z.string().min(3, "Min 3 characters").optional(),
-  email: z.string().email().optional(),
-  password: z.string().min(6, "Min 6 characters"),
-}).refine((data) => data.username || data.email, {
-  message: "Username or email is required",
-  path: ["username"],
-});
-
-type FormValues = z.infer<typeof schema>;
 
 export default function Login() {
   const { login, onboardingDone } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<FormValues>({ resolver: zodResolver(schema) });
-
-  const onSubmit = async (data: FormValues) => {
-    login(data.username || data.email);
-    toast({ title: "Welcome back!", description: "Signed in successfully" });
-    navigate(onboardingDone ? "/" : "/onboarding", { replace: true });
-  };
 
   // Page SEO
   useEffect(() => {
@@ -65,31 +36,21 @@ export default function Login() {
     link.setAttribute('href', window.location.href);
   }, []);
 
-  const [consent, setConsent] = useState(false);
   const [loading, setLoading] = useState<null | 'google' | 'apple' | 'email'>(null);
   const [errorProvider, setErrorProvider] = useState<null | 'google' | 'apple'>(null);
-  const [showEmailForm, setShowEmailForm] = useState(false);
   const [activeSlide, setActiveSlide] = useState(0);
 
   const handleProvider = async (provider: 'google' | 'apple') => {
-    if (!consent) {
-      toast({ title: 'Please agree to continue', description: 'You must accept the terms to continue.' });
-      return;
-    }
     setLoading(provider);
     setErrorProvider(null);
     await new Promise((r) => setTimeout(r, 800));
     setErrorProvider(provider);
-    toast({ title: 'Coming soon', description: `${provider === 'apple' ? 'Apple' : 'Google'} sign-in isn\'t connected yet.`});
+    toast({ title: 'Coming soon', description: `${provider === 'apple' ? 'Apple' : 'Google'} sign-in isn't connected yet.`});
     setLoading(null);
   };
 
   const handleEmailContinue = () => {
-    if (!consent) {
-      toast({ title: 'Please agree to continue', description: 'You must accept the terms to continue.' });
-      return;
-    }
-    setShowEmailForm(true);
+    navigate('/auth/email');
   };
 
   const onClose = () => {
@@ -219,27 +180,6 @@ export default function Login() {
             </Button>
           </div>
 
-          {/* Username/Password form */}
-          <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-4" aria-label="Username and password sign in">
-            <div className="space-y-2">
-              <Label htmlFor="username">Username</Label>
-              <Input id="username" type="text" placeholder="yourname" {...register("username")} />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password-inline">Password</Label>
-              <Input id="password-inline" type="password" placeholder="••••••••" {...register("password")} aria-invalid={!!errors.password} />
-              {errors.password && <p className="text-sm text-destructive">{errors.password.message}</p>}
-            </div>
-            <Button type="submit" className="w-full h-12 rounded-xl">Sign in</Button>
-          </form>
-
-          {/* Consent */}
-          <div className="mt-4">
-            <label htmlFor="consent" className="flex items-center gap-3 text-[hsl(var(--text-secondary))] cursor-pointer select-none">
-              <Checkbox id="consent" checked={consent} onCheckedChange={(v) => setConsent(Boolean(v))} aria-label="I agree to the terms" />
-              <span className="text-sm">I agree to SocialGym's <Link to="/terms" className="story-link">Terms</Link> and acknowledge the <Link to="/privacy" className="story-link">Privacy Policy</Link>.</span>
-            </label>
-          </div>
 
 
           {/* Footer */}
