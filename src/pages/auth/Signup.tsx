@@ -35,7 +35,7 @@ export default function Signup() {
   };
 
   return (
-    <main className="relative min-h-[100dvh] flex items-end px-6 pb-8 sm:pb-10" style={{ paddingTop: 'env(safe-area-inset-top)', paddingBottom: 'env(safe-area-inset-bottom)' }}>
+    <main className="relative min-h-[100dvh] grid place-items-center px-6 py-8 sm:py-10" style={{ paddingTop: 'env(safe-area-inset-top)', paddingBottom: 'env(safe-area-inset-bottom)' }}>
       <section className="relative z-10 w-full">
         <div className="relative mx-auto w-full max-w-[420px] animate-slide-up">
           {/* Brand emblem for consistency with Login */}
