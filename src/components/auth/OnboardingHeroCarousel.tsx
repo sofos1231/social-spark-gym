@@ -7,7 +7,7 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel"
 
-import eyeIllustration from "@/assets/eye-contact-illustration.jpg"
+
 import groupIllustration from "@/assets/group-conversation-illustration.jpg"
 import speakingIllustration from "@/assets/public-speaking-illustration.jpg"
 
@@ -24,8 +24,8 @@ const slidesData: Slide[] = [
     id: "skill",
     title: "Train to succeed socially",
     subtitle: "Practice real conversations and build confidence where it matters.",
-    image: eyeIllustration,
-    alt: "Illustration of confident character improving eye contact on a skill tree",
+    image: "/lovable-uploads/ca1c1727-4919-4086-b9c8-78571cf173a5.png",
+    alt: "Two people smiling and making eye contact illustration",
   },
   {
     id: "ai",

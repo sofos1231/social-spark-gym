@@ -6,7 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import { X, Apple, Mail } from "lucide-react";
 import OnboardingHeroCarousel from "@/components/auth/OnboardingHeroCarousel";
 import ImmersiveBackground from "@/components/auth/ImmersiveBackground";
-import eyeIllustration from "@/assets/eye-contact-illustration.jpg";
+
 import speakingIllustration from "@/assets/public-speaking-illustration.jpg";
 import groupIllustration from "@/assets/group-conversation-illustration.jpg";
 
@@ -72,7 +72,7 @@ export default function Login() {
       {/* Cinematic background */}
       <div className="absolute inset-0 overflow-hidden" aria-hidden>
         <ImmersiveBackground
-          images={[eyeIllustration, speakingIllustration, groupIllustration]}
+          images={["/lovable-uploads/ca1c1727-4919-4086-b9c8-78571cf173a5.png", speakingIllustration, groupIllustration]}
           activeIndex={activeSlide}
         />
       </div>
