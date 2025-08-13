@@ -9,11 +9,20 @@ interface ImmersiveBackgroundProps {
 export default function ImmersiveBackground({ images, activeIndex }: ImmersiveBackgroundProps) {
   const [outgoingIndex, setOutgoingIndex] = useState<number | null>(null)
   const prevActiveRef = useRef(activeIndex)
+  const [reducedMotion, setReducedMotion] = useState(false)
+
+  useEffect(() => {
+    const m = window.matchMedia('(prefers-reduced-motion: reduce)')
+    setReducedMotion(m.matches)
+    const handler = (e: MediaQueryListEvent) => setReducedMotion(e.matches)
+    m.addEventListener('change', handler)
+    return () => m.removeEventListener('change', handler)
+  }, [])
 
   useEffect(() => {
     setOutgoingIndex(prevActiveRef.current)
     prevActiveRef.current = activeIndex
-    const t = setTimeout(() => setOutgoingIndex(null), 800)
+    const t = setTimeout(() => setOutgoingIndex(null), 480)
     return () => clearTimeout(t)
   }, [activeIndex])
 
@@ -28,16 +37,18 @@ export default function ImmersiveBackground({ images, activeIndex }: ImmersiveBa
         return (
           <div
             key={i}
-            className="absolute inset-0 transition-opacity duration-700 ease-out"
+            className="absolute inset-0 transition-opacity duration-[450ms] ease-out"
             style={{ opacity: isActive ? 1 : 0, pointerEvents: "none" }}
           >
             {/* Subtle parallax/zoom via transform on the image container */}
             <div
-              className="absolute inset-0 transition-transform duration-700 ease-out will-change-transform"
+              className="absolute inset-0 transition-transform duration-[450ms] ease-out will-change-transform"
               style={{
-                transform: isActive
+                transform: reducedMotion
                   ? "translate3d(0,0,0) scale(1)"
-                  : "translate3d(-2%,0,0) scale(1.03)",
+                  : isActive
+                  ? "translate3d(0,0,0) scale(1)"
+                  : "translate3d(12px,0,0) scale(1.01)",
               }}
             >
               <img
@@ -47,7 +58,7 @@ export default function ImmersiveBackground({ images, activeIndex }: ImmersiveBa
                 className="absolute inset-0 h-full w-full object-cover blur-2xl scale-110"
               />
               {/* Brand-tinted readability overlay */}
-              <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/70 to-background/90" />
+              <div className="absolute inset-0 bg-background/70" />
             </div>
           </div>
         )

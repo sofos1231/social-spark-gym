@@ -47,7 +47,8 @@ type Props = { onIndexChange?: (i: number) => void }
 export default function OnboardingHeroCarousel({ onIndexChange }: Props) {
   const [api, setApi] = useState<CarouselApi | null>(null)
   const [selectedIndex, setSelectedIndex] = useState(0)
-  const [interacted, setInteracted] = useState(false)
+  const [pausedUntil, setPausedUntil] = useState<number | null>(null)
+  const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
   // Sync dots with carousel selection
   useEffect(() => {
@@ -68,16 +69,16 @@ export default function OnboardingHeroCarousel({ onIndexChange }: Props) {
 
   // Autoplay that pauses forever after first interaction
   useEffect(() => {
-    if (!api || interacted) return
+    if (!api || prefersReducedMotion) return
     const id = setInterval(() => {
-      if (!api) return
+      if (pausedUntil && Date.now() < pausedUntil) return
       if (api.canScrollNext()) api.scrollNext()
       else api.scrollTo(0)
     }, 4500)
     return () => clearInterval(id)
-  }, [api, interacted])
+  }, [api, pausedUntil, prefersReducedMotion])
 
-  const handleUserInteraction = () => setInteracted(true)
+  const handleUserInteraction = () => setPausedUntil(Date.now() + 6000)
 
   const slides = useMemo(() => slidesData, [])
 
@@ -97,7 +98,7 @@ export default function OnboardingHeroCarousel({ onIndexChange }: Props) {
         <CarouselContent>
           {slides.map((s) => (
             <CarouselItem key={s.id} className="px-2">
-              <article className="rounded-2xl border border-border/40 bg-background/60 backdrop-blur supports-[backdrop-filter]:bg-background/40 shadow-lg/30 shadow-[var(--shadow-elegant)] p-4 sm:p-5 text-center animate-fade-in">
+              <article className="rounded-2xl bg-background/5 p-5 text-center animate-fade-in">
                 <div className="relative mx-auto aspect-[16/9] w-full overflow-hidden rounded-xl">
                   <img
                     src={s.image}
@@ -105,12 +106,11 @@ export default function OnboardingHeroCarousel({ onIndexChange }: Props) {
                     loading="lazy"
                     className="h-full w-full object-cover"
                   />
-                  <span aria-hidden className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-white/5" />
                 </div>
-                <h3 className="mt-4 text-base sm:text-lg font-semibold text-[hsl(var(--text-primary))]">
+                <h3 className="mt-3 text-base sm:text-lg font-semibold text-[hsl(var(--text-primary))]">
                   {s.title}
                 </h3>
-                <p className="mt-1 text-sm text-[hsl(var(--text-muted))]">
+                <p className="mt-2 text-sm text-[hsl(var(--text-muted))]">
                   {s.subtitle}
                 </p>
               </article>
@@ -132,11 +132,10 @@ export default function OnboardingHeroCarousel({ onIndexChange }: Props) {
                   handleUserInteraction()
                   api?.scrollTo(i)
                 }}
-                className={
-                  "h-2.5 w-2.5 rounded-full transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring " +
-                  (active ? "bg-primary/90 scale-110" : "bg-muted hover:bg-muted/80")
-                }
-                style={{ minHeight: 10, minWidth: 10 }}
+                  className={
+                    "h-2.5 w-2.5 rounded-full transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring " +
+                    (active ? "bg-primary scale-110" : "bg-muted/60 hover:bg-muted/80")
+                  }
               />
             )
           })}
