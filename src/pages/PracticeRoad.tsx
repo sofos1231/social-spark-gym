@@ -374,32 +374,6 @@ const PracticeRoad = () => {
             );
           })}
 
-          {/* Treasure Chests at Milestones */}
-          {missions.map((_, index) => {
-            if ((index + 1) % 4 === 0 && index < missions.length - 1) {
-              const chestPosition = { 
-                x: positions[index].x + 15, 
-                y: positions[index].y + 30 
-              };
-              return (
-                <div
-                  key={`chest-${index}`}
-                  className="absolute pointer-events-auto"
-                  style={{
-                    left: `${chestPosition.x}%`,
-                    top: `${chestPosition.y}px`,
-                    transform: 'translate(-50%, -50%)'
-                  }}
-                >
-                  <TreasureChest
-                    isUnlocked={index < completedMissions}
-                    rewardType="xp"
-                  />
-                </div>
-              );
-            }
-            return null;
-          })}
         </div>
 
         {/* Coach Character */}
