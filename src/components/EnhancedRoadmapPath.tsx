@@ -160,48 +160,6 @@ const EnhancedRoadmapPath: React.FC<EnhancedRoadmapPathProps> = ({
           />
         )}
         
-        {/* Completed Path Section */}
-        {completedPath && (
-          <>
-            <path
-              d={completedPath}
-              fill="none"
-              stroke="url(#completedPath)"
-              strokeWidth="8"
-              strokeLinecap="round"
-              filter="url(#pathGlow)"
-            />
-            
-            {/* Shimmer Overlay on Completed Path */}
-            <path
-              d={completedPath}
-              fill="none"
-              stroke="url(#shimmer)"
-              strokeWidth="6"
-              strokeLinecap="round"
-            />
-          </>
-        )}
-        
-        {/* Progress Path (Animated Current) */}
-        {completedPath && (
-          <path
-            d={completedPath}
-            fill="none"
-            stroke="url(#progressPath)"
-            strokeWidth="4"
-            strokeLinecap="round"
-            strokeDasharray="12"
-            strokeDashoffset="12"
-          >
-            <animate
-              attributeName="stroke-dashoffset"
-              values="12;0;12"
-              dur="4s"
-              repeatCount="indefinite"
-            />
-          </path>
-        )}
         
         {/* Path Decorations (Milestone Markers) */}
         {pathPoints.map((point, index) => {
