@@ -543,17 +543,103 @@ const PracticeHub = () => {
 
       {/* Category Sections with Horizontal Carousels */}
       <div className="space-y-8">
-        {categories.map((category, index) => (
-          <CategorySection
-            key={category.id}
-            title={category.title}
-            description={category.description}
-            icon={category.icon}
-            missions={category.missions}
-            onMissionClick={handleMissionClick}
-            animationDelay={index * 200}
-          />
-        ))}
+        {categories.map((category, index) => {
+          // Replace the second category (Dating & Romance, index 1) with roadmap layout
+          if (index === 1 && category.id === 'dating') {
+            return (
+              <div key={category.id} className="relative">
+                {/* Section Header */}
+                <div className="section-container-sm mb-6">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center">
+                      <Heart className="w-4 h-4 text-white" />
+                    </div>
+                    <h2 className="heading-section">{category.title}</h2>
+                  </div>
+                  <p className="text-sm text-slate-400 font-medium">{category.description}</p>
+                </div>
+
+                {/* Exact Roadmap Layout from PracticeRoad */}
+                <div className="pb-20">
+                  <div 
+                    className="relative w-full max-w-md mx-auto px-4"
+                    style={{ height: '600px' }}
+                  >
+                    {/* Mission Road for Dating Category */}
+                    {chapters[0].missions.slice(0, 6).map((mission, missionIndex) => {
+                      const yPosition = missionIndex * 90;
+                      const xOffset = missionIndex % 2 === 0 ? 20 : 60;
+                      
+                      return (
+                        <div
+                          key={mission.id}
+                          className="absolute cursor-pointer"
+                          style={{
+                            left: `${xOffset}%`,
+                            top: `${yPosition}px`,
+                            transform: 'translate(-50%, -50%)'
+                          }}
+                          onClick={() => handleChapterMissionClick(mission)}
+                        >
+                          <div className={getMissionNodeStyle(mission)}>
+                            {getMissionIcon(mission)}
+                          </div>
+                          
+                          {/* Mission Info */}
+                          <div className="absolute left-full ml-4 top-1/2 -translate-y-1/2 min-w-[200px]">
+                            <div className="bg-slate-800/90 rounded-lg p-3 border border-slate-700">
+                              <h3 className="text-sm font-semibold text-white mb-1">{mission.title}</h3>
+                              <p className="text-xs text-slate-400 mb-2">{mission.description}</p>
+                              <div className="flex items-center gap-2 text-xs">
+                                <Clock className="w-3 h-3 text-slate-500" />
+                                <span className="text-slate-400">{mission.duration}</span>
+                                <Trophy className="w-3 h-3 text-yellow-500 ml-2" />
+                                <span className="text-yellow-400">{mission.xpReward} XP</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+
+                    {/* Connecting Path */}
+                    {chapters[0].missions.slice(0, 5).map((_, pathIndex) => {
+                      const yStart = pathIndex * 90;
+                      const yEnd = (pathIndex + 1) * 90;
+                      const xStart = pathIndex % 2 === 0 ? 20 : 60;
+                      const xEnd = (pathIndex + 1) % 2 === 0 ? 20 : 60;
+                      
+                      return (
+                        <div
+                          key={`path-${pathIndex}`}
+                          className="absolute w-1 bg-slate-700"
+                          style={{
+                            left: `${Math.min(xStart, xEnd)}%`,
+                            top: `${yStart + 32}px`,
+                            height: `${yEnd - yStart - 32}px`,
+                            background: getPathStyle(pathIndex, chapters[0].missions)
+                          }}
+                        />
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            );
+          }
+
+          return (
+            <CategorySection
+              key={category.id}
+              title={category.title}
+              description={category.description}
+              icon={category.icon}
+              missions={category.missions}
+              onMissionClick={handleMissionClick}
+              animationDelay={index * 200}
+            />
+          );
+        })}
       </div>
 
       {/* Stats Section */}
