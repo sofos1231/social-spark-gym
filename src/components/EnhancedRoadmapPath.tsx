@@ -147,45 +147,7 @@ const EnhancedRoadmapPath: React.FC<EnhancedRoadmapPathProps> = ({
           </linearGradient>
         </defs>
         
-        {/* Base Path (Full Route) */}
-        {fullPath && (
-          <path
-            d={fullPath}
-            fill="none"
-            stroke="url(#basePath)"
-            strokeWidth="6"
-            strokeLinecap="round"
-            strokeDasharray="8,4"
-            opacity="0.3"
-          />
-        )}
         
-        
-        {/* Path Decorations (Milestone Markers) */}
-        {pathPoints.map((point, index) => {
-          if (index % 3 === 0 && index > 0 && index < pathPoints.length - 1) {
-            return (
-              <g key={`milestone-${index}`}>
-                <circle
-                  cx={point.x}
-                  cy={point.y}
-                  r="3"
-                  fill="hsl(var(--accent))"
-                  opacity="0.6"
-                >
-                  <animate
-                    attributeName="r"
-                    values="3;5;3"
-                    dur="3s"
-                    repeatCount="indefinite"
-                    begin={`${index * 0.5}s`}
-                  />
-                </circle>
-              </g>
-            );
-          }
-          return null;
-        })}
       </svg>
     </div>
   );

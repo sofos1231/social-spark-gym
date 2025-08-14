@@ -62,9 +62,6 @@ const EnhancedMissionBubble: React.FC<EnhancedMissionBubbleProps> = ({
           <h3 className="text-sm font-bold text-success leading-tight font-display">
             {mission.title}
           </h3>
-          <div className="mt-1 flex items-center justify-center gap-1 text-xs text-success/80">
-            <span>✓ {mission.xpReward} XP</span>
-          </div>
         </div>
       </div>
     );
@@ -224,19 +221,6 @@ const EnhancedMissionBubble: React.FC<EnhancedMissionBubbleProps> = ({
         )}>
           {mission.title}
         </h3>
-        
-        {/* XP and Duration */}
-        <div className={cn(
-          "mt-1 transition-opacity duration-200",
-          isHovered ? "opacity-100" : "opacity-60"
-        )}>
-          <div className="flex items-center justify-center gap-1 text-xs text-muted-foreground">
-            <Star className="w-3 h-3" />
-            <span>{mission.xpReward} XP</span>
-            <span>•</span>
-            <span>{mission.duration}</span>
-          </div>
-        </div>
       </div>
       
       {/* Base Shadow */}
