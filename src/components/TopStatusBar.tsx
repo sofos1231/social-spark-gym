@@ -79,13 +79,7 @@ const TopStatusBar = () => {
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50">
-      <div 
-        className="px-3 py-2 backdrop-blur-xl"
-        style={{ 
-          background: 'rgba(255, 255, 255, 0.05)',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
-        }}
-      >
+      <div>
         {/* Clash Royale Style Status Row */}
         <div className="flex items-center justify-between gap-2">
           {/* Left: Level Trophy + XP Bar */}
