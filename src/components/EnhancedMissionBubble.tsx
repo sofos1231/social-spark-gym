@@ -183,19 +183,6 @@ const EnhancedMissionBubble: React.FC<EnhancedMissionBubbleProps> = ({
           </div>
         )}
         
-        {/* Difficulty Indicator */}
-        {mission.status !== 'locked' && (
-          <div className={cn(
-            "absolute -bottom-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center text-xs",
-            mission.difficulty === 'easy' && "bg-green-500",
-            mission.difficulty === 'medium' && "bg-yellow-500", 
-            mission.difficulty === 'hard' && "bg-red-500"
-          )}>
-            {mission.difficulty === 'easy' && '●'}
-            {mission.difficulty === 'medium' && '●●'}
-            {mission.difficulty === 'hard' && '●●●'}
-          </div>
-        )}
         
         {/* NEW Tag */}
         {showNewTag && mission.status === 'available' && (
