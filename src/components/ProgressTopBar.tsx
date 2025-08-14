@@ -28,6 +28,7 @@ const ProgressTopBar: React.FC<ProgressTopBarProps> = ({
   className = ""
 }) => {
   const [isStatsOpen, setIsStatsOpen] = useState(false);
+  const [isMilestonesExpanded, setIsMilestonesExpanded] = useState(false);
   const remainingMissions = totalMissions - completedMissions;
 
   return (
@@ -77,7 +78,8 @@ const ProgressTopBar: React.FC<ProgressTopBarProps> = ({
         <SegmentedProgress
           completed={completedMissions}
           total={totalMissions}
-          showMilestones={true}
+          showMilestones={isMilestonesExpanded}
+          onToggleMilestones={() => setIsMilestonesExpanded(!isMilestonesExpanded)}
         />
       </div>
 
