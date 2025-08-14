@@ -5,11 +5,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
-
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { Checkbox } from "@/components/ui/checkbox";
+import ImmersiveBackground from "@/components/auth/ImmersiveBackground";
+import eyeIllustration from "@/assets/eye-contact-illustration.jpg";
+import speakingIllustration from "@/assets/public-speaking-illustration.jpg";
+import groupIllustration from "@/assets/group-conversation-illustration.jpg";
 
 const schema = z.object({
   email: z.string().email(),
@@ -48,8 +51,16 @@ export default function Signup() {
   }, []);
 
   return (
-    <main className="relative min-h-[100dvh] grid place-items-center px-6 py-8 sm:py-10" style={{ paddingTop: 'env(safe-area-inset-top)', paddingBottom: 'env(safe-area-inset-bottom)' }}>
-      <section className="relative z-10 w-full">
+    <main className="relative min-h-[100dvh] flex items-center" style={{ paddingTop: 'env(safe-area-inset-top)', paddingBottom: 'env(safe-area-inset-bottom)' }}>
+      {/* Cinematic background */}
+      <div className="absolute inset-0 overflow-hidden" aria-hidden>
+        <ImmersiveBackground
+          images={[eyeIllustration, speakingIllustration, groupIllustration]}
+          activeIndex={0}
+        />
+      </div>
+
+      <section className="relative z-10 w-full px-6 py-8 sm:py-10">
         <div className="relative mx-auto w-full max-w-[420px] animate-slide-up">
           <div aria-hidden className="pointer-events-none absolute -inset-x-12 -top-24 h-48 rounded-full bg-[radial-gradient(closest-side,_hsl(var(--primary))/0.25,_transparent_70%)] blur-3xl opacity-30 -z-10" />
           {/* Brand emblem for consistency with Login */}
