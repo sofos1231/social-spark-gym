@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -29,13 +29,47 @@ const ProgressTopBar: React.FC<ProgressTopBarProps> = ({
 }) => {
   const [isStatsOpen, setIsStatsOpen] = useState(false);
   const [isMilestonesExpanded, setIsMilestonesExpanded] = useState(false);
+  const [showBackButton, setShowBackButton] = useState(true);
+  const [isCompact, setIsCompact] = useState(false);
   const remainingMissions = totalMissions - completedMissions;
+
+  useEffect(() => {
+    let lastScrollY = window.scrollY;
+    let ticking = false;
+
+    const handleScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const currentScrollY = window.scrollY;
+          const scrollingDown = currentScrollY > lastScrollY;
+          const scrollThreshold = 50;
+
+          if (scrollingDown && currentScrollY > scrollThreshold) {
+            setShowBackButton(false);
+            setIsCompact(true);
+          } else if (!scrollingDown && currentScrollY <= scrollThreshold) {
+            setShowBackButton(true);
+            setIsCompact(false);
+          }
+
+          lastScrollY = currentScrollY;
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
     <>
       <div 
         className={cn(
-          "fixed top-0 left-0 right-0 z-40 px-4 pt-3 pb-4",
+          "fixed top-0 left-0 right-0 z-40 px-4 transition-all duration-300",
+          // Dynamic padding based on compact state
+          isCompact ? "pt-3 pb-4" : "pt-4 pb-6",
           // Glass styling with backdrop blur
           "backdrop-blur-[20px] bg-[rgba(10,15,31,0.45)]",
           "border-b border-white/[0.06]",
@@ -44,8 +78,26 @@ const ProgressTopBar: React.FC<ProgressTopBarProps> = ({
           className
         )}
       >
+        {/* Header Row - Back button (conditionally shown) */}
+        {showBackButton && (
+          <div className="flex items-center justify-between mb-4">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onBack}
+              className="text-white/80 hover:text-white hover:bg-white/10 transition-colors"
+            >
+              <ArrowLeft className="w-5 h-5 mr-2" />
+              Back
+            </Button>
+          </div>
+        )}
+
         {/* Title Stack and Stats Button - Above Progress Bar */}
-        <div className="flex items-center justify-between mb-3">
+        <div className={cn(
+          "flex items-center justify-between transition-all duration-300",
+          isCompact ? "mb-2" : "mb-3"
+        )}>
           <div className="text-left">
             <h2 className="text-[22px] font-semibold text-white tracking-[-0.01em] leading-tight">
               {completedMissions}/{totalMissions} Missions
