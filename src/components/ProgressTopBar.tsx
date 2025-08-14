@@ -35,7 +35,7 @@ const ProgressTopBar: React.FC<ProgressTopBarProps> = ({
     <>
       <div 
         className={cn(
-          "fixed top-0 left-0 right-0 z-40 px-4 pt-4 pb-6",
+          "fixed top-0 left-0 right-0 z-40 px-4 pt-3 pb-4",
           // Glass styling with backdrop blur
           "backdrop-blur-[20px] bg-[rgba(10,15,31,0.45)]",
           "border-b border-white/[0.06]",
@@ -45,7 +45,7 @@ const ProgressTopBar: React.FC<ProgressTopBarProps> = ({
         )}
       >
         {/* Header Row - Back button only */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-4">
           <Button
             variant="ghost"
             size="sm"
@@ -58,7 +58,7 @@ const ProgressTopBar: React.FC<ProgressTopBarProps> = ({
         </div>
 
         {/* Title Stack and Stats Button - Above Progress Bar */}
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-3">
           <div className="text-left">
             <h2 className="text-[22px] font-semibold text-white tracking-[-0.01em] leading-tight">
               {completedMissions}/{totalMissions} Missions
