@@ -343,7 +343,7 @@ const PracticeRoad = () => {
       />
 
       {/* Scrollable Mission Road */}
-      <div className="pt-40 pb-20">
+      <div className="pt-24 pb-20">
         <div 
           className="relative w-full max-w-md mx-auto px-4"
           style={{ height: `${totalHeight}px` }}
