@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LucideIcon, Lock, Crown, Gem, Sparkles, Star } from 'lucide-react';
+import { LucideIcon, Lock, Crown, Gem, Sparkles, Star, Play } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import GoldenMissionCoin from './GoldenMissionCoin';
 import ProgressShimmer from './ProgressShimmer';
@@ -121,6 +121,7 @@ const EnhancedMissionBubble: React.FC<EnhancedMissionBubbleProps> = ({
     if (mission.status === 'locked') return Lock;
     if (mission.type === 'boss') return Crown;
     if (mission.type === 'premium') return Gem;
+    if (mission.type === 'video') return Play;
     return Icon;
   };
 
@@ -203,12 +204,6 @@ const EnhancedMissionBubble: React.FC<EnhancedMissionBubbleProps> = ({
           </div>
         )}
         
-        {/* Trending Fire Effect */}
-        {mission.status === 'current' && streakBonus && (
-          <div className="absolute -top-3 -right-2 text-orange-400 animate-bounce">
-            🔥
-          </div>
-        )}
       </div>
 
       {/* Mission Title */}
