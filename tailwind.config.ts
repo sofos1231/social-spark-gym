@@ -115,7 +115,11 @@ export default {
 				sm: 'calc(var(--radius) - 4px)',
 				xl: 'var(--radius-xl)'
 			},
-			keyframes: {
+      keyframes: {
+        "shimmer-subtle": {
+          "0%, 100%": { "background-position": "200% 0" },
+          "50%": { "background-position": "-200% 0" }
+        },
 				'accordion-down': {
 					from: { height: '0' },
 					to: { height: 'var(--radix-accordion-content-height)' }
@@ -229,6 +233,10 @@ export default {
 				'path-progress': {
 					'0%': { strokeDashoffset: '100%' },
 					'100%': { strokeDashoffset: '0%' }
+				},
+				'shimmer-subtle': {
+					'0%, 100%': { 'background-position': '200% 0' },
+					'50%': { 'background-position': '-200% 0' }
 				}
 			},
 			animation: {
@@ -256,7 +264,8 @@ export default {
 				'float': 'float 3s ease-in-out infinite',
 				'coin-flip': 'coin-flip 0.8s ease-in-out',
 				'treasure-unlock': 'treasure-unlock 0.6s ease-out',
-				'path-progress': 'path-progress 1.2s ease-out forwards'
+				'path-progress': 'path-progress 1.2s ease-out forwards',
+				'shimmer-subtle': 'shimmer-subtle 1200ms ease-out'
 			}
 		}
 	},
