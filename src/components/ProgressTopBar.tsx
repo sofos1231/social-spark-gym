@@ -44,19 +44,6 @@ const ProgressTopBar: React.FC<ProgressTopBarProps> = ({
           className
         )}
       >
-        {/* Header Row - Back button only */}
-        <div className="flex items-center justify-between mb-4">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onBack}
-            className="text-white/80 hover:text-white hover:bg-white/10 transition-colors"
-          >
-            <ArrowLeft className="w-5 h-5 mr-2" />
-            Back
-          </Button>
-        </div>
-
         {/* Title Stack and Stats Button - Above Progress Bar */}
         <div className="flex items-center justify-between mb-3">
           <div className="text-left">
