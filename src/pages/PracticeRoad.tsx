@@ -21,7 +21,7 @@ import RewardPopup from '@/components/RewardPopup';
 import CelebrationOverlay from '@/components/CelebrationOverlay';
 import CoachCharacter from '@/components/CoachCharacter';
 import TreasureChest from '@/components/TreasureChest';
-import romanticBg from '@/assets/romantic-gradient-bg.jpg';
+import romanceBgPremium from '@/assets/romance-bg-premium.png';
 
 interface Mission {
   id: number;
@@ -334,15 +334,15 @@ const PracticeRoad = () => {
     <div 
       className="min-h-screen bg-background relative"
       style={{
-        backgroundImage: category === 'dating' ? `url(${romanticBg})` : undefined,
+        backgroundImage: category === 'dating' ? `url(${romanceBgPremium})` : undefined,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat'
       }}
     >
-      {/* Overlay for better text readability */}
+      {/* Subtle overlay for optimal text readability while preserving the romantic atmosphere */}
       {category === 'dating' && (
-        <div className="absolute inset-0 bg-background/60" />
+        <div className="absolute inset-0 bg-black/10" />
       )}
       {/* Progress Top Bar */}
       <div className="relative z-10">
