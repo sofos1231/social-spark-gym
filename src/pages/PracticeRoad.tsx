@@ -21,6 +21,7 @@ import RewardPopup from '@/components/RewardPopup';
 import CelebrationOverlay from '@/components/CelebrationOverlay';
 import CoachCharacter from '@/components/CoachCharacter';
 import TreasureChest from '@/components/TreasureChest';
+import romanticBg from '@/assets/romantic-gradient-bg.jpg';
 
 interface Mission {
   id: number;
@@ -330,9 +331,22 @@ const PracticeRoad = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div 
+      className="min-h-screen bg-background relative"
+      style={{
+        backgroundImage: category === 'dating' ? `url(${romanticBg})` : undefined,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}
+    >
+      {/* Overlay for better text readability */}
+      {category === 'dating' && (
+        <div className="absolute inset-0 bg-background/60" />
+      )}
       {/* Progress Top Bar */}
-      <ProgressTopBar
+      <div className="relative z-10">
+        <ProgressTopBar
         title={title}
         chapterNumber={chapterNumber}
         completedMissions={completedMissions}
@@ -425,6 +439,7 @@ const PracticeRoad = () => {
         missionTitle={rewardData?.title || ''}
         streakBonus={completedMissions >= 3 ? 25 : 0}
       />
+      </div>
     </div>
   );
 };
