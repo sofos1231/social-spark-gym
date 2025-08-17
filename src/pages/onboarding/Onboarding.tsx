@@ -36,6 +36,7 @@ export default function Onboarding() {
   const [animatedStats, setAnimatedStats] = useState({ streak: 0, xp: 0, confidence: 0, level: 0 });
   const [cardSwiped, setCardSwiped] = useState(false);
   const [confetti, setConfetti] = useState(false);
+  const [networkError, setNetworkError] = useState(false);
   const { completeOnboarding } = useAuth();
   const navigate = useNavigate();
 
@@ -141,6 +142,7 @@ export default function Onboarding() {
               <p className="text-white/60 text-base leading-[130%] max-w-[28ch] mx-auto">
                 Practice real conversations. Build confidence.
               </p>
+              <p className="text-white/40 text-sm">30-sec drills • XP • streaks</p>
             </div>
           </div>
         );
@@ -153,44 +155,50 @@ export default function Onboarding() {
             <div className="relative mb-8">
               <div className="mx-auto w-64 h-80 rounded-[3rem] border border-white/[0.08] bg-gradient-to-b from-white/[0.02] to-transparent backdrop-blur-sm p-4">
                 <div className="w-full h-full rounded-[2.5rem] bg-gradient-to-b from-black/40 to-black/60 p-4 relative">
-                  {/* 30-sec demo tag */}
-                  <div className="absolute top-4 right-4 px-2 py-1 rounded-full bg-white/10 backdrop-blur-md">
-                    <span className="text-xs text-white/80">30-sec demo</span>
+                  {/* 30-sec demo pill tag */}
+                  <div className="absolute top-4 right-4 px-3 py-1.5 rounded-full bg-white/[0.06] backdrop-blur-[24px] border border-white/[0.16] flex items-center gap-1.5">
+                    <div className="w-3 h-3 rounded-full bg-orange-400 flex items-center justify-center">
+                      <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
+                    </div>
+                    <span className="text-xs text-white/80 font-medium">30-sec demo</span>
                   </div>
                   
                   {/* Chat scenario */}
                   <div className="mt-8 space-y-3">
                     <div className="text-xs text-white/60 text-left">Practice scenario:</div>
-                    <div className="p-3 bg-white/[0.06] backdrop-blur-[24px] border border-white/[0.16] rounded-[22px]">
+                    <div className="p-3 bg-white/[0.06] backdrop-blur-[24px] border border-white/[0.16] rounded-[22px] shadow-[0_12px_28px_rgba(0,0,0,0.35)]">
+                      <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
                       <p className="text-sm text-white text-left">You're at a party. Start a conversation:</p>
                     </div>
                     
                     {/* Reply chips */}
                     <div className="space-y-2 mt-4">
                       <button 
-                        className={`w-full p-3 rounded-xl text-sm font-medium transition-all duration-300 ${
+                        className={`w-full p-3 rounded-[22px] text-sm font-medium transition-all duration-300 shadow-[0_12px_28px_rgba(0,0,0,0.35)] ${
                           selectedAnswer === "hi"
-                            ? "bg-gradient-to-r from-[#9BE8DA] to-[#59C9B8] text-[#0B1B2F] scale-[0.96]"
+                            ? "bg-gradient-to-r from-[#9BE8DA] to-[#59C9B8] text-[#0B1B2F] scale-[0.96] border border-white/10"
                             : "bg-white/[0.06] backdrop-blur-[24px] border border-white/[0.16] text-white hover:bg-white/10"
                         }`}
                         onClick={() => handleAnswerSelect("hi")}
                       >
+                        <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
                         👋 "Hi there!"
                       </button>
                       <button 
-                        className={`w-full p-3 rounded-xl text-sm font-medium transition-all duration-300 ${
+                        className={`w-full p-3 rounded-[22px] text-sm font-medium transition-all duration-300 shadow-[0_12px_28px_rgba(0,0,0,0.35)] ${
                           selectedAnswer === "party"
-                            ? "bg-gradient-to-r from-[#9BE8DA] to-[#59C9B8] text-[#0B1B2F] scale-[0.96]"
+                            ? "bg-gradient-to-r from-[#9BE8DA] to-[#59C9B8] text-[#0B1B2F] scale-[0.96] border border-white/10"
                             : "bg-white/[0.06] backdrop-blur-[24px] border border-white/[0.16] text-white hover:bg-white/10"
                         }`}
                         onClick={() => handleAnswerSelect("party")}
                       >
+                        <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
                         🎉 "Great party, isn't it?"
                       </button>
                     </div>
 
                     {feedbackVisible && (
-                      <div className="mt-3 p-2 bg-green-500/20 border border-green-400/30 rounded-lg">
+                      <div className="mt-3 p-2 bg-green-500/20 border border-green-400/30 rounded-lg backdrop-blur-[24px]">
                         <span className="text-xs text-green-300">+10 XP Great choice!</span>
                       </div>
                     )}
@@ -207,52 +215,60 @@ export default function Onboarding() {
       case 3:
         return (
           <div className="max-w-sm mx-auto space-y-8 text-center">
-            {/* Four metric pills */}
+            {/* Four metric pills with 3D tokens */}
             <div className="grid grid-cols-2 gap-4">
-              <div className="p-4 bg-white/[0.06] backdrop-blur-[24px] border border-white/[0.16] rounded-[22px] text-center">
-                <div className="flex items-center justify-center gap-2 mb-1">
-                  <Flame className="h-4 w-4 text-orange-400" />
-                  <span className="text-lg font-semibold text-white">{animatedStats.streak}</span>
+              <div className="relative p-4 bg-white/[0.06] backdrop-blur-[24px] border border-white/[0.16] rounded-[22px] text-center shadow-[0_12px_28px_rgba(0,0,0,0.35)]">
+                <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+                <div className="relative w-8 h-8 mx-auto mb-2 rounded-full bg-gradient-to-br from-[#FF9A5A] to-[#FF6B35] flex items-center justify-center">
+                  <Flame className="h-4 w-4 text-white" />
+                  <div className="absolute top-1 left-1 w-2 h-2 bg-white/30 rounded-full blur-sm"></div>
                 </div>
-                <p className="text-xs text-white/60">Day Streak</p>
+                <span className="text-[20px] font-semibold text-white">{animatedStats.streak}</span>
+                <p className="text-[12px] text-white/60 mt-1">Day Streak</p>
               </div>
               
-              <div className="p-4 bg-white/[0.06] backdrop-blur-[24px] border border-white/[0.16] rounded-[22px] text-center">
-                <div className="flex items-center justify-center gap-2 mb-1">
-                  <Star className="h-4 w-4 text-yellow-400" />
-                  <span className="text-lg font-semibold text-white">{animatedStats.xp}</span>
+              <div className="relative p-4 bg-white/[0.06] backdrop-blur-[24px] border border-white/[0.16] rounded-[22px] text-center shadow-[0_12px_28px_rgba(0,0,0,0.35)]">
+                <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+                <div className="relative w-8 h-8 mx-auto mb-2 rounded-full bg-gradient-to-br from-[#FFE082] to-[#FFC107] flex items-center justify-center">
+                  <Star className="h-4 w-4 text-white" />
+                  <div className="absolute top-1 left-1 w-2 h-2 bg-white/30 rounded-full blur-sm"></div>
                 </div>
-                <p className="text-xs text-white/60">XP</p>
+                <span className="text-[20px] font-semibold text-white">{animatedStats.xp}</span>
+                <p className="text-[12px] text-white/60 mt-1">XP</p>
               </div>
               
-              <div className="p-4 bg-white/[0.06] backdrop-blur-[24px] border border-white/[0.16] rounded-[22px] text-center">
-                <div className="flex items-center justify-center gap-2 mb-1">
-                  <TrendingUp className="h-4 w-4 text-blue-400" />
-                  <span className="text-lg font-semibold text-white">{animatedStats.confidence}%</span>
+              <div className="relative p-4 bg-white/[0.06] backdrop-blur-[24px] border border-white/[0.16] rounded-[22px] text-center shadow-[0_12px_28px_rgba(0,0,0,0.35)]">
+                <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+                <div className="relative w-8 h-8 mx-auto mb-2 rounded-full bg-gradient-to-br from-[#64B5F6] to-[#1976D2] flex items-center justify-center">
+                  <TrendingUp className="h-4 w-4 text-white" />
+                  <div className="absolute top-1 left-1 w-2 h-2 bg-white/30 rounded-full blur-sm"></div>
                 </div>
-                <p className="text-xs text-white/60">Confidence</p>
+                <span className="text-[20px] font-semibold text-white">{animatedStats.confidence}%</span>
+                <p className="text-[12px] text-white/60 mt-1">Confidence</p>
               </div>
               
-              <div className="p-4 bg-white/[0.06] backdrop-blur-[24px] border border-white/[0.16] rounded-[22px] text-center">
-                <div className="flex items-center justify-center gap-2 mb-1">
-                  <Trophy className="h-4 w-4 text-purple-400" />
-                  <span className="text-lg font-semibold text-white">Lvl {animatedStats.level}</span>
+              <div className="relative p-4 bg-white/[0.06] backdrop-blur-[24px] border border-white/[0.16] rounded-[22px] text-center shadow-[0_12px_28px_rgba(0,0,0,0.35)]">
+                <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+                <div className="relative w-8 h-8 mx-auto mb-2 rounded-full bg-gradient-to-br from-[#BA68C8] to-[#7B1FA2] flex items-center justify-center">
+                  <Trophy className="h-4 w-4 text-white" />
+                  <div className="absolute top-1 left-1 w-2 h-2 bg-white/30 rounded-full blur-sm"></div>
                 </div>
-                <p className="text-xs text-white/60">Level</p>
+                <span className="text-[20px] font-semibold text-white">Lvl {animatedStats.level}</span>
+                <p className="text-[12px] text-white/60 mt-1">Level</p>
               </div>
             </div>
 
-            {/* XP bar */}
+            {/* XP progress bar */}
             <div className="space-y-2">
-              <div className="h-[10px] bg-white/10 rounded-full overflow-hidden">
+              <div className="relative h-[10px] bg-white/10 rounded-full overflow-hidden shadow-inner">
                 <div 
-                  className="h-full bg-gradient-to-r from-[#9BE8DA] to-[#59C9B8] rounded-full transition-all duration-1000"
+                  className="h-full bg-gradient-to-r from-[#9BE8DA] to-[#59C9B8] rounded-full transition-all duration-1000 shadow-[0_0_8px_rgba(155,232,218,0.4)]"
                   style={{ width: `${(animatedStats.xp / 500) * 100}%` }}
                 />
               </div>
-              <div className="flex justify-between text-xs text-white/60">
+              <div className="flex justify-between text-[13px] text-white/60">
                 <span>Level {animatedStats.level}</span>
-                <span>{animatedStats.xp}/500 XP</span>
+                <span className="font-medium">{animatedStats.xp}/500 XP</span>
               </div>
             </div>
 
@@ -264,41 +280,58 @@ export default function Onboarding() {
       case 4:
         return (
           <div className="max-w-sm mx-auto space-y-8 text-center">
-            {/* Swipeable card with depth */}
+            {/* Swipeable card with enhanced depth */}
             <div className="relative h-64 flex items-center justify-center">
+              {/* Blurred background shapes for richness */}
+              <div className="absolute inset-0">
+                <div className="absolute top-8 left-4 w-20 h-20 bg-purple-400/10 rounded-full blur-2xl"></div>
+                <div className="absolute bottom-12 right-6 w-16 h-16 bg-pink-400/10 rounded-full blur-2xl"></div>
+              </div>
+              
               <div 
                 className={`relative w-72 h-48 transition-all duration-500 ${
                   cardSwiped ? 'translate-x-full rotate-12 opacity-0' : 'translate-x-0 rotate-0 opacity-100'
                 }`}
                 style={{
-                  filter: 'drop-shadow(0 12px 28px rgba(0,0,0,0.35))'
+                  filter: 'drop-shadow(0 16px 40px rgba(0,0,0,0.5))'
                 }}
               >
-                {/* Glass card */}
-                <div className="relative w-full h-full bg-white/[0.06] backdrop-blur-[24px] border border-white/[0.16] rounded-[22px] p-6 flex flex-col justify-center">
-                  {/* Duotone orb */}
-                  <div className="mx-auto w-16 h-16 rounded-full bg-gradient-to-br from-[#FFB36B] via-[#FF5B8A] to-[#C06BFF] mb-4 flex items-center justify-center">
-                    <span className="text-2xl">💬</span>
+                {/* Glass card with enhanced depth */}
+                <div className="relative w-full h-full bg-white/[0.06] backdrop-blur-[24px] border border-white/[0.16] rounded-[22px] p-6 flex flex-col justify-center shadow-[0_12px_28px_rgba(0,0,0,0.35)]">
+                  <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+                  
+                  {/* Enhanced 3D orb */}
+                  <div className="relative mx-auto w-16 h-16 mb-4">
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#FFB36B] via-[#FF5B8A] to-[#C06BFF] flex items-center justify-center">
+                      <span className="text-2xl">💬</span>
+                      <div className="absolute top-2 left-2 w-4 h-4 bg-white/30 rounded-full blur-sm"></div>
+                    </div>
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#FFB36B] via-[#FF5B8A] to-[#C06BFF] blur-lg opacity-40 scale-110"></div>
                   </div>
+                  
                   <h3 className="text-lg font-semibold text-white mb-2">Practice Partner</h3>
                   <p className="text-sm text-white/60">Swipe right to begin a chat</p>
+                  
+                  {/* Focus ring on active card */}
+                  <div className="absolute inset-0 rounded-[22px] ring-2 ring-white/10 ring-opacity-0 hover:ring-opacity-100 transition-all duration-300"></div>
                 </div>
                 
-                {/* Parallax shadow */}
+                {/* Enhanced parallax shadow */}
                 <div 
-                  className="absolute inset-0 bg-black/20 blur-xl rounded-[22px] -z-10"
-                  style={{ transform: 'translate(4px, 8px)' }}
+                  className="absolute inset-0 bg-black/30 blur-2xl rounded-[22px] -z-10"
+                  style={{ transform: 'translate(6px, 12px)' }}
                 />
               </div>
               
-              {/* Helper text */}
+              {/* Ghost button with animated arrow */}
               {!cardSwiped && (
                 <div className="absolute bottom-4">
                   <button 
                     onClick={handleSwipeDemo}
-                    className="text-sm text-white/60 hover:text-white transition-colors"
+                    className="flex items-center gap-2 text-sm text-white/60 hover:text-white transition-colors bg-white/5 px-4 py-2 rounded-full backdrop-blur-sm border border-white/10"
                   >
-                    Try swiping →
+                    <span>Try swiping</span>
+                    <ChevronRight className="h-3 w-3 animate-pulse" />
                   </button>
                 </div>
               )}
@@ -310,47 +343,58 @@ export default function Onboarding() {
       case 5:
         return (
           <div className="max-w-sm mx-auto space-y-8 text-center">
-            {/* Stack of feedback chips */}
+            {/* Stack of color-coded feedback chips */}
             <div className="relative">
-              <div className="space-y-3 p-6 bg-white/[0.06] backdrop-blur-[24px] border border-white/[0.16] rounded-[22px]">
-                {/* Confetti sparkles (low density) */}
+              <div className="space-y-3 p-6 bg-white/[0.06] backdrop-blur-[24px] border border-white/[0.16] rounded-[22px] shadow-[0_12px_28px_rgba(0,0,0,0.35)]">
+                <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+                
+                {/* Tiny sparkle particles (low density) */}
                 <div className="absolute inset-0 pointer-events-none">
-                  {[...Array(6)].map((_, i) => (
+                  {[...Array(4)].map((_, i) => (
                     <div
                       key={i}
                       className="absolute w-1 h-1 bg-yellow-400 rounded-full animate-pulse"
                       style={{
-                        left: `${20 + Math.random() * 60}%`,
-                        top: `${20 + Math.random() * 60}%`,
+                        left: `${25 + Math.random() * 50}%`,
+                        top: `${25 + Math.random() * 50}%`,
                         animationDelay: `${Math.random() * 2}s`
                       }}
                     />
                   ))}
                 </div>
 
-                {/* Feedback chips */}
+                {/* Color-coded feedback chips */}
                 <div className="relative z-10 space-y-3">
-                  <div className="flex items-center gap-3 p-3 bg-green-500/10 border border-green-400/20 rounded-xl">
-                    <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center text-xs text-white font-bold">
+                  {/* Green for +XP */}
+                  <div className="flex items-center gap-3 p-3 bg-green-500/10 border border-green-400/20 rounded-[22px] shadow-[0_8px_20px_rgba(0,0,0,0.25)]">
+                    <div className="relative w-6 h-6 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center text-xs text-white font-bold">
                       +10
+                      <div className="absolute top-0.5 left-0.5 w-2 h-2 bg-white/30 rounded-full blur-sm"></div>
                     </div>
                     <span className="text-sm font-medium text-green-300">XP Humor</span>
                   </div>
                   
-                  <div className="flex items-center gap-3 p-3 bg-blue-500/10 border border-blue-400/20 rounded-xl">
-                    <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-xs text-white font-bold">
+                  {/* Blue for trait */}
+                  <div className="flex items-center gap-3 p-3 bg-blue-500/10 border border-blue-400/20 rounded-[22px] shadow-[0_8px_20px_rgba(0,0,0,0.25)]">
+                    <div className="relative w-6 h-6 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center text-xs text-white font-bold">
                       +5
+                      <div className="absolute top-0.5 left-0.5 w-2 h-2 bg-white/30 rounded-full blur-sm"></div>
                     </div>
                     <span className="text-sm font-medium text-blue-300">Listening</span>
                   </div>
                   
-                  <div className="p-3 bg-yellow-500/10 border border-yellow-400/20 rounded-xl">
+                  {/* Amber for Tip with expand affordance */}
+                  <div className="p-3 bg-yellow-500/10 border border-yellow-400/20 rounded-[22px] shadow-[0_8px_20px_rgba(0,0,0,0.25)]">
                     <div className="flex items-start gap-2">
-                      <Target className="h-4 w-4 text-yellow-400 mt-0.5" />
-                      <div className="text-left">
+                      <div className="relative w-4 h-4 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center mt-0.5">
+                        <Target className="h-2.5 w-2.5 text-white" />
+                        <div className="absolute top-0 left-0 w-1.5 h-1.5 bg-white/30 rounded-full blur-sm"></div>
+                      </div>
+                      <div className="text-left flex-1">
                         <p className="text-xs font-medium text-yellow-300">Tip:</p>
                         <p className="text-xs text-yellow-400">Ask more open-ended questions</p>
                       </div>
+                      <ChevronRight className="h-3 w-3 text-yellow-400/60 mt-1" />
                     </div>
                   </div>
                 </div>
@@ -376,20 +420,25 @@ export default function Onboarding() {
                   <button
                     key={goal.id}
                     onClick={() => setSelectedGoal(goal.id)}
-                    className={`w-full p-4 rounded-[22px] border transition-all duration-300 text-left ${
+                    className={`w-full p-4 rounded-[22px] border transition-all duration-300 text-left shadow-[0_12px_28px_rgba(0,0,0,0.35)] ${
                       isSelected 
-                        ? 'border-white/30 bg-white/[0.08] shadow-[0_0_40px_rgba(155,232,218,0.4)]' 
+                        ? 'border-white/30 bg-white/[0.08] shadow-[0_0_40px_rgba(155,232,218,0.4)] ring-2 ring-[#9BE8DA]/20' 
                         : 'border-white/[0.16] bg-white/[0.06] backdrop-blur-[24px] hover:bg-white/[0.08]'
                     }`}
                   >
+                    <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
                     <div className="flex items-center gap-4">
-                      <goal.icon className="h-5 w-5 text-white/80" />
+                      <div className="relative w-8 h-8 rounded-full bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm border border-white/20 flex items-center justify-center">
+                        <goal.icon className="h-4 w-4 text-white/80" />
+                      </div>
                       <div className="flex-1">
                         <div className="font-medium text-sm text-white">{goal.title}</div>
                         <div className="text-xs text-white/60 mt-1">{goal.desc}</div>
                       </div>
                       {isSelected && (
-                        <CheckCircle2 className="h-5 w-5 text-[#9BE8DA]" />
+                        <div className="relative w-5 h-5 rounded-full bg-gradient-to-br from-[#9BE8DA] to-[#59C9B8] flex items-center justify-center">
+                          <CheckCircle2 className="h-3 w-3 text-[#0B1B2F]" />
+                        </div>
                       )}
                     </div>
                   </button>
