@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Heart, Users, Briefcase, Mic, Smile, Crown, Star, LucideIcon, Flame, Zap, Brain, Lock, ChevronDown, ChevronUp, CheckCircle, Play, Diamond, Clock, Trophy } from 'lucide-react';
 import CategorySection from '@/components/CategorySection';
 import JourneyFlashcards from '@/components/JourneyFlashcards';
-import ProfileCard from '@/components/ProfileCard';
+import SparkSwipeEvent from '@/components/SparkSwipeEvent';
 import WeeklyStreakChart from '@/components/WeeklyStreakChart';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -534,8 +534,8 @@ const PracticeHub = () => {
       className="min-h-screen pb-20 pt-4"
       style={{ background: 'var(--gradient-background)' }}
     >
-      {/* Profile Card Hero */}
-      <ProfileCard />
+      {/* Spark Swipe Event Hero */}
+      <SparkSwipeEvent />
 
       {/* Weekly Streak Chart */}
       <WeeklyStreakChart />
