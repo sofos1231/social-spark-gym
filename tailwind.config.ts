@@ -237,6 +237,29 @@ export default {
 				'shimmer-subtle': {
 					'0%, 100%': { 'background-position': '200% 0' },
 					'50%': { 'background-position': '-200% 0' }
+				},
+				'spark-float': {
+					'0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+					'33%': { transform: 'translateY(-4px) rotate(1deg)' },
+					'66%': { transform: 'translateY(2px) rotate(-0.5deg)' }
+				},
+				'spark-hint-pulse': {
+					'0%, 100%': { opacity: '0.6', transform: 'translate(-50%, -50%) scale(1)' },
+					'50%': { opacity: '0.9', transform: 'translate(-50%, -50%) scale(1.05)' }
+				},
+				'spark-confetti': {
+					'0%': { 
+						transform: 'translateY(-20px) rotate(0deg) scale(0)',
+						opacity: '0'
+					},
+					'20%': { 
+						transform: 'translateY(0px) rotate(180deg) scale(1)',
+						opacity: '1'
+					},
+					'100%': { 
+						transform: 'translateY(100vh) rotate(720deg) scale(0.5)',
+						opacity: '0'
+					}
 				}
 			},
 			animation: {
@@ -265,7 +288,10 @@ export default {
 				'coin-flip': 'coin-flip 0.8s ease-in-out',
 				'treasure-unlock': 'treasure-unlock 0.6s ease-out',
 				'path-progress': 'path-progress 1.2s ease-out forwards',
-				'shimmer-subtle': 'shimmer-subtle 1200ms ease-out'
+				'shimmer-subtle': 'shimmer-subtle 1200ms ease-out',
+				'spark-float': 'spark-float 4s ease-in-out infinite',
+				'spark-hint-pulse': 'spark-hint-pulse 2s ease-in-out infinite',
+				'spark-confetti': 'spark-confetti 600ms ease-out forwards'
 			}
 		}
 	},

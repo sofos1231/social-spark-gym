@@ -14,6 +14,7 @@ import Upgrade from "./pages/Upgrade";
 import Shop from "./pages/Shop";
 import Badges from "./pages/Badges";
 import LevelMilestones from "./pages/LevelMilestones";
+import SparkSwipe from "./pages/SparkSwipe";
 import Navigation from "./components/Navigation";
 import TopStatusBar from "./components/TopStatusBar";
 import NotFound from "./pages/NotFound";
@@ -52,6 +53,7 @@ const AppShell = () => {
         <Route path="/shop" element={<PageTransition currentPath="/shop"><ProtectedRoute><Shop /></ProtectedRoute></PageTransition>} />
         <Route path="/badges" element={<PageTransition currentPath="/badges"><ProtectedRoute><Badges /></ProtectedRoute></PageTransition>} />
         <Route path="/level-milestones" element={<PageTransition currentPath="/level-milestones"><ProtectedRoute><LevelMilestones /></ProtectedRoute></PageTransition>} />
+        <Route path="/spark-swipe" element={<PageTransition currentPath="/spark-swipe"><ProtectedRoute><SparkSwipe /></ProtectedRoute></PageTransition>} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<PageTransition currentPath="*"><NotFound /></PageTransition>} />
       </Routes>
