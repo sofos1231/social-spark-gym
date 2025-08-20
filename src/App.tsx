@@ -26,7 +26,6 @@ import Onboarding from "./pages/onboarding/Onboarding";
 import ProtectedRoute from "./components/routing/ProtectedRoute";
 import PublicOnlyRoute from "./components/routing/PublicOnlyRoute";
 import AuthProvider from "./contexts/AuthContext";
-import DevSkipButton from "./components/DevSkipButton";
 
 const queryClient = new QueryClient();
 
@@ -70,7 +69,6 @@ const App = () => (
       <BrowserRouter>
         <AuthProvider>
           <AppShell />
-          <DevSkipButton />
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
