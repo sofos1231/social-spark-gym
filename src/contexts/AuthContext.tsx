@@ -31,11 +31,11 @@ const removeLS = (key: string) => {
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
-    if (import.meta.env.DEV) return false;
+    if (import.meta.env.DEV) return true;
     return getLS("AUTH") === "1";
   });
   const [onboardingDone, setOnboardingDone] = useState<boolean>(() => {
-    if (import.meta.env.DEV) return false;
+    if (import.meta.env.DEV) return true;
     return getLS("ONBOARDING_DONE") === "1";
   });
 
