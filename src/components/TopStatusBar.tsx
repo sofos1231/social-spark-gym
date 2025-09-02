@@ -69,112 +69,110 @@ const TopStatusBar = ({
     <div className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50">
       <div className="flex items-center justify-between px-4 py-3 max-w-6xl mx-auto">
         {/* Left Section - Avatar & Profile */}
-        <div className="flex items-center gap-3 flex-1">
-          {/* Avatar with XP Ring */}
-          <div className="relative">
-            <div className="w-12 h-12 rounded-full bg-gradient-primary p-0.5">
-              <div className="w-full h-full rounded-full bg-card flex items-center justify-center overflow-hidden">
-                {avatarUri ? (
-                  <img 
-                    src={avatarUri} 
-                    alt="Avatar" 
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <User className="w-6 h-6 text-foreground" />
-                )}
-              </div>
-            </div>
-            {/* XP Progress Ring Overlay */}
-            <svg className="absolute inset-0 w-12 h-12 -rotate-90" viewBox="0 0 44 44">
-              <circle
-                cx="22"
-                cy="22"
-                r="20"
-                stroke="hsl(var(--muted))"
-                strokeWidth="2"
-                fill="none"
-                opacity="0.3"
-              />
-              <circle
-                cx="22"
-                cy="22"
-                r="20"
-                stroke="hsl(var(--secondary))"
-                strokeWidth="2"
-                fill="none"
-                strokeDasharray={`${xpProgress * 1.256} 125.6`}
-                className="transition-all duration-300"
-              />
-            </svg>
-            {/* Level Badge */}
-            <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-gradient-secondary border-2 border-background flex items-center justify-center">
-              <span className="text-xs font-bold text-secondary-foreground">{level}</span>
+        <div className="flex items-center gap-3 flex-1 max-w-[60%]">
+          {/* Clean Avatar - No Ring/Badge */}
+          <div className="relative flex-shrink-0">
+            <div className="w-11 h-11 rounded-full bg-muted/20 flex items-center justify-center overflow-hidden">
+              {avatarUri ? (
+                <img 
+                  src={avatarUri} 
+                  alt="Avatar" 
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <User className="w-5 h-5 text-muted-foreground" />
+              )}
             </div>
           </div>
 
-          {/* Username & Membership */}
+          {/* Username & Membership Stack */}
           <div className="flex flex-col justify-center min-w-0 flex-1">
-            <h2 className="text-sm font-semibold text-foreground truncate">
+            {/* Username - Top */}
+            <h2 className="text-sm font-semibold text-foreground truncate leading-tight">
               {username}
             </h2>
+            
+            {/* Membership Pill - Bottom, Hugging Avatar */}
             <button
               onClick={handleMembershipClick}
               className={cn(
-                "flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium transition-all duration-200 active:scale-95 w-fit",
+                "flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium transition-all duration-200 active:scale-98 w-fit mt-1",
+                "shadow-sm border backdrop-blur-sm",
                 isPremium 
-                  ? "bg-gradient-primary text-primary-foreground" 
-                  : "bg-muted text-muted-foreground hover:bg-accent"
+                  ? "bg-gradient-primary text-primary-foreground border-primary/20" 
+                  : "bg-gradient-to-r from-slate-600 to-slate-700 text-white border-slate-500/30 hover:from-slate-500 hover:to-slate-600"
               )}
+              style={{ 
+                maxHeight: '28px',
+                fontSize: '11px'
+              }}
             >
-              <span>{isPremium ? "Premium" : "Get Membership"}</span>
-              <ChevronRight className="w-3 h-3" />
+              <span className="truncate">{isPremium ? "Premium" : "Get Membership"}</span>
+              <div className={cn(
+                "w-3 h-3 rounded-full flex items-center justify-center flex-shrink-0",
+                isPremium ? "bg-white/20" : "bg-success"
+              )}>
+                <ChevronRight className="w-2 h-2" />
+              </div>
             </button>
           </div>
         </div>
 
-        {/* Right Section - Currency Group */}
-        <div className="flex items-center gap-2">
-          {/* Coins */}
+        {/* Right Section - Currency Pills */}
+        <div className="flex items-center gap-2 flex-shrink-0">
+          {/* Coins Pill */}
           <button
             onClick={() => handleCurrencyClick('coins', onPressCoin)}
             className={cn(
-              "flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-background/60 border border-border/50 backdrop-blur-sm transition-all duration-200 active:scale-95",
-              animatingCurrency === 'coins' && "scale-105 bg-secondary/20"
+              "flex items-center gap-2 px-3 py-1.5 rounded-full transition-all duration-200 active:scale-95",
+              "bg-white/6 backdrop-blur-sm border border-white/10 shadow-sm",
+              animatingCurrency === 'coins' && "scale-105 bg-yellow-500/20 border-yellow-500/30"
             )}
           >
-            <Coins className="w-4 h-4 text-yellow-500" />
+            {/* Premium 3D Coin Icon Placeholder */}
+            <div className="w-4 h-4 rounded-full bg-gradient-to-br from-yellow-400 via-yellow-500 to-yellow-600 flex items-center justify-center shadow-sm">
+              <div className="w-2 h-2 rounded-full bg-yellow-200/80" />
+            </div>
             <span className="text-sm font-bold text-foreground">{coins.toLocaleString()}</span>
           </button>
 
-          {/* Gems */}
+          {/* Gems Pill */}
           <button
             onClick={() => handleCurrencyClick('gems', onPressGem)}
             className={cn(
-              "flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-background/60 border border-border/50 backdrop-blur-sm transition-all duration-200 active:scale-95",
-              animatingCurrency === 'gems' && "scale-105 bg-primary/20"
+              "flex items-center gap-2 px-3 py-1.5 rounded-full transition-all duration-200 active:scale-95",
+              "bg-white/6 backdrop-blur-sm border border-white/10 shadow-sm",
+              animatingCurrency === 'gems' && "scale-105 bg-cyan-500/20 border-cyan-500/30"
             )}
           >
-            <Gem className="w-4 h-4 text-cyan-400" />
+            {/* Premium 3D Gem Icon Placeholder */}
+            <div className="w-4 h-4 bg-gradient-to-br from-cyan-300 via-cyan-400 to-cyan-600 transform rotate-45 shadow-sm" 
+                 style={{ clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)' }} />
             <span className="text-sm font-bold text-foreground">{gems}</span>
           </button>
 
-          {/* Streak */}
+          {/* Streak Pill */}
           <button
             onClick={() => handleCurrencyClick('streak', onPressStreak)}
             className={cn(
-              "flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-background/60 border border-border/50 backdrop-blur-sm transition-all duration-200 active:scale-95",
-              animatingCurrency === 'streak' && "scale-105 bg-secondary/20"
+              "flex items-center gap-2 px-3 py-1.5 rounded-full transition-all duration-200 active:scale-95",
+              "bg-white/6 backdrop-blur-sm border border-white/10 shadow-sm",
+              animatingCurrency === 'streak' && "scale-105 bg-orange-500/20 border-orange-500/30"
             )}
           >
-            <Flame className="w-4 h-4 text-orange-500" />
+            {/* Premium 3D Flame Icon Placeholder */}
+            <div className="w-4 h-4 relative">
+              <div className="absolute inset-0 bg-gradient-to-t from-orange-600 via-orange-500 to-yellow-400 rounded-full shadow-sm" 
+                   style={{ clipPath: 'polygon(50% 0%, 80% 40%, 100% 100%, 0% 100%, 20% 40%)' }} />
+              <div className="absolute top-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-yellow-200 rounded-full" />
+            </div>
             <span className="text-sm font-bold text-foreground">{streak}</span>
           </button>
 
           {/* Shop Button */}
           <button
             onClick={handleShopClick}
-            className="flex items-center justify-center w-9 h-9 rounded-full bg-primary text-primary-foreground transition-all duration-200 active:scale-95 hover:shadow-glow-primary"
+            className="flex items-center justify-center w-9 h-9 rounded-full bg-primary text-primary-foreground transition-all duration-200 active:scale-95 hover:shadow-glow-primary border border-primary/20"
           >
             <Plus className="w-4 h-4" />
           </button>
