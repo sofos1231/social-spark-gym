@@ -98,49 +98,28 @@ const TopStatusBar = ({
                   <ChevronDown className="w-3 h-3 text-muted-foreground group-hover:text-foreground transition-colors flex-shrink-0" />
                 </button>
               </PopoverTrigger>
-              <PopoverContent className="w-56 p-2 bg-card/95 backdrop-blur-lg border border-border/50 shadow-xl animate-fade-in" align="start">
+              <PopoverContent className="w-screen max-w-none p-2 bg-card/95 backdrop-blur-lg border border-border/50 shadow-xl animate-fade-in mx-4" align="start">
                 <div className="space-y-1">
                   <button
                     onClick={() => handleMenuItemClick('profile')}
-                    className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted/80 rounded-lg transition-all duration-200 hover:scale-[1.02]"
+                    className="w-full flex items-center gap-3 px-4 py-3 text-base font-medium text-foreground hover:bg-muted/80 rounded-lg transition-all duration-200 hover:scale-[1.02]"
                   >
-                    <User className="w-4 h-4" />
+                    <User className="w-5 h-5" />
                     View Profile
-                  </button>
-                  <button
-                    onClick={() => handleMenuItemClick('stats')}
-                    className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted/80 rounded-lg transition-all duration-200 hover:scale-[1.02]"
-                  >
-                    <div className="w-4 h-4 bg-gradient-to-br from-blue-400 to-blue-600 rounded" />
-                    Stats
-                  </button>
-                  <button
-                    onClick={() => handleMenuItemClick('shop')}
-                    className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted/80 rounded-lg transition-all duration-200 hover:scale-[1.02]"
-                  >
-                    <Plus className="w-4 h-4" />
-                    Shop
-                  </button>
-                  <button
-                    onClick={() => handleMenuItemClick('settings')}
-                    className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted/80 rounded-lg transition-all duration-200 hover:scale-[1.02]"
-                  >
-                    <div className="w-4 h-4 bg-gradient-to-br from-gray-400 to-gray-600 rounded" />
-                    Settings
                   </button>
                   <div className="h-px bg-border/50 my-1" />
                   <button
                     onClick={() => handleMenuItemClick('membership')}
-                    className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted/80 rounded-lg transition-all duration-200 hover:scale-[1.02]"
+                    className="w-full flex items-center gap-3 px-4 py-3 text-base font-medium text-foreground hover:bg-muted/80 rounded-lg transition-all duration-200 hover:scale-[1.02]"
                   >
-                    <div className="w-4 h-4 bg-gradient-to-br from-amber-400 to-amber-600 rounded" />
+                    <div className="w-5 h-5 bg-gradient-to-br from-amber-400 to-amber-600 rounded" />
                     {isPremium ? 'Manage Premium' : 'Get Membership'}
                   </button>
                   <button
                     onClick={() => handleMenuItemClick('signout')}
-                    className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-destructive hover:bg-destructive/10 rounded-lg transition-all duration-200 hover:scale-[1.02]"
+                    className="w-full flex items-center gap-3 px-4 py-3 text-base font-medium text-destructive hover:bg-destructive/10 rounded-lg transition-all duration-200 hover:scale-[1.02]"
                   >
-                    <div className="w-4 h-4 bg-gradient-to-br from-red-400 to-red-600 rounded" />
+                    <div className="w-5 h-5 bg-gradient-to-br from-red-400 to-red-600 rounded" />
                     Sign Out
                   </button>
                 </div>
