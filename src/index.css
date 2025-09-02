@@ -50,6 +50,10 @@
     /* Supporting neutrals - high contrast on navy */
     --muted: 220 20% 25%;               /* Elevated muted backgrounds */
     --muted-foreground: 0 0% 71%;       /* #B6B6B6 - muted text */
+    
+    /* Surface system for currency pills */
+    --surface: 255 255 255;             /* White base for rgba usage */
+    --surface-border: 255 255 255;      /* White base for rgba usage */
 
     /* XP tier colors - consistent with orange theme */
     --xp-bronze: 25 85% 45%;
