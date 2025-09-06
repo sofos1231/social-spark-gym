@@ -27,6 +27,7 @@ import ProtectedRoute from "./components/routing/ProtectedRoute";
 import PublicOnlyRoute from "./components/routing/PublicOnlyRoute";
 import AuthProvider from "./contexts/AuthContext";
 import DevSkipButton from "./components/DevSkipButton";
+import DevButton from "./components/DevButton";
 
 const queryClient = new QueryClient();
 
@@ -71,6 +72,9 @@ const App = () => (
         <AuthProvider>
           <AppShell />
           <DevSkipButton />
+          <DevButton onClick={() => console.log('Dev button clicked!')}>
+            DEV TEST
+          </DevButton>
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
