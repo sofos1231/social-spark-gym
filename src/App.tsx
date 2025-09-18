@@ -12,6 +12,10 @@ import Stats from "./pages/Stats";
 import Profile from "./pages/Profile";
 import Upgrade from "./pages/Upgrade";
 import Shop from "./pages/Shop";
+import PracticeLanding from "./pages/PracticeLanding";
+import SocialSparkScreen from "./pages/SocialSparkScreen";
+import PracticeHubScreen from "./pages/PracticeHubScreen";
+import ShadowModeScreen from "./pages/ShadowModeScreen";
 import Badges from "./pages/Badges";
 import LevelMilestones from "./pages/LevelMilestones";
 import SparkSwipe from "./pages/SparkSwipe";
@@ -45,6 +49,10 @@ const AppShell = () => {
         <Route path="/onboarding" element={<PageTransition currentPath="/onboarding"><Onboarding /></PageTransition>} />
 
         <Route path="/" element={<PageTransition currentPath="/"><ProtectedRoute><PracticeHub /></ProtectedRoute></PageTransition>} />
+        <Route path="/practice-landing" element={<PageTransition currentPath="/practice-landing"><ProtectedRoute><PracticeLanding /></ProtectedRoute></PageTransition>} />
+        <Route path="/social-spark" element={<PageTransition currentPath="/social-spark"><ProtectedRoute><SocialSparkScreen /></ProtectedRoute></PageTransition>} />
+        <Route path="/practice-hub" element={<PageTransition currentPath="/practice-hub"><ProtectedRoute><PracticeHubScreen /></ProtectedRoute></PageTransition>} />
+        <Route path="/shadow-mode" element={<PageTransition currentPath="/shadow-mode"><ProtectedRoute><ShadowModeScreen /></ProtectedRoute></PageTransition>} />
         <Route path="/practice-road/:category" element={<PageTransition currentPath="/practice-road"><ProtectedRoute><PracticeRoad /></ProtectedRoute></PageTransition>} />
         <Route path="/practice" element={<PageTransition currentPath="/practice"><ProtectedRoute><PracticeHub /></ProtectedRoute></PageTransition>} />
         <Route path="/quick-drill" element={<PageTransition currentPath="/quick-drill"><ProtectedRoute><QuickDrill /></ProtectedRoute></PageTransition>} />
