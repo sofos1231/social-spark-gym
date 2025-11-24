@@ -38,6 +38,13 @@ export default function Signup() {
     navigate("/onboarding", { replace: true });
   };
 
+  const devSkip = () => {
+    if (import.meta.env.DEV) {
+      login();
+      navigate("/practice-landing", { replace: true });
+    }
+  };
+
   // Page SEO
   useEffect(() => {
     document.title = "Create account – SocialGym";
@@ -102,6 +109,16 @@ export default function Signup() {
           </form>
         </div>
       </section>
+
+      {import.meta.env.DEV && (
+        <Button
+          onClick={devSkip}
+          className="fixed bottom-4 right-4 z-50 bg-red-500 hover:bg-red-600 text-white font-bold text-xs px-3 py-2 rounded-lg shadow-lg"
+          size="sm"
+        >
+          DEV SKIP
+        </Button>
+      )}
     </main>
   );
 }
