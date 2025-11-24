@@ -60,7 +60,7 @@ export default function Login() {
   const devSkip = () => {
     if (import.meta.env.DEV) {
       login();
-      navigate("/", { replace: true });
+      navigate("/practice-landing", { replace: true });
     }
   };
 
