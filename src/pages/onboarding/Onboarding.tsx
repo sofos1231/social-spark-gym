@@ -53,6 +53,13 @@ export default function Onboarding() {
     navigate("/", { replace: true });
   };
 
+  const devSkip = () => {
+    if (import.meta.env.DEV) {
+      completeOnboarding();
+      navigate("/practice-landing", { replace: true });
+    }
+  };
+
   const goals = [
     { id: "confidence", icon: Zap, title: "Confidence", desc: "Build overall social confidence" },
     { id: "dating", icon: Heart, title: "Dating", desc: "Master romantic conversations" },
@@ -601,6 +608,16 @@ export default function Onboarding() {
             />
           ))}
         </div>
+      )}
+
+      {import.meta.env.DEV && (
+        <Button
+          onClick={devSkip}
+          className="fixed bottom-4 right-4 z-50 bg-red-500 hover:bg-red-600 text-white font-bold text-xs px-3 py-2 rounded-lg shadow-lg"
+          size="sm"
+        >
+          DEV SKIP
+        </Button>
       )}
     </div>
   );
